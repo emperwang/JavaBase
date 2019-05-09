@@ -1,0 +1,75 @@
+{
+  "name":"smart-sms",
+  "size": 1,
+  "limit":100,
+  "kafka":{
+    "key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "value.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+    "bootstrap.servers": "192.168.72.15:9092",
+    "group.id": "kafka2kafka",
+    "auto.offset.reset": "latest"
+  },
+  "hdfsSinkerConfig":{
+    "name":"sinkerGroup",
+    "encoding":"UTF-8",
+    "prefix":"sms-",
+    "label":"0000",
+    "suffix":".cvs",
+    "outputPath":"",
+    "hdfsOutputPath":"/test/${dt:yyyyMMdd/HH/mm}/${prefix}_${dt:yyyyMMddHHmm00}_${label}${suffix}",
+    "appendLineEnding":"",
+    "lineEnding":"",
+    "rollingPeriod":60,
+    "lineThreshold":"2",
+    "sizeThreshold":"512"
+  },
+  "kafkaSourceConfig":{
+    "name":"source",
+    "kafkaConfig":{
+      "key.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+      "value.deserializer": "org.apache.kafka.common.serialization.StringDeserializer",
+      "bootstrap.servers": "192.168.72.15:9092",
+      "group.id": "kafka2kafka",
+      "auto.offset.reset": "latest"
+    },
+    "topics":["paritioner3"],
+    "commitOffset":false
+  },
+  "monitorConfig":{
+    "name": "smartsms-monitor",
+    "type": "smartsms-monitor",
+    "biz": "smartsms-monitor",
+    /** 监控输出topic **/
+    /*"topic": "monitor_collector_topic",*/
+    "topic":"mc_mme_combine",
+    "dateFormat": "yyyy-MM-dd HH:mm:ss.SSS",
+    "period": 60, /** 监控事件间隔（单位秒） **/
+    "kafkaConfig": {
+      "bootstrap.servers": "192.168.72.15:9092",
+      "producer.type": "sync",
+      "compression.codec": "none",
+      "key.serializer": "org.apache.kafka.common.serialization.StringSerializer",
+      "value.serializer": "org.apache.kafka.common.serialization.StringSerializer"
+    }
+  },
+  "codisConfig":{
+    "addresses":["192.168.72.18:19000"],
+    "total": 10,
+    "idle": 0,
+    "waitTime": 5000,
+    "timeout": 5000,
+    "closeCurator": false,
+    "zkProxyDir": "",
+    "zkAddr": "",
+    "zkSessionTimeoutMs": 3000,
+    "poolConfig": {
+      "maxTotal": 5,
+      "maxIdle": 1,
+      "minIdle": 0
+    },
+    "connectionTimeoutMs": 3000,
+    "soTimeout": 0,
+    "database": 0,
+    "clientName": "codis-importer"
+  }
+}
