@@ -1,4 +1,4 @@
-package com.wk.annotation;
+package com.wk.base.annotation;
 
 import java.lang.annotation.*;
 

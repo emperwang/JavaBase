@@ -6,10 +6,12 @@
     <display-name>Archetype Created Web Application</display-name>
     <servlet>
         <servlet-name>DispatcherServlet</servlet-name>
-        <servlet-class>com.wk.servlet.DispatcherServlet</servlet-class>
+        <servlet-class>com.wk.base.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>myapplication.properties</param-value>
+            <param-value>
+                myapplication.properties
+            </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
