@@ -23,4 +23,15 @@ public class TestController {
         //String result = userService.addUser();
         response.getWriter().write( " ..add user success !!!..");
     }
+
+    @RequestMapping("/add2")
+    @ResponseBody
+    public String getStr(){
+        return "return value is String ....";
+    }
+
+    @RequestMapping("/index")
+    public String getIndex(){
+        return "index";
+    }
 }

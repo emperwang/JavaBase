@@ -1,10 +1,9 @@
 package com.wk.base.servlet;
 
 
-import com.wk.base.annotation.Autowired;
-import com.wk.base.annotation.Controller;
-import com.wk.base.annotation.RequestMapping;
-import com.wk.base.annotation.Service;
+import com.alibaba.fastjson.JSON;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.wk.base.annotation.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -220,6 +219,8 @@ public class DispatcherServlet extends HttpServlet {
         try {
             String requestURI = request.getRequestURI();
             String contextPath = request.getContextPath();
+            //判断返回值是否是json格式
+            Boolean jsonFlag = false;
             System.out.println("requestURI is :" + requestURI + "  contextPath is:" + contextPath);
             //拼接url, 把多个/替换为一个
             requestURI = requestURI.replace(contextPath, "").replaceAll("/+", "/");
@@ -227,8 +228,16 @@ public class DispatcherServlet extends HttpServlet {
                 response.getWriter().write("404 NOT FOUND");
                 return;
             }
+
             //得到此url对应的方法
             Method method = this.handlerMapping.get(requestURI);
+            //得到controller函数的class
+            Class<?> aClass = this.controllerMap.get(requestURI).getClass();
+            //判断类或方法上是否由ResponseBody
+            if (aClass.isAnnotationPresent(ResponseBody.class)||method.isAnnotationPresent(ResponseBody.class)){
+                jsonFlag = true;
+            }
+
             //获取方法参数列表
             Class<?>[] parameterTypes = method.getParameterTypes();
             //获取请求参数
@@ -257,7 +266,14 @@ public class DispatcherServlet extends HttpServlet {
                 }
 
             }
-            method.invoke(this.controllerMap.get(requestURI), paramValues);
+            Object result = method.invoke(this.controllerMap.get(requestURI), paramValues);
+            //如果返回时json格式，那么就格式化，返回json格式的数据
+            if (jsonFlag){
+                String s = JSON.toJSONString(result);
+                response.getWriter().write(s);
+            }else{ //不然返回视图
+                //doResolveView((String)result,request,response);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -266,6 +282,24 @@ public class DispatcherServlet extends HttpServlet {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+    //视图解析
+    private void doResolveView(String indexView, HttpServletRequest request, HttpServletResponse response) {
+        //视图前缀
+        String prefix = properties.getProperty("view.prefix");
+        //视图后缀
+        String suffix = properties.getProperty("view.suffix");
+
+        String view = (prefix + indexView + suffix).trim().replaceAll("/+","/");
+        try {
+            //返回视图
+            request.getRequestDispatcher(view).forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
