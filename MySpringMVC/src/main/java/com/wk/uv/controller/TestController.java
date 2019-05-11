@@ -32,6 +32,6 @@ public class TestController {
 
     @RequestMapping("/index")
     public String getIndex(){
-        return "index";
+        return "hello";
     }
 }

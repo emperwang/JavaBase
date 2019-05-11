@@ -272,7 +272,7 @@ public class DispatcherServlet extends HttpServlet {
                 String s = JSON.toJSONString(result);
                 response.getWriter().write(s);
             }else{ //不然返回视图
-                //doResolveView((String)result,request,response);
+                doResolveView((String)result,request,response);
             }
 
         } catch (IOException e) {
