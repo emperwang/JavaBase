@@ -42,12 +42,12 @@ public class DispatcherServlet extends HttpServlet {
         doScanner(properties.getProperty("scanPackages"));
         //3. 拿到扫描到的类, 通过反射机制,实例化,并且放到容器IOC中,beanName 默认是首字母小写
         doInstance();
-        //4. 初始化handlermapping(将url和method对应上)
+        //4.自动注入
+        autoInject();
+        //5.初始化handlermapping(将url和method对应上)
         initHandlerMapping();
-        //自动注入
-        //autoInject();
     }
-
+    // 自动注入由问题， 注入不能成功
     private void autoInject() {
         if (ioc.isEmpty() && iocType.isEmpty()) {
             return;
@@ -100,6 +100,9 @@ public class DispatcherServlet extends HttpServlet {
                     baseUrl = requestAnno.value();
                 }
                 Method[] methods = clazz.getMethods();
+                String controllerClassName = clazz.getName();
+                String controllerName = toLowerFirstWord(clazz.getSimpleName());
+                Object instance = null;
                 for (Method method : methods) {
                     if (!method.isAnnotationPresent(RequestMapping.class)) {
                         continue;
@@ -108,16 +111,13 @@ public class DispatcherServlet extends HttpServlet {
                     String url = methodRequestAnno.value().trim();
                     //去除多个 //的情况
                     url = (baseUrl + "/" + url).replaceAll("/+", "/");
-
+                    instance = ioc.get(controllerName)!=null?ioc.get(controllerName):iocType.get(controllerClassName);
                     //存储url对应的类实例和方法
                     handlerMapping.put(url, method);
-                    controllerMap.put(url, clazz.newInstance());
+                    controllerMap.put(url, instance);
                 }
-
             }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -283,7 +283,7 @@ public class DispatcherServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-    //视图解析
+    //视图解析   目前有些问题  不能使用
     private void doResolveView(String indexView, HttpServletRequest request, HttpServletResponse response) {
         //视图前缀
         String prefix = properties.getProperty("view.prefix");

@@ -14,13 +14,13 @@ import java.io.IOException;
 @RequestMapping("/user")
 public class TestController {
 
-    /*@Autowired
-    private UserService userService;*/
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/add")
     public void addUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        //System.out.println("in controller service is:" + userService);
-        //String result = userService.addUser();
+        System.out.println("in controller service is:" + userService);
+        String result = userService.addUser();
         response.getWriter().write( " ..add user success !!!..");
     }
 
