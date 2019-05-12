@@ -31,6 +31,12 @@
             <artifactId>cglib</artifactId>
             <version>3.2.4</version>
         </dependency>
+        <!--使用spring的aop进行切面编程-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.3.0.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
