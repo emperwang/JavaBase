@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--被代理的类-->
+    <bean id="target" class="com.wk.proxy.springAOP.spring3.MathImpl"/>
+    <!--通知-->
+    <bean id="advice" class="com.wk.proxy.springAOP.spring3.Advices"/>
+
+    <!--aop配置-->
+    <!--proxy-target-class属性表示被代理的类是否为一个没有实现接口的类
+        spring会一句实现了接口使用JDK内置动态代理，如果没有实现则使用cglib
+    -->
+    <aop:config proxy-target-class="true">
+        <!--切面配置-->
+        <!--ref表示通知对象的引用-->
+        <aop:aspect ref="advice">
+            <!--配置切入点（横切逻辑将注入的精确位置）-->
+            <aop:pointcut id="pointcut1" expression="execution(* com.wk.proxy.springAOP.spring3.MathImpl.*(..))"/>
+            <!--声明通知，method指定通知函数，pointcut指定切点，就是该通知应该注入哪些方法中-->
+            <aop:before method="before" pointcut-ref="pointcut1"/>
+            <aop:after method="after" pointcut-ref="pointcut1"/>
+            <!--指定s开头的函数进行环绕通知-->
+            <aop:around method="aroundMethod" pointcut="execution(* com.wk.proxy.springAOP.spring3.MathImpl.s*(..))"/>
+            <!--指定d开头的函数进行异常通知
+               throwing: 和函数中的Exception参数名字对应
+            -->
+            <aop:after-throwing method="afterThrowing" pointcut="execution(* com.wk.proxy.springAOP.spring3.MathImpl.d*(..))" throwing="exp"/>
+            <!--这里的returning也要和通知函数的参数名字一致-->
+            <aop:after-returning method="afterReturing" pointcut="execution(* com.wk.proxy.springAOP.spring3.MathImpl.a*(..))" returning="result"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
