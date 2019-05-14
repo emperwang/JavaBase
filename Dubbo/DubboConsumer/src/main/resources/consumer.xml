@@ -7,7 +7,20 @@
     <!--注册中心地址-->
     <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
     <!--生成远程服务代理-->
-    <dubbo:reference interface="com.wk.api.service.UserService" id="userService"/>
+    <!--
+        check : 刚开始启动时不检查，调用时才会检查服务存在
+        timeout:设置超时时间
+        loadbalance: 设置负载均衡方式
+        url: 配置好服方的地址，直接连接方式
+        retires 重试次数.次数设置的重试为3，也就是一共执行4次，第一次+三次重试
+
+    -->
+    <dubbo:reference interface="com.wk.api.service.UserService"
+                     id="userService" check="false" retries="3" ></dubbo:reference>
+    <!--
+        dubbo:consumer 配置调用者的共用属性，check：是否检查属性
+    -->
+    <!--<dubbo:consumer check="false"/>-->
 
     <bean id="userInvoke" class="com.wk.service.UserServiceInvoke"></bean>
     <!--连接控制中心-->

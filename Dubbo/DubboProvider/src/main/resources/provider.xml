@@ -13,7 +13,18 @@
     <dubbo:protocol name="dubbo" port="20880"/>
 
     <!--暴露的服务-->
-    <dubbo:service interface="com.wk.api.service.UserService" ref="userService"/>
+    <!--
+        version: 多版本设置
+        timeout: 超时设置
+    -->
+    <dubbo:service interface="com.wk.api.service.UserService"
+                   ref="userService" >
+        <!--可以具体对方法进行设置
+            timeout
+            loadbalance
+        -->
+        <!--<dubbo:method name="" ></dubbo:method>-->
+    </dubbo:service>
     <!--服务的具体实现类-->
     <bean id="userService" class="com.wk.Service.UserServiceImpl"/>
 
