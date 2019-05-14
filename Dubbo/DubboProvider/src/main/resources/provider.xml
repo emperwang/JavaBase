@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!--服务的名称-->
+    <dubbo:application name="dubboProvider"/>
+
+    <!--dubbo的注册地址-->
+    <!--<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>-->
+    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
+
+    <!--dubbo的通讯协议 以及端口-->
+    <dubbo:protocol name="dubbo" port="20880"/>
+
+    <!--暴露的服务-->
+    <dubbo:service interface="com.wk.api.service.UserService" ref="userService"/>
+    <!--服务的具体实现类-->
+    <bean id="userService" class="com.wk.Service.UserServiceImpl"/>
+
+    <!--连接控制中心-->
+    <dubbo:monitor protocol="registry"/>
+    <!--<dubbo:monitor address="127.0.0.1:12080"/>-->
+
+    <!--可以为provider提供的所有服务进行一些配置-->
+    <!--<dubbo:provider timeout="" />-->
+</beans>
