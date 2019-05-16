@@ -51,3 +51,11 @@
 13. 使用@PostConstruct和@PreDestory实现初始化和销毁方法
 
 14. BeanPostProcesser接口的使用, 分别是在bean初始化之前和之后调用一次
+
+15. @Value注解的使用
+
+    1. 支持直接赋值 @Value("zhangsan")
+    2. spEL表达式 @Value("#{20-1}")
+    3. ${} 取出环境变量的值 @Value("${os.name}")
+
+16. 
