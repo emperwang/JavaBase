@@ -70,9 +70,12 @@
 
 17. @Autowired注入
 
- 	1. 首先按照类型进行注入
- 	2. 如果有同一个类型有两个bean,那么会再次按照要注入的变量的名字进行查找注入
- 	3. 使用@Qualifier指定注入哪个bean
+  18. 首先按照类型进行注入
+
+  19. 如果有同一个类型有两个bean,那么会再次按照要注入的变量的名字进行查找注入
+
+  20. 使用@Qualifier指定注入哪个bean
+
  	4. @Primary注解,优先注入哪一个bean
 
 	autowired其他用法:
@@ -127,6 +130,10 @@
 22. xxxAware接口, 实现某种接口实现具体的功能
 
     1.	实现applicationContextAware接口可以获取applicationContext
-    2.	
 
+23. @Profile注解使用.用于快速切换环境.  不同的环境下,注册不同的bean
+
+    1. 可以写在配置类上.  就是说只有在这个环境下,这个配置类才加载
+    2. 可以写在bean上. 只有在这个环境下, 此bean才会注册到ioc容器中
+    
       
