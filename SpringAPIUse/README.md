@@ -9,4 +9,5 @@
       	1. 配置扫描的包
       	2. includeFilters使用
       	3. excludeFilters使用
+      	4. 自定义过滤规则的使用
 	5. @ComponScans使用
