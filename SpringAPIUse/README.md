@@ -36,4 +36,7 @@
 
    3, importBeanDefinitionRegistrar 注册bean
 
-   
+10.  FactoryBean 创建实例
+
+    1. 创建的class类型是要注册的类
+    2. 获取factoryBean的方法 applicationContext.getBean("&beanName")  ,如注册的bean的名字是factoryBean,那么这里就写 "&factoryBean", 那么获得的就是工厂类的实例
