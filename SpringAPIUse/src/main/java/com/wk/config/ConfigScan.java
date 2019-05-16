@@ -3,6 +3,7 @@ package com.wk.config;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
 //只扫描某些类
 //默认扫描规则是扫描所有，useDefaultFilters此配置项表示不使用默认配置
 @ComponentScan(basePackages = {"com.wk.web"},includeFilters = {
-    @ComponentScan.Filter(classes = {Controller.class,Service.class})
+    @ComponentScan.Filter(type = FilterType.ANNOTATION,classes = {Controller.class,Service.class})
 },useDefaultFilters = false)
 public class ConfigScan {
 }
