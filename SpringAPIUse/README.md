@@ -46,4 +46,4 @@
     1. 单实例的bean容器会帮忙进行销毁
     2. 多实例的bean,容器不会进行销毁操作
 
-12. 
+12. Bean实现InitializingBean和DisposableBean来定义初始化和销毁逻辑
