@@ -49,3 +49,5 @@
 12. Bean实现InitializingBean和DisposableBean来定义初始化和销毁逻辑
 
 13. 使用@PostConstruct和@PreDestory实现初始化和销毁方法
+
+14. BeanPostProcesser接口的使用, 分别是在bean初始化之前和之后调用一次
