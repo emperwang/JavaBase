@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--进行bean的定义,因为没有无参构造函数，所以这里定义时需要指定构造函数的参数-->
+    <bean id="person" class="com.wk.beans.Person">
+        <constructor-arg name="name" value="wangsi"/>
+        <constructor-arg name="age" value="24"/>
+    </bean>
+</beans>
