@@ -34,4 +34,6 @@
 
    2, importSelector使用. 通过实现importSelector接口进行具体的业务操作.
 
+   3, importBeanDefinitionRegistrar 注册bean
+
    
