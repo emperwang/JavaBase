@@ -40,3 +40,10 @@
 
     1. 创建的class类型是要注册的类
     2. 获取factoryBean的方法 applicationContext.getBean("&beanName")  ,如注册的bean的名字是factoryBean,那么这里就写 "&factoryBean", 那么获得的就是工厂类的实例
+
+11. @Bean注解指定初始化和销毁方法
+
+    1. 单实例的bean容器会帮忙进行销毁
+    2. 多实例的bean,容器不会进行销毁操作
+
+12. 
