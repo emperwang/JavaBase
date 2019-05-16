@@ -70,4 +70,9 @@
 	3. 使用@Qualifier指定注入哪个bean
 	4. @Primary注解,优先注入哪一个bean
 
+18.	@Resource可以和@Autowired一样是现在自动注入功能,默认是按照组件名称进行装配的
+	1. 没有支持@Primary功能
+	2. 也没有支持Required=false功能
+19.	@Inject和autowired功能类似
+
        

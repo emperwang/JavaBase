@@ -13,7 +13,9 @@ public class AutowiredStarter {
         AutoWiredController controller = (AutoWiredController) applicationContext.getBean("autoWiredController");
         System.out.println(controller);
         AutoWiredService service = (AutoWiredService) applicationContext.getBean("service");
-        System.out.println(service);
+        AutoWiredService autoWiredService = (AutoWiredService) applicationContext.getBean("autoWiredService");
+        System.out.println("service"+service);
+        System.out.println("autoWiredService"+autoWiredService);
         applicationContext.close();
     }
 }

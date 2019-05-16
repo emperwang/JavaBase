@@ -5,10 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
+
 @Controller
 public class AutoWiredController {
     //@Qualifier("service")
-    @Autowired
+    //@Autowired
+    //@Resource(name = "autoWiredService")
+    @Inject
     private AutoWiredService autoWiredService;
 
     @Override
