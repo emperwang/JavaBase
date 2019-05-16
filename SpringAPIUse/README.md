@@ -58,4 +58,10 @@
     2. spEL表达式 @Value("#{20-1}")
     3. ${} 取出环境变量的值 @Value("${os.name}")
 
-16. 
+16. @PropertySource加载外部配置文件
+
+    1. 此注解可以重复标注
+
+    2. @PropertySources此注解表示使用多个propertySource注解
+
+       
