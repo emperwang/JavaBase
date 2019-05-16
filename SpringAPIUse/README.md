@@ -64,4 +64,10 @@
 
     2. @PropertySources此注解表示使用多个propertySource注解
 
+17. @Autowired注入
+	1. 首先按照类型进行注入
+	2. 如果有同一个类型有两个bean,那么会再次按照要注入的变量的名字进行查找注入
+	3. 使用@Qualifier指定注入哪个bean
+	4. @Primary注解,优先注入哪一个bean
+
        
