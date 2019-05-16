@@ -12,7 +12,7 @@ public class AutoWiredService {
     @Resource
     private AutowiredDao dao;
 
-    
+
     @Override
     public String toString() {
         return "AutoWiredService{" +
