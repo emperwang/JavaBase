@@ -47,3 +47,5 @@
     2. 多实例的bean,容器不会进行销毁操作
 
 12. Bean实现InitializingBean和DisposableBean来定义初始化和销毁逻辑
+
+13. 使用@PostConstruct和@PreDestory实现初始化和销毁方法
