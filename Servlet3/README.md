@@ -9,3 +9,5 @@ servlet3.0插件能力：
    META-INF/services/javax.servlet.ServletContainerInitializer
 
    文件的内容指定了ServletContainerInitializer实现类。
+   
+3. 在启动类初始化类中添加servlet，filter，listening类
