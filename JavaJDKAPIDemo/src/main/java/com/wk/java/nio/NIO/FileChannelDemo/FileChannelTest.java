@@ -1,4 +1,4 @@
-package com.wk.NIO.FileChannelDemo;
+package com.wk.java.nio.NIO.FileChannelDemo;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;

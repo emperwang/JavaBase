@@ -1,4 +1,4 @@
-package com.wk.NIO.SocketChannelDemo;
+package com.wk.java.nio.NIO.SocketChannelDemo;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

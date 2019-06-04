@@ -1,4 +1,4 @@
-package com.wk.NIO.DatagramChannelDemo;
+package com.wk.java.nio.NIO.DatagramChannelDemo;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
