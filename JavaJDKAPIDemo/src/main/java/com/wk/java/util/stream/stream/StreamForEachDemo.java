@@ -1,4 +1,4 @@
-package com.wk.stream;
+package com.wk.java.util.stream.stream;
 
 import java.util.stream.IntStream;
 
