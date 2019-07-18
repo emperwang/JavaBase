@@ -46,7 +46,7 @@ public class Coder {
      * @return
      * @throws IOException
      */
-    public static byte[] deccryBASE64(String key) throws IOException {
+    public static byte[] decryptBASE64(String key) throws IOException {
         byte[] bytes = new BASE64Decoder().decodeBuffer(key);
         return bytes;
     }
@@ -110,7 +110,7 @@ public class Coder {
      * @throws InvalidKeyException
      */
     public static byte[] encryptHMAC(byte[] data,String key) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
-        SecretKeySpec keySpec = new SecretKeySpec(deccryBASE64(key), KEY_MAC);
+        SecretKeySpec keySpec = new SecretKeySpec(decryptBASE64(key), KEY_MAC);
         Mac mac = Mac.getInstance(keySpec.getAlgorithm());
         mac.init(keySpec);
         byte[] bytes = mac.doFinal(data);

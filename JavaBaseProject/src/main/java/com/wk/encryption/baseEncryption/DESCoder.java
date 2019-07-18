@@ -61,7 +61,7 @@ public class DESCoder extends Coder {
      * @throws IllegalBlockSizeException
      */
     public static byte[] encrypt(byte[] data,String key) throws IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException {
-        Key k = toKey(deccryBASE64(key));
+        Key k = toKey(decryptBASE64(key));
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         // 使用加密的key和要进行的模式初始化算法
         cipher.init(Cipher.ENCRYPT_MODE,k);
@@ -77,7 +77,7 @@ public class DESCoder extends Coder {
      * @return
      */
     public static byte[] decript(byte[] data,String key) throws IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException, BadPaddingException, IllegalBlockSizeException {
-        Key k = toKey(deccryBASE64(key));
+        Key k = toKey(decryptBASE64(key));
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE,k);
         byte[] bytes = cipher.doFinal(data);
@@ -100,7 +100,7 @@ public class DESCoder extends Coder {
     public static String initKey(String seed) throws IOException, NoSuchAlgorithmException {
         SecureRandom secureRandom = null;
         if (seed != null){
-            secureRandom = new SecureRandom(deccryBASE64(seed));
+            secureRandom = new SecureRandom(decryptBASE64(seed));
         }else {
             secureRandom = new SecureRandom();
         }

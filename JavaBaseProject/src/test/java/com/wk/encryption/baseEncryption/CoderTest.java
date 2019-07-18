@@ -17,7 +17,7 @@ public class CoderTest {
         String base64 = Coder.encryptionBASE64(intputStrBytes);
         System.out.println("BASE64加密:"+base64);
         System.out.println("");
-        byte[] deccryBASE64 = Coder.deccryBASE64(base64);
+        byte[] deccryBASE64 = Coder.decryptBASE64(base64);
         System.out.println("BASE解密:"+new BigInteger(deccryBASE64));
         System.out.println("");
         byte[] encryptMD5 = Coder.encryptMD5(intputStrBytes);
