@@ -18,6 +18,11 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <httpclient.version>4.5.5</httpclient.version>
         <lombok.version>1.16.20</lombok.version>
+        <commons-net.version>3.3</commons-net.version>
+        <aspectjweaver.version>1.8.9</aspectjweaver.version>
+        <bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
+        <cglib.version>3.2.4</cglib.version>
+        <spring.version>4.3.0.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -31,25 +36,25 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.60</version>
+            <version>${bcprov-jdk15on.version}</version>
         </dependency>
         <!--引入cglib动态代理jar包-->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.2.4</version>
+            <version>${cglib.version}</version>
         </dependency>
         <!--使用spring的aop进行切面编程-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.3.0.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <!--使用织入实现代理-->
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.8.9</version>
+            <version>${aspectjweaver.version}</version>
         </dependency>
 
         <dependency>
@@ -63,6 +68,13 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--ftp-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${commons-net.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
