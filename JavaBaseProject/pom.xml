@@ -24,6 +24,7 @@
         <cglib.version>3.2.4</cglib.version>
         <spring.version>4.3.0.RELEASE</spring.version>
         <logback.version>1.2.3</logback.version>
+        <fastjson.version>1.2.47</fastjson.version>
     </properties>
 
     <dependencies>
@@ -86,7 +87,12 @@
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
         </dependency>
-
+        <!--json-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

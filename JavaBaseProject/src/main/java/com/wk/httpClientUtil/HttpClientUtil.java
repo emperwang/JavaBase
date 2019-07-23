@@ -1,6 +1,5 @@
 package com.wk.httpClientUtil;
 
-import com.ericsson.common.util.JSONUtil;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
