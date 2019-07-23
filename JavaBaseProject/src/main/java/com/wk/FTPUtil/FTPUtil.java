@@ -197,7 +197,12 @@ public class FTPUtil {
             // 设置被动模式，开通一个端口来传输数据
             ftpClient.enterLocalPassiveMode();
             // 上传文件
-            flag = ftpClient.storeFile(new String(fileName.getBytes(localCharset),serverCharset),fileInputStream);
+            String tmpFile = new String((fileName+".tmp").getBytes(localCharset), serverCharset);
+            String destFile = new String(fileName.getBytes(localCharset), serverCharset);
+            flag = ftpClient.storeFile(tmpFile,fileInputStream);
+            if (flag) {
+                ftpClient.rename(tmpFile, destFile);
+            }
             closeConnect();
         }
         return flag;
@@ -235,7 +240,13 @@ public class FTPUtil {
             // 设置被动模式
             ftpClient.enterLocalPassiveMode();
             // 文件上传
-            flag = ftpClient.storeFile(new String(fileName.getBytes(localCharset),serverCharset),inputStream);
+            String tmpFile = new String((fileName+".tmp").getBytes(localCharset), serverCharset);
+            String destFile = new String(fileName.getBytes(localCharset), serverCharset);
+            flag = ftpClient.storeFile(tmpFile,inputStream);
+            if (flag){
+                // 重命名
+                ftpClient.rename(tmpFile, destFile);
+            }
             closeConnect();
             httpClient.close();
             response.close();

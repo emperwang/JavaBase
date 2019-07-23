@@ -42,7 +42,7 @@ public class FTPUtilTest {
      */
     @Test
     public void uploadFile() throws IOException {
-        Boolean flag = FTPUtil.uploadLocalFile("notepadPlus", "H:\\FTPTest\\1.txt", "1.txt");
+        Boolean flag = FTPUtil.uploadLocalFile("notepadPlus", "H:\\FTPTest\\kafka_2.11-2.1.1.tgz", "1.txt");
         System.out.println(flag);
     }
 
