@@ -271,16 +271,40 @@ public class FTPUtil {
             for (String file:files){
                 String ftpname = new String(file.getBytes(serverCharset), localCharset);
                 if (ftpname.equals(fileName)){
-                    File destFile = new File(localPath + "/" + ftpname);
+                    File destFile = new File(localPath + "/" + ftpname+".tmp");
+                    File finalFile = new File(localPath + "/" + ftpname);
                     FileOutputStream outputStream = new FileOutputStream(destFile);
                     // 下载文件
                     flag = ftpClient.retrieveFile(file, outputStream);
+                    if (flag){
+                        outputStream.flush();
+                        outputStream.close();
+                        renameFile(destFile,finalFile);
+                    }
                     break;
                 }
             }
             closeConnect();
         }
         return flag;
+    }
+
+    /**
+     *  文件重命名
+     */
+    private static void renameFile(File destFile,File finalFile){
+        if (destFile.exists() && finalFile != null){
+            if( destFile.renameTo(finalFile)) {
+                log.info("rename file success");
+                destFile.delete();
+                return;
+            }else{
+                log.info("rename file error");
+                return;
+            }
+        }else {
+            log.info("the file does not exists");
+        }
     }
 
     /**
@@ -309,11 +333,16 @@ public class FTPUtil {
             // 遍历文件进行存储操作
             for (String file:fileNames){
                 String filename = new String(file.getBytes(serverCharset), localCharset);
-                File destFile = new File(savePath + "/" + filename);
+                File destFile = new File(savePath + "/" + filename+".tmp");
+                File finalFile = new File(savePath + "/" + filename);
                 FileOutputStream outputStream = new FileOutputStream(destFile);
-                ftpClient.retrieveFile(file,outputStream);
+                flag = ftpClient.retrieveFile(file,outputStream);
+                if (flag){
+                    outputStream.flush();
+                    outputStream.close();
+                    renameFile(destFile,finalFile);
+                }
             }
-            flag = true;
             closeConnect();
         }
         return flag;

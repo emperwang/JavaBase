@@ -34,7 +34,7 @@ public class FTPUtilTest {
     @Test
     public void downLoadFileByNameTest() throws IOException {
         Boolean flag = FTPUtil.downLoadfile("notepadPlus", "NppFTP-x64.zip", "H:\\FTPTest");
-        System.out.println(false);
+        System.out.println(flag);
     }
 
     /**
