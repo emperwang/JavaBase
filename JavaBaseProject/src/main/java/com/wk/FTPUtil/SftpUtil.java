@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.util.Properties;
-import java.util.Vector;
+import java.util.*;
 
 @Slf4j
 public class SftpUtil {
@@ -82,10 +81,10 @@ public class SftpUtil {
      * 将输入流的数据上传到sftp作为文件
      * 文件完整路径=basePath+directory
      *
-     * @param basePath 基本目录
-     * @param directory 文件所在目录
+     * @param basePath     基本目录
+     * @param directory    文件所在目录
      * @param sftpFileName 上传后的文件名字
-     * @param filePath  要上传的文件
+     * @param filePath     要上传的文件
      */
     public static Boolean upload(String basePath, String directory, String sftpFileName, String filePath) throws JSchException, IOException, SftpException {
         boolean flag = false;
@@ -115,9 +114,9 @@ public class SftpUtil {
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(new File(filePath));
-            String tempFileName = sftpFileName+".tmp";
+            String tempFileName = sftpFileName + ".tmp";
             sftp.put(inputStream, tempFileName);
-            sftp.rename(tempFileName,sftpFileName);
+            sftp.rename(tempFileName, sftpFileName);
         } catch (FileNotFoundException e) {
             log.error(filePath + " 此文件不存在");
         } finally {
@@ -131,30 +130,31 @@ public class SftpUtil {
     }
 
     /**
-     *  把一个目录中的所有文件上传到服务器上
-     * @param srcDirectory 要上传文件所在目录
+     * 把一个目录中的所有文件上传到服务器上
+     *
+     * @param srcDirectory   要上传文件所在目录
      * @param destServerPath 目标目录
      */
-    public static Boolean uploadAllFilesInDirectory(String srcDirectory,String destServerPath) throws JSchException, SftpException, IOException {
+    public static Boolean uploadAllFilesInDirectory(String srcDirectory, String destServerPath) throws JSchException, SftpException, IOException {
         boolean flag = false;
         if (srcDirectory != null && srcDirectory.length() > 0) {
             // 检查原目录存在
             File file = new File(srcDirectory);
-            if (!file.exists()){
-                log.error(srcDirectory +" 目录不存在");
+            if (!file.exists()) {
+                log.error(srcDirectory + " 目录不存在");
                 return flag;
             }
             // 检查原目录中存在文件
             String[] filesName = file.list();
-            if (filesName == null || filesName.length == 0){
+            if (filesName == null || filesName.length == 0) {
                 log.error(srcDirectory + "  目录中没有文件");
                 return flag;
             }
             // 准备上传文件
             String srcFilePath = null;
             for (String name : filesName) {
-                srcFilePath = srcDirectory + "/"+name;
-                upload("/",destServerPath,name,srcFilePath);
+                srcFilePath = srcDirectory + "/" + name;
+                upload("/", destServerPath, name, srcFilePath);
             }
             flag = true;
         }
@@ -199,7 +199,7 @@ public class SftpUtil {
             try {
                 String substring = saveFile.substring(0, saveFile.lastIndexOf("/"));
                 File parentDir = new File(substring);
-                String tempFileName = saveFile+".tmp";
+                String tempFileName = saveFile + ".tmp";
                 tempFile = new File(tempFileName);
                 destFile = new File(saveFile);
                 // 目录不存在则创建
@@ -211,20 +211,20 @@ public class SftpUtil {
                     return flag;
                 }
                 // 下载
-                 outputStream = new FileOutputStream(tempFile);
+                outputStream = new FileOutputStream(tempFile);
                 sftp.get(downloadFile, outputStream);
                 outputStream.flush();
             } catch (Exception e) {
                 e.printStackTrace();
-            }finally {
-                if (outputStream != null){
+            } finally {
+                if (outputStream != null) {
                     try {
                         outputStream.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-                if (tempFile != null && destFile != null){
+                if (tempFile != null && destFile != null) {
                     tempFile.renameTo(destFile);
                 }
                 logout();
@@ -235,12 +235,63 @@ public class SftpUtil {
     }
 
     /**
-     *  把服务器上一个目录中所有的文件下载到本地
+     * 把服务器上一个目录中所有的文件下载到本地
+     *
      * @param srcServerPath 要下载的文件所在的服务器目录
-     * @param destLocalPath  本地目标目录
+     * @param destLocalPath 本地目标目录
      */
-    public static void downLoadAllFilsInDirectory(String srcServerPath,String destLocalPath){
+    public static Boolean downLoadAllFilsInDirectory(String srcServerPath, String destLocalPath) throws JSchException, SftpException {
+        boolean flag = false;
+        // 检查目标目录是否存在，不存在则创建
+        if (destLocalPath != null && destLocalPath.length() > 0) {
+            File file = new File(destLocalPath);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            // 得到原目录中的文件名
+            Vector filesInSrc = listFiles(srcServerPath);
+            if (filesInSrc == null || filesInSrc.size() == 0){
+                log.error(srcServerPath +" 没有文件");
+                return flag;
+            }
+            List<String> fileNamesFromLs = getFileNameFromLs(filesInSrc);
+            for (String namesFromL : fileNamesFromLs) {
+                downLoad(srcServerPath,namesFromL,destLocalPath+"/"+namesFromL);
+            }
+            flag = true;
+        }
+        return flag;
+    }
 
+    /**
+     *  从 sftp.ls() 结果中获取文件名
+     * @return
+     */
+    public static List<String> getFileNameFromLs(Vector fileList){
+            List<String> nameLists = new ArrayList<>();
+            if (fileList != null && fileList.size()>0){
+                for (int i = 2; i < fileList.size(); i++) { // 跳过当前目录和上次目录
+                    String[] split = fileList.get(i).toString().split(" ");
+                    nameLists.add(split[split.length-1]);
+                }
+            }
+            return nameLists;
+    }
+
+    /**
+     *  获取一个目录中所有文件的大小
+     * @param fileList
+     * @return
+     */
+    public static Map<String,String> getFileNameAndSizeFromLs(Vector fileList){
+        Map<String,String> nameLists = new HashMap<>();
+        if (fileList != null && fileList.size()>0){
+            for (int i = 2; i < fileList.size(); i++) { // 跳过当前目录和上次目录
+                String[] split = fileList.get(i).toString().split(" ");
+                nameLists.put(split[split.length-1],split[16]);
+            }
+        }
+        return nameLists;
     }
 
     /**
@@ -259,19 +310,19 @@ public class SftpUtil {
                 try {
                     sftp.cd(directory);
                 } catch (SftpException e) {
-                    log.error(directory + " 此目录不存在,错误信息:"+e.getMessage());
+                    log.error(directory + " 此目录不存在,错误信息:" + e.getMessage());
                     return fileDate;
                 }
 
                 // 检测目录中是否存在文件
-                try{
+                try {
                     Vector files = sftp.ls(directory);
-                    if (files == null || files.size() == 0){
-                        log.info(directory+" 此目录中没有文件可下载");
+                    if (files == null || files.size() == 0) {
+                        log.info(directory + " 此目录中没有文件可下载");
                         return fileDate;
                     }
                 } catch (SftpException e) {
-                    log.error(directory + " 此目录不存在,错误信息:"+e.getMessage());
+                    log.error(directory + " 此目录不存在,错误信息:" + e.getMessage());
                     return fileDate;
                 }
 
