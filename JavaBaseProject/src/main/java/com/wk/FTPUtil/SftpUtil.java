@@ -82,10 +82,10 @@ public class SftpUtil {
      * 将输入流的数据上传到sftp作为文件
      * 文件完整路径=basePath+directory
      *
-     * @param basePath
-     * @param directory
-     * @param sftpFileName
-     * @param filePath
+     * @param basePath 基本目录
+     * @param directory 文件所在目录
+     * @param sftpFileName 上传后的文件名字
+     * @param filePath  要上传的文件
      */
     public static void upload(String basePath, String directory, String sftpFileName, String filePath) throws JSchException, IOException, SftpException {
         try {
@@ -114,7 +114,9 @@ public class SftpUtil {
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(new File(filePath));
-            sftp.put(inputStream, sftpFileName);
+            String tempFileName = sftpFileName+".tmp";
+            sftp.put(inputStream, tempFileName);
+            sftp.rename(tempFileName,sftpFileName);
         } catch (FileNotFoundException e) {
             log.error(filePath + " 此文件不存在");
         } finally {
