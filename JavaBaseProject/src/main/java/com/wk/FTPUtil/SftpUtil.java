@@ -168,8 +168,9 @@ public class SftpUtil {
      * @param downloadFile 下载文件
      * @param saveFile     本地存放路径
      */
-    public static void downLoad(String directory, String downloadFile, String saveFile) throws JSchException {
+    public static Boolean downLoad(String directory, String downloadFile, String saveFile) throws JSchException {
         login();
+        boolean flag = false;
         if (sftp != null) {
             if (directory != null && !"".equals(directory)) {
                 // 检测目录是否存在
@@ -178,18 +179,18 @@ public class SftpUtil {
                 } catch (SftpException e) {
                     // 目录不存在
                     log.error(directory + " 此目录不存在,错误信息:" + e.getMessage());
-                    return;
+                    return flag;
                 }
                 // 检测目录中是否有文件
                 try {
                     Vector files = sftp.ls(directory);
                     if (files == null || files.size() == 0) {
                         log.error(directory + " 此目录中没有文件存在");
-                        return;
+                        return flag;
                     }
                 } catch (SftpException e) {
                     log.error(directory + " 此目录不存在,错误信息:" + e.getMessage());
-                    return;
+                    return flag;
                 }
             }
             FileOutputStream outputStream = null;
@@ -207,7 +208,7 @@ public class SftpUtil {
                 }
                 // 文件存在，则不进行下载
                 if (destFile.exists()) {
-                    return;
+                    return flag;
                 }
                 // 下载
                  outputStream = new FileOutputStream(tempFile);
@@ -227,8 +228,10 @@ public class SftpUtil {
                     tempFile.renameTo(destFile);
                 }
                 logout();
+                flag = true;
             }
         }
+        return flag;
     }
 
     /**

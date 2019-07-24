@@ -17,7 +17,8 @@ public class SFTPUtilTest {
     }
     @Test
     public void downLoadFileTest() throws FileNotFoundException, SftpException, JSchException {
-        SftpUtil.downLoad("/","powerDesign.zip","H:/FTPTest/powerDesign.zip");
+        Boolean aBoolean = SftpUtil.downLoad("/", "NppFTP-x64.zip", "H:/FTPTest/NppFTP-x64.zip");
+        System.out.println(aBoolean);
     }
     @Test
     public void uploadFileTest() throws IOException, SftpException, JSchException {
