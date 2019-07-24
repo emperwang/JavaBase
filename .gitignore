@@ -35,6 +35,8 @@ Servers
 *.via
 *.tmp
 *.err
+## log file
+logs
 # OS generated files #  
 .DS_Store  
 .DS_Store?  
