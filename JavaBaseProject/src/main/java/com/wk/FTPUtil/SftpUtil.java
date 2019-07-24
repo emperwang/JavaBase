@@ -160,24 +160,41 @@ public class SftpUtil {
                     return;
                 }
             }
+            FileOutputStream outputStream = null;
+            File tempFile = null;
+            File destFile = null;
             try {
                 String substring = saveFile.substring(0, saveFile.lastIndexOf("/"));
                 File parentDir = new File(substring);
-                File file = new File(saveFile);
+                String tempFileName = saveFile+".tmp";
+                tempFile = new File(tempFileName);
+                destFile = new File(saveFile);
                 // 目录不存在则创建
                 if (!parentDir.exists()) {
                     parentDir.mkdirs();
                 }
                 // 文件存在，则不进行下载
-                if (file.exists()) {
+                if (destFile.exists()) {
                     return;
                 }
                 // 下载
-                sftp.get(downloadFile, new FileOutputStream(file));
-            } catch (FileNotFoundException e) {
+                 outputStream = new FileOutputStream(tempFile);
+                sftp.get(downloadFile, outputStream);
+                outputStream.flush();
+            } catch (Exception e) {
                 e.printStackTrace();
-            } catch (SftpException e) {
-                e.printStackTrace();
+            }finally {
+                if (outputStream != null){
+                    try {
+                        outputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (tempFile != null && destFile != null){
+                    tempFile.renameTo(destFile);
+                }
+                logout();
             }
         }
     }

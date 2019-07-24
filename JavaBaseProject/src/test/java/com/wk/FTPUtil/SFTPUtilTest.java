@@ -17,7 +17,7 @@ public class SFTPUtilTest {
     }
     @Test
     public void downLoadFileTest() throws FileNotFoundException, SftpException, JSchException {
-        SftpUtil.downLoad("/","npp.7.6.3.Installer.x64.exe","D:/npp.7.6.3.Installer.x64.exe");
+        SftpUtil.downLoad("/","powerDesign.zip","H:/FTPTest/powerDesign.zip");
     }
     @Test
     public void uploadFileTest() throws IOException, SftpException, JSchException {
