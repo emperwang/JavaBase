@@ -27,4 +27,10 @@ public class SFTPUtilTest {
     public void deleteServerFileTest() throws JSchException, SftpException {
         SftpUtil.delete("/","powerDesign.zip");
     }
+
+    @Test
+    public void uploadAllFilesInDirectory() throws JSchException, SftpException, IOException {
+        Boolean aBoolean = SftpUtil.uploadAllFilesInDirectory("H:/FTPTest", "test");
+        System.out.println(aBoolean);
+    }
 }

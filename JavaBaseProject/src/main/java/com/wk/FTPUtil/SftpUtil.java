@@ -87,7 +87,8 @@ public class SftpUtil {
      * @param sftpFileName 上传后的文件名字
      * @param filePath  要上传的文件
      */
-    public static void upload(String basePath, String directory, String sftpFileName, String filePath) throws JSchException, IOException, SftpException {
+    public static Boolean upload(String basePath, String directory, String sftpFileName, String filePath) throws JSchException, IOException, SftpException {
+        boolean flag = false;
         try {
             login();
             sftp.cd(basePath);
@@ -124,10 +125,41 @@ public class SftpUtil {
                 inputStream.close();
             }
             logout();
+            flag = true;
         }
+        return flag;
     }
 
-
+    /**
+     *  把一个目录中的所有文件上传到服务器上
+     * @param srcDirectory 要上传文件所在目录
+     * @param destServerPath 目标目录
+     */
+    public static Boolean uploadAllFilesInDirectory(String srcDirectory,String destServerPath) throws JSchException, SftpException, IOException {
+        boolean flag = false;
+        if (srcDirectory != null && srcDirectory.length() > 0) {
+            // 检查原目录存在
+            File file = new File(srcDirectory);
+            if (!file.exists()){
+                log.error(srcDirectory +" 目录不存在");
+                return flag;
+            }
+            // 检查原目录中存在文件
+            String[] filesName = file.list();
+            if (filesName == null || filesName.length == 0){
+                log.error(srcDirectory + "  目录中没有文件");
+                return flag;
+            }
+            // 准备上传文件
+            String srcFilePath = null;
+            for (String name : filesName) {
+                srcFilePath = srcDirectory + "/"+name;
+                upload("/",destServerPath,name,srcFilePath);
+            }
+            flag = true;
+        }
+        return flag;
+    }
 
     /**
      * 下载文件
@@ -197,6 +229,15 @@ public class SftpUtil {
                 logout();
             }
         }
+    }
+
+    /**
+     *  把服务器上一个目录中所有的文件下载到本地
+     * @param srcServerPath 要下载的文件所在的服务器目录
+     * @param destLocalPath  本地目标目录
+     */
+    public static void downLoadAllFilsInDirectory(String srcServerPath,String destLocalPath){
+
     }
 
     /**
