@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--<properties resource=""></properties>-->
+    <typeAliases>
+        <package name="com.mybatis.bean"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/ssm"/>
+                <property name="username" value="root"/>
+                <property name="password" value="admin"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--1.注册sql映射文件-->
+        <!--<mapper resource="com/mybatis/mapper/UserMapper.xml"/>-->
+        <!--2.注册接口，sql映射文件必须和接口同名，并且放到
+            同一目录下-->
+        <!--<mapper class=""/>-->
+
+        <!--3.注册基于注解的接口，没有sql映射文件
+        所有的sql都是利用注解写在接口上  -->
+        <!--<mapper class=""/>-->
+
+        <!--4.批量注册，需要将sql配置文件和接口放到同一目录下-->
+        <package name="com.mybatis.mapper"/>
+    </mappers>
+</configuration>
