@@ -13,7 +13,7 @@ public class MainApp {
         SqlSessionFactory sqlSessionFactory = SqlSessionFactoryUtil.getSqlSessionFactory();
         SqlSession sqlSession = sqlSessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        
+
         List<User> all = userMapper.findAll();
         for (User user : all) {
             System.out.println(user);
