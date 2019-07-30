@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<students>
+    <student id="111" idcard="ma111">
+        <name>马化腾</name>
+        <location>深圳</location>
+        <age>20</age>
+    </student>
+    <student id="222" idcard="yun222">
+        <name>马云飞</name>
+        <location>杭州</location>
+        <age>30</age>
+    </student>
+</students>
