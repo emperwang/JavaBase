@@ -44,9 +44,9 @@ public class SocketUtil {
             connetServer(HostAddress, HostPort);
         }
         // 向服务端发送信息
-        OutputStream outer = socket.getOutputStream();
-        outer.write(data.getBytes());
-        outer.flush();
+        OutputStream outputStream = socket.getOutputStream();
+        outputStream.write(data.getBytes());
+        outputStream.flush();
         logger.info("发送完毕！");
 
         // 接收服务端的返回值
@@ -60,6 +60,10 @@ public class SocketUtil {
 
         String str_recv = new String(recv);
         logger.info("客户端：接收到服务端的文字：" + str_recv);
+
+        outputStream.close();
+        inputStream.close();
+        closeConnect(socket);
     }
 
     /**
