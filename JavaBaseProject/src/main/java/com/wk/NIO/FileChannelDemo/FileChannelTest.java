@@ -25,7 +25,7 @@ public class FileChannelTest {
         // 7. 设置limit为当前的position位置
         bufWrite.flip();
         // 8. 写入数据
-        fileChannel.write(buf);
+        fileChannel.write(bufWrite);
         while (byteRead != -1){
             System.out.println("Read "+byteRead);
             // 9. 把limit设置到position位置，也就是读取时读取写入的数据就好
