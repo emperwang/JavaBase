@@ -40,7 +40,6 @@ public class SocketUtil {
         }
         // 向服务端发送信息
         OutputStream outer = socket.getOutputStream();
-       // byte[] b = "客户端：向服务端发送文字，\"这是一行测试....\"".getBytes();
         outer.write(data.getBytes());
         outer.flush();
         logger.info("发送完毕！");
