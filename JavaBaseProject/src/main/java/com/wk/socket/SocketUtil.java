@@ -24,8 +24,13 @@ public class SocketUtil {
 
     private static Integer ReceiveBufSize = 2014;
 
-    public static void connetServer(String hostAddres, Integer port) throws IOException {
-        socket = new Socket(hostAddres, port);
+    public static void connetServer(String hostAddres, Integer port){
+        try {
+            socket = new Socket(hostAddres, port);
+            logger.info("create socket connect....");
+        } catch (IOException e) {
+            logger.info("create connect error,the msg is:{}",e.getMessage());
+        }
     }
 
     /**
@@ -57,7 +62,20 @@ public class SocketUtil {
         logger.info("客户端：接收到服务端的文字：" + str_recv);
     }
 
-
+    /**
+     *  关闭连接
+     * @param socket
+     */
+    public static void closeConnect(Socket socket){
+        if (socket != null){
+            try {
+                socket.close();
+                logger.info("close socket connection..");
+            } catch (IOException e) {
+                logger.error("close socket error,erroe msg is:{}",e.getMessage());
+            }
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         sendDataTCP("hello, this is www client.");

@@ -9,6 +9,9 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ *  每次一个socket连接，都使用一个新的线程去进行处理
+ */
 public class SocketServerThread {
     private  static  final Logger logger = LoggerFactory.getLogger(SocketServerdemo.class);
     private static final String CharSet = "UTF-8";
