@@ -11,7 +11,7 @@ import java.net.Socket;
  *  收发文件请求
  */
 public class SocketServerSendReceiveFile {
-    private  static  final Logger logger = LoggerFactory.getLogger(SocketServerdemo.class);
+    private  static  final Logger logger = LoggerFactory.getLogger(SocketServerSendReceiveFile.class);
     private static final String CharSet = "UTF-8";
     private static final Integer PORT = 9001;
 
