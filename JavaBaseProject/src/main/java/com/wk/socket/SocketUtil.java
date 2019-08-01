@@ -135,7 +135,7 @@ public class SocketUtil {
             logger.error("file must be set");
         }
         if (socket == null){
-            connectServer(HostAddress,HostPort);
+            socket = connectServer(HostAddress,HostPort);
             logger.debug("socket can not be null");
         }
         File file1 = new File(file);
@@ -155,8 +155,6 @@ public class SocketUtil {
             dataOutputStream.flush();
 
             dataInputStream.close();
-            dataOutputStream.close();
-            closeConnect(socket);
         } catch (IOException e) {
             logger.error("socket occur error,error msg is:{}",e.getMessage());
         }
@@ -172,7 +170,7 @@ public class SocketUtil {
             logger.error("file must be set");
         }
         if (socket == null){
-            connectServer(HostAddress,HostPort);
+            socket = connectServer(HostAddress,HostPort);
             logger.debug("socket can not be null");
         }
         try {
@@ -194,27 +192,18 @@ public class SocketUtil {
             }
             dataOutputStream.flush();
 
-            dataInputStream.close();
             dataOutputStream.close();
-            closeConnect(socket);
         } catch (IOException e) {
             logger.error("socket occur error,error msg is:{}",e.getMessage());
         }
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        //sendDataTCP("hello, this is www client.");
-
-        // 接收文件
-        /*sendMsg("read");
-        connectServer(HostAddress,HostPort);
-        revFile(SavePath);*/
         Socket socket = connectServer(HostAddress, HostPort);
         while (true) {
             // 发送文件
             sendMsgNotClose("write", socket);
-            //sendFile(FileToSend, socket);
-
+            sendFile(FileToSend, socket);
 
             Thread.sleep(5000);
         }
