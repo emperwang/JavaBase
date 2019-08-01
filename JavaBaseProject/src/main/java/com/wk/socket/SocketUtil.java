@@ -14,8 +14,6 @@ public class SocketUtil {
 
     private static final String CharSet = "UTF-8";
 
-    private static Socket socket = null;
-
     private static Integer SoTimeOut = 30000;
 
     private static Integer SendBufSize = 1024;
@@ -25,13 +23,15 @@ public class SocketUtil {
     private static final String FileToSend = "D:/gc.log";
     private static final String SavePath = "D:/image";
 
-    public static void connectServer(String hostAddres, Integer port){
+    public static Socket connectServer(String hostAddres, Integer port){
+        Socket socket = null;
         try {
             socket = new Socket(hostAddres, port);
             logger.info("create socket connect....");
         } catch (IOException e) {
             logger.info("create connect error,the msg is:{}",e.getMessage());
         }
+        return socket;
     }
 
     /**
@@ -40,7 +40,7 @@ public class SocketUtil {
      * @param data
      * @return
      */
-    public static void sendAndReceiveData(String data) throws IOException {
+    public static void sendAndReceiveData(String data,Socket socket) throws IOException {
         if (socket == null) {
             connectServer(HostAddress, HostPort);
         }
@@ -70,7 +70,7 @@ public class SocketUtil {
     /**
      *  发送消息
      */
-    public static void sendMsg(String msg){
+    public static void sendMsg(String msg,Socket socket){
         if (msg == null || msg.length() == 0){
             logger.error("msg can not be null");
         }
@@ -90,6 +90,29 @@ public class SocketUtil {
         }
     }
 
+
+    /**
+     * 发送消息
+     */
+    public static void sendMsgNotClose(String msg, Socket socket) {
+        if (msg == null || msg.length() == 0) {
+            logger.error("msg can not be null");
+        }
+        if (socket == null) {
+            socket = connectServer(HostAddress, HostPort);
+        }
+        PrintWriter writer = null;
+        try {
+            OutputStream outputStream = socket.getOutputStream();
+            writer = new PrintWriter(new OutputStreamWriter(outputStream));
+            writer.println(msg);
+            writer.flush();
+        } catch (IOException e) {
+            logger.error("send msg error,error msg is:{}", e.getMessage());
+        } finally {
+
+        }
+    }
     /**
      *  关闭连接
      * @param socket
@@ -107,7 +130,7 @@ public class SocketUtil {
     /**
      *  发送文件
      */
-    public static void sendFile(String file){
+    public static void sendFile(String file,Socket socket){
         if (file == null || file.length() == 0){
             logger.error("file must be set");
         }
@@ -144,7 +167,7 @@ public class SocketUtil {
      * @param savePath
      * @param
      */
-    public static void revFile(String savePath){
+    public static void revFile(String savePath,Socket socket){
         if (savePath == null || savePath.length() == 0){
             logger.error("file must be set");
         }
@@ -179,17 +202,21 @@ public class SocketUtil {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         //sendDataTCP("hello, this is www client.");
 
         // 接收文件
         /*sendMsg("read");
         connectServer(HostAddress,HostPort);
         revFile(SavePath);*/
+        Socket socket = connectServer(HostAddress, HostPort);
+        while (true) {
+            // 发送文件
+            sendMsgNotClose("write", socket);
+            //sendFile(FileToSend, socket);
 
-        // 发送文件
-        sendMsg("write");
-        connectServer(HostAddress,HostPort);
-        sendFile(FileToSend);
+
+            Thread.sleep(5000);
+        }
     }
 }
