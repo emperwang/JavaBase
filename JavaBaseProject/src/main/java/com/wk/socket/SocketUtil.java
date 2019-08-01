@@ -7,7 +7,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class SocketUtil {
-    private  static  final Logger logger = LoggerFactory.getLogger(SocketServerdemo.class);
+    private  static  final Logger logger = LoggerFactory.getLogger(SocketUtil.class);
     private static final String HostAddress = "127.0.0.1";
 
     private static final Integer HostPort = 9001;
@@ -110,6 +110,31 @@ public class SocketUtil {
 
         }
     }
+
+    /**
+     *  接收消息
+     * @param socket
+     * @return
+     */
+    public static String receiveMsgNotClose( Socket socket) {
+        if (socket == null) {
+            socket = connectServer(HostAddress, HostPort);
+        }
+        BufferedReader reader = null;
+        try {
+            InputStream inputStream = socket.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            int count = 0;
+            while ((count = inputStream.available())>0);
+
+            String revMsg = reader.readLine();
+            return revMsg;
+        } catch (IOException e) {
+            logger.error("send msg error,error msg is:{}", e.getMessage());
+        }
+        return null;
+    }
     /**
      *  关闭连接
      * @param socket
@@ -202,11 +227,15 @@ public class SocketUtil {
     public static void main(String[] args) throws IOException, InterruptedException {
         Socket socket = connectServer(HostAddress, HostPort);
         while (true) {
-            // 发送文件
             sendMsgNotClose("write", socket);
-            sendFile(FileToSend, socket);
-            sendMsgNotClose("", socket);
-            Thread.sleep(20000);
+            //sendFile(FileToSend, socket);
+
+            String s = receiveMsgNotClose(socket);
+            logger.info("rev from server :{}",s);
+
+            sendMsgNotClose("read", socket);
+            s = receiveMsgNotClose(socket);
+            logger.info("rev from server2 :{}",s);
         }
     }
 }
