@@ -95,9 +95,6 @@ public class SocketUtil {
      * 发送消息
      */
     public static void sendMsgNotClose(String msg, Socket socket) {
-        if (msg == null || msg.length() == 0) {
-            logger.error("msg can not be null");
-        }
         if (socket == null) {
             socket = connectServer(HostAddress, HostPort);
         }
@@ -155,6 +152,8 @@ public class SocketUtil {
             dataOutputStream.flush();
 
             dataInputStream.close();
+            dataOutputStream.close();
+            socket.close();
         } catch (IOException e) {
             logger.error("socket occur error,error msg is:{}",e.getMessage());
         }
@@ -165,7 +164,7 @@ public class SocketUtil {
      * @param savePath
      * @param
      */
-    public static void revFile(String savePath,Socket socket){
+    public static void revFileByClose(String savePath,Socket socket){
         if (savePath == null || savePath.length() == 0){
             logger.error("file must be set");
         }
@@ -193,6 +192,8 @@ public class SocketUtil {
             dataOutputStream.flush();
 
             dataOutputStream.close();
+            dataInputStream.close();
+            socket.close();
         } catch (IOException e) {
             logger.error("socket occur error,error msg is:{}",e.getMessage());
         }
@@ -204,8 +205,8 @@ public class SocketUtil {
             // 发送文件
             sendMsgNotClose("write", socket);
             sendFile(FileToSend, socket);
-
-            Thread.sleep(5000);
+            sendMsgNotClose("", socket);
+            Thread.sleep(20000);
         }
     }
 }
