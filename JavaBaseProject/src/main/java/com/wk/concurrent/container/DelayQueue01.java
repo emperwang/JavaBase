@@ -1,7 +1,5 @@
 package com.wk.concurrent.container;
 
-import jdk.management.resource.internal.inst.DatagramDispatcherRMHooks;
-
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.DelayQueue;
