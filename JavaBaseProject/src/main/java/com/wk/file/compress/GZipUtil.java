@@ -9,9 +9,9 @@ import java.util.zip.GZIPOutputStream;
 
 public class GZipUtil {
     private static Logger logger = LoggerFactory.getLogger(GZipUtil.class);
-    private static String To_Comptess_File = "H:/FTPTest/测试文件.txt";
-    private static String To_Comptess_Dir = "H:/FTPTest";
-    private static String To_UnComptess_File = "H:/FTPTest/测试文件.txt.gz";
+    private static String To_Compress_File = "H:/FTPTest/测试文件.txt";
+    private static String To_Compress_Dir = "H:/FTPTest";
+    private static String To_UnCompress_File = "H:/FTPTest/测试文件.txt.gz";
     private static String Dest_Path = "D:/image";
 
     private static Integer Buf_Size = 1024;
@@ -215,12 +215,12 @@ public class GZipUtil {
         GZipUtil gZipUtil = new GZipUtil();
 
         // 压缩文件
-        //gZipUtil.compress(To_Comptess_File,true);
-        //gZipUtil.compress(To_Comptess_File,Dest_Path,true);
+        //gZipUtil.compress(To_Compress_File,true);
+        //gZipUtil.compress(To_Compress_File,Dest_Path,true);
 
         // 解压缩
-        //gZipUtil.deCompress(To_UnComptess_File,false);
-        //gZipUtil.deCompress(To_UnComptess_File,true,Dest_Path);
+        //gZipUtil.deCompress(To_UnCompress_File,false);
+        //gZipUtil.deCompress(To_UnCompress_File,true,Dest_Path);
 
 
     }
