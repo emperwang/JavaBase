@@ -28,5 +28,7 @@ public class MainApp {
             System.out.println(user);
         }
 
+        User user = userMapper.findById(1);
+        System.out.println(user);
     }
 }

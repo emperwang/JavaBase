@@ -14,4 +14,9 @@
         SELECT <include refid="baseSql"/>
         FROM user
     </select>
+
+    <select id="findById" resultMap="baseResultMap" parameterType="java.lang.Integer">
+        SELECT <include refid="baseSql"/>
+        FROM user WHERE id = #{id}
+    </select>
 </mapper>
