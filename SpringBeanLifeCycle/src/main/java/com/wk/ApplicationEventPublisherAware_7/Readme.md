@@ -1,0 +1,1 @@
+注入应用事件发布器ApplicationEventPublisher

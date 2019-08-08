@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="person" class="com.wk.bean.Person"/>
+    <bean id="lifecycle" class="com.wk.bean.LifeCycle"/>
+    <bean id="liftCycleBeanPostProcessor" class="com.wk.bean.LiftCycleBeanPostProcessor" />
+    <bean id="lifeCycleInstantiationProcessor" class="com.wk.bean.LifeCycleInstantiationProcessor" />
+    <bean id="liftCycleDestory" class="com.wk.bean.LiftCycle_destory" />
+</beans>
