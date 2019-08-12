@@ -1,0 +1,9 @@
+// 对文件赋予  读写权限
+grant {
+    permission java.io.FilePermission "D:/gc.log","read";
+    permission java.io.FilePermission "D:/gc.log","write";
+};
+// 对一个属性进行权限赋予read
+grant {
+    permission java.util.PropertyPermission "file.encoding","read";
+};
