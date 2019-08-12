@@ -24,7 +24,9 @@ public class MBeanAgent {
     public static void startMBean(int port) throws MalformedObjectNameException, NotCompliantMBeanException, InstanceAlreadyExistsException, MBeanRegistrationException, IOException {
         MBeanServer beanServer = ManagementFactory.getPlatformMBeanServer();
         ObjectName objectName = new ObjectName("jmxBean:name=Msg");
-        beanServer.registerMBean(new Msg(),objectName);
+        Msg msg = new Msg();
+        msg.setMessage("hello");
+        beanServer.registerMBean(msg,objectName);
 
         LocateRegistry.createRegistry(port);
         JMXServiceURL jmxServiceURL = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://localhost:" + port + "/jmxrmi/Msg");
