@@ -1,4 +1,4 @@
-package com.wk.JMX;
+package com.wk.JMX.base_mine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

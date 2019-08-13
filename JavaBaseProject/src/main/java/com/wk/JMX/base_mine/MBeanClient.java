@@ -1,4 +1,4 @@
-package com.wk.JMX;
+package com.wk.JMX.base_mine;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,6 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import java.io.IOException;
-import java.net.MalformedURLException;
 
 public class MBeanClient {
     private static Logger logger = LoggerFactory.getLogger(MBeanClient.class);

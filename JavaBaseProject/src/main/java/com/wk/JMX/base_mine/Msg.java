@@ -1,4 +1,4 @@
-package com.wk.JMX;
+package com.wk.JMX.base_mine;
 
 /**
  *  MBean的一个实现类

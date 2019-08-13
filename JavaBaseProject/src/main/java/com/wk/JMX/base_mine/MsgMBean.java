@@ -1,4 +1,4 @@
-package com.wk.JMX;
+package com.wk.JMX.base_mine;
 
 /**
  *  向外暴露的MBean
