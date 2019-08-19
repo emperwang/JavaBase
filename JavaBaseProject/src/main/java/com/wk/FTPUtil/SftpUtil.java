@@ -166,7 +166,7 @@ public class SftpUtil {
      *
      * @param directory    下载目录
      * @param downloadFile 下载文件
-     * @param saveFile     本地存放路径
+     * @param saveFile     本地存放路径  H:/FTPTest/20190819144000.xml.gz
      */
     public static Boolean downLoad(String directory, String downloadFile, String saveFile) throws JSchException {
         login();
@@ -175,7 +175,8 @@ public class SftpUtil {
             if (directory != null && !"".equals(directory)) {
                 // 检测目录是否存在
                 try {
-                    sftp.lcd(directory);
+                    sftp.cd(directory);
+                    // sftp.lcd(directory);   // 报:文件路径找不到
                 } catch (SftpException e) {
                     // 目录不存在
                     log.error(directory + " 此目录不存在,错误信息:" + e.getMessage());
@@ -360,5 +361,12 @@ public class SftpUtil {
             files = sftp.ls(directory);
         }
         return files;
+    }
+
+    public static void main(String[] args) throws JSchException {
+        SftpUtil.downLoad("/opt/ericsson/simulator/omc/data/North/CM/20190819",
+                "GD-CM-PCF-A1-V0.4.0-20190819144000.xml.gz",
+                "H:/FTPTest/20190819144000.xml.gz");
+        SftpUtil.logout();
     }
 }
