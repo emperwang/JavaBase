@@ -38,6 +38,7 @@
     <module>Dubbo/DubboConsumer</module>
     <module>Dubbo/DubboProvider</module>
     <module>Javaspi</module>
+    <module>java_kafka_demo</module>
   </modules>
 
 
