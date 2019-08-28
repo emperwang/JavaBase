@@ -12,6 +12,8 @@ public class PrintUtil {
 
     /**
      *  字符串转二进制
+     *  转换为字符对应的二进制  ASCALL 码表对应
+     *  unicode 编码 兼容 ASCALL
      * @return
      */
     public static String toBinary(String str){
@@ -25,6 +27,8 @@ public class PrintUtil {
 
     /**
      *  字符串转十六进制
+     *  转换为 ASCALL 字符对应的十六进制
+     *  unicode 兼容ascall 码表
      * @return
      */
     public static String toHex(String str){
@@ -38,6 +42,8 @@ public class PrintUtil {
 
     /**
      *  字符串转 十进制
+     *  把字符转换为 ascall表的十进制表示
+     *  unicode 兼容 ascall
      * @return
      */
     public static String toOct(String str){
@@ -57,9 +63,25 @@ public class PrintUtil {
         char[] chars = binStr.toCharArray();
         int[] result = new int[chars.length];
         for (int i = 0; i < chars.length; i++) {
+            // 字符的 1 和十进制的 1 ,在ascall表中相差 48,减去48就可以把字符的1转换为数字的1
             result[i] = chars[i] - 48;
         }
         return result;
+    }
+
+    /**
+     * 二进制转换为字符
+     * @param binStr
+     * @return
+     */
+    public static char binaryToChar(String binStr){
+        int[] ints = binaryToIntArray(binStr);
+        int sum = 0;
+        for (int i = 0;i< ints.length;i++){
+            sum += ints[ints.length-1-i] << i;
+        }
+        System.out.println(sum);
+        return (char)sum;
     }
 
     public static void prinfDemo(){
@@ -103,7 +125,14 @@ public class PrintUtil {
 
     public static void main(String[] args) {
         // binaryPrint();
-        String hello = toBinary("hello");
-        prinfDemo();
+        String hex = toHex("h");
+        System.out.println("0x"+hex);
+        String oct = toOct("h");
+        System.out.println(oct);
+        String hello = toBinary("h");
+        System.out.println(hello);
+        char c = binaryToChar(hello);
+        System.out.println(c);
+        //prinfDemo();
     }
 }
