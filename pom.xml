@@ -39,6 +39,7 @@
     <module>Dubbo/DubboProvider</module>
     <module>Javaspi</module>
     <module>java_kafka_demo</module>
+      <module>JavaSSL</module>
   </modules>
 
 
