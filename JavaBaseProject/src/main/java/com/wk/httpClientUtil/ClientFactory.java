@@ -2,6 +2,7 @@ package com.wk.httpClientUtil;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustAllStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -42,8 +43,15 @@ public class ClientFactory {
         try{
             SSLContext sslContext = SSLContexts.custom()
                     .loadTrustMaterial(new TrustAllStrategy()).build();
-            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,
-                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+            String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
+            // 此处会认证主机  hostName
+/*            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                    null,
+                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
+            // 此不会认证主机名字
+            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                    null,
+                    NoopHostnameVerifier.INSTANCE);
             RequestConfig requestConfig = RequestConfig.custom()
                     .setSocketTimeout(socketTime)
                     .setConnectTimeout(connectTimeout)
@@ -65,10 +73,19 @@ public class ClientFactory {
     public static CloseableHttpClient createHttpSSLClient(String trustStorePath,
                                                           String trustStorePasswd,Integer socketTimeOut,Integer connectTimeout)  {
         try{
-            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(new File(trustStorePath), trustStorePasswd.toCharArray()).build();
-            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(new File(trustStorePath), trustStorePasswd.toCharArray())
+                    .build();
+            String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
+/*            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                                                                    null,
+                                                                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
 
-            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeOut).setConnectTimeout(connectTimeout).build();
+            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                                                                    null,
+                                                                    NoopHostnameVerifier.INSTANCE);
+
+            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeOut)
+                    .setConnectTimeout(connectTimeout).build();
             CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(sslConnectionSocketFactory)
                     .setDefaultRequestConfig(requestConfig).build();
             return httpClient;
@@ -101,7 +118,12 @@ public class ClientFactory {
                                 }
                             }).build();
             String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
-            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,protocols,null, SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+/*            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                    null,
+                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
+            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                    null,
+                    NoopHostnameVerifier.INSTANCE);
             RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(connectTimeout).setSocketTimeout(socketTimeOut).build();
             CloseableHttpClient httpClient = HttpClients.custom().setSSLSocketFactory(socketFactory)
                     .setDefaultRequestConfig(requestConfig).build();
