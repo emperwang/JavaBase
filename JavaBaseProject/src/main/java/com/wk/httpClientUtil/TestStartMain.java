@@ -3,6 +3,10 @@ package com.wk.httpClientUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.CloseableHttpClient;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+
 /**
  *
  */
@@ -20,8 +24,10 @@ public class TestStartMain {
     /**
      *  绕过认证测试
      */
-    public static void trustAll(){
-        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(socketTimeOut, connectTimeout);
+    public static void trustAll() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        // CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(socketTimeOut, connectTimeout);
+        // 带连接池的测试
+        CloseableHttpClient httpSSLClient = ClientFactory.createHttpClientWithPoolNoAuth(socketTimeOut, connectTimeout);
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
                 .methods(HttpMethods.GET)
                 .url("https://10.154.129.144:9999/getUser");
@@ -33,7 +39,10 @@ public class TestStartMain {
      *  单向认证测试
      */
     public static void authenticationOne(){
-        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
+        // CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
+        // 带连接池的测试
+        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientOneAuthenticateWithPool(trustKey, trustKeyPwd,
+                                                                                                socketTimeOut, connectTimeout);
 
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
                 .methods(HttpMethods.GET)
@@ -46,7 +55,9 @@ public class TestStartMain {
      * 双向认证测试
      */
     public static void authenticationDouble(){
-        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(clientKey, clientKeyPwd,
+        /*CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(clientKey, clientKeyPwd,
+                trustKey, trustKeyPwd, socketTimeOut, connectTimeout);*/
+        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientDoubleAuthenticateWithPool(clientKey, clientKeyPwd,
                 trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
                 .methods(HttpMethods.GET)
@@ -55,9 +66,9 @@ public class TestStartMain {
         log.info("double authentication..:"+s);
     }
 
-    public static void main(String[] args) {
-        //trustAll();
-       // authenticationOne();
-        authenticationDouble();
+    public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        // trustAll();
+         authenticationOne();
+        // authenticationDouble();
     }
 }
