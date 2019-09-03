@@ -14,11 +14,13 @@ import java.security.NoSuchAlgorithmException;
 public class TestStartMain {
 
     private static String trustKey = "F:\\github_code\\Mine\\springbootDemo\\HTTPS_Interface\\src\\main\\resources\\clienttrust.key";
+    private static String trustKey2 = "D:\\certificate\\client\\clientTrust";
     private static String trustKeyPwd="123456";
     private static Integer socketTimeOut = 10000;
     private static Integer connectTimeout = 10000;
 
     private static String clientKey = "F:\\github_code\\Mine\\springbootDemo\\HTTPS_Interface\\src\\main\\resources\\sslclient.key";
+    private static String clientKey2 = "D:\\certificate\\client\\client.keystore";
     private static String clientKeyPwd = "123456";
 
     /**
@@ -41,7 +43,7 @@ public class TestStartMain {
     public static void authenticationOne(){
         // CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
         // 带连接池的测试
-        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientOneAuthenticateWithPool(trustKey, trustKeyPwd,
+        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientOneAuthenticateAndHostNameWithPool(clientKey2, trustKeyPwd,
                                                                                                 socketTimeOut, connectTimeout);
 
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
@@ -57,7 +59,8 @@ public class TestStartMain {
     public static void authenticationDouble(){
         /*CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(clientKey, clientKeyPwd,
                 trustKey, trustKeyPwd, socketTimeOut, connectTimeout);*/
-        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientDoubleAuthenticateWithPool(clientKey, clientKeyPwd,
+        CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientDoubleAuthenticateAndHostNameWithPool(clientKey2,
+                clientKeyPwd,
                 trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
                 .methods(HttpMethods.GET)
@@ -68,7 +71,7 @@ public class TestStartMain {
 
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         // trustAll();
-         authenticationOne();
-        // authenticationDouble();
+        // authenticationOne();
+        authenticationDouble();
     }
 }
