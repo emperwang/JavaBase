@@ -67,10 +67,7 @@ public class ClientFactory {
             SSLContext sslContext = SSLContexts.custom()
                     .loadTrustMaterial(new TrustAllStrategy()).build();
             String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
-            // 此处会认证主机  hostName
-/*            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
-                    null,
-                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
+
             // 此不会认证主机名字
             SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
                     null,
@@ -99,10 +96,7 @@ public class ClientFactory {
             SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(new File(trustStorePath), trustStorePasswd.toCharArray())
                     .build();
             String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
-/*            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
-                                                                    null,
-                                                                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
-
+            // no  host
             SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
                                                                     null,
                                                                     NoopHostnameVerifier.INSTANCE);
@@ -141,9 +135,7 @@ public class ClientFactory {
                                 }
                             }).build();
             String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
-/*            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
-                    null,
-                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
+            // no -- host
             SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
                     null,
                     NoopHostnameVerifier.INSTANCE);
@@ -269,9 +261,7 @@ public class ClientFactory {
             SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(new File(trustStorePath), trustStorePasswd.toCharArray())
                     .build();
             String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
-            /*SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
-                                                                    null,
-                                                                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());*/
+
             // 不做主机名认证
             SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
                     null,
@@ -292,6 +282,36 @@ public class ClientFactory {
         return null;
     }
 
+    /**
+     *  HTTPS单向认证,并设置连接池
+     * @return
+     */
+    public static CloseableHttpClient createHttpSSLClientOneAuthenticateAndHostNameWithPool(String trustStorePath,
+                                                                                 String trustStorePasswd,Integer socketTimeOut,Integer connectTimeout)  {
+        try{
+            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeOut)
+                    .setConnectTimeout(connectTimeout).build();
+            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(new File(trustStorePath), trustStorePasswd.toCharArray())
+                    .build();
+            String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
+            //  需要做主机认证
+            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                                                                    null,
+                                                                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+            Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http",new PlainConnectionSocketFactory())
+                    .register("https",sslConnectionSocketFactory)
+                    .build();
+            PoolingHttpClientConnectionManager pcm = new PoolingHttpClientConnectionManager(registry);
+            CloseableHttpClient httpClient = HttpClients.custom()
+                    .setConnectionManager(pcm)
+                    .setDefaultRequestConfig(requestConfig).build();
+            return httpClient;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      *  https 双向认证
      * @param keyStorePath
@@ -339,6 +359,56 @@ public class ClientFactory {
                                                         .setConnectionManager(pcm)
                                                         .setDefaultRequestConfig(requestConfig)
                                                         .build();
+            return httpClient;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     *  https 双向认证
+     * @param keyStorePath
+     * @return
+     */
+    public static CloseableHttpClient createHttpSSLClientDoubleAuthenticateAndHostNameWithPool(String keyStorePath,String keyStorePassword,
+                                                                                    String trustKeyStorePath,String trustKeyStorePasswd,Integer socketTimeOut,Integer connectTimeout )  {
+        InputStream storeInput = null;
+        try{
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectionRequestTimeout(connectTimeout)
+                    .setSocketTimeout(socketTimeOut).build();
+            // load keyStore
+            storeInput = new FileInputStream(keyStorePath);
+            //KeyStore keyStore = KeyStore.getInstance(KEY_TYPE_PKCS);
+            KeyStore keyStore = KeyStore.getInstance(KEY_TYPE_JKS);
+            keyStore.load(storeInput,keyStorePassword.toCharArray());
+
+            SSLContext sslContext = SSLContexts.custom()
+                    // load keyStore
+                    .loadKeyMaterial(keyStore, keyStorePassword.toCharArray())
+                    // load TrustKeyStore
+                    .loadTrustMaterial(new File(trustKeyStorePath), trustKeyStorePasswd.toCharArray(),
+                            new TrustStrategy() { // 设置信任策略
+                                @Override
+                                public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                                    return true;
+                                }
+                            }).build();
+            String[] protocols = {"TLSv1.2","TLSv1.1","SSLv3"};
+            SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext,protocols,
+                    null,
+                    SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+            Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http",new PlainConnectionSocketFactory())
+                    .register("https",socketFactory)
+                    .build();
+            PoolingHttpClientConnectionManager pcm = new PoolingHttpClientConnectionManager(registry);
+            pcm.setMaxTotal(1000);
+            CloseableHttpClient httpClient = HttpClients.custom()
+                    .setConnectionManager(pcm)
+                    .setDefaultRequestConfig(requestConfig)
+                    .build();
             return httpClient;
         } catch (Exception e){
             e.printStackTrace();
