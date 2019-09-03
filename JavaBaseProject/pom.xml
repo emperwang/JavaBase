@@ -129,6 +129,12 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+        <!--JMX 第三方包  导入到本地使用-->
+        <dependency>
+            <groupId>jdmkrt</groupId>
+            <artifactId>jdmkrt</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
