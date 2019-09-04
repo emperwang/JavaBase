@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.management.*;
 
-public class HelloAgent {
+public class HelloAgent implements NotificationListener{
     private static final Logger log = LoggerFactory.getLogger(HelloAgent.class);
     private MBeanServer mbs = null;
 
@@ -33,6 +33,8 @@ public class HelloAgent {
 
             mbs.registerMBean(adaptor,adaptorName);
 
+            helloWorld.addNotificationListener(this,null,null);
+
             adaptor.start();
 
         } catch (MalformedObjectNameException e) {
@@ -49,5 +51,14 @@ public class HelloAgent {
     public static void main(String[] args) {
         log.info("HelloAgent is running");
         HelloAgent helloAgent = new HelloAgent();
+    }
+
+    @Override
+    public void handleNotification(Notification notification, Object handback) {
+        log.info("Receive notification ....");
+        log.info("type is :" + notification.getType());
+        log.info("message is :"+ notification.getMessage());
+        log.info("Sequence Number is:" + String.valueOf(notification.getSequenceNumber()));
+        log.info("UserData is:" + notification.getUserData().toString());
     }
 }
