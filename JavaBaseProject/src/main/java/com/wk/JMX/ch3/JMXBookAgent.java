@@ -4,12 +4,14 @@ import com.sun.jdmk.comm.HtmlAdaptorServer;
 import com.sun.jdmk.comm.RmiConnectorServer;
 import com.wk.JMX.ch2.HelloWorld;
 import com.wk.JMX.ch3.util.ExceptionUtil;
+import com.wk.JMX.ch7_modelMBean.ModelClass;
+import com.wk.JMX.ch7_modelMBean.ModelMBeanInfoBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.management.MBeanServer;
-import javax.management.MBeanServerFactory;
-import javax.management.ObjectName;
+import javax.management.*;
+import javax.management.modelmbean.ModelMBeanInfo;
+import javax.management.modelmbean.RequiredModelMBean;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
@@ -37,6 +39,7 @@ public class JMXBookAgent {
 
         startHTMLAdaptor();
         startRMIConnector();
+        addModelMBean();
     }
 
     protected void startRMIConnector() {
@@ -86,6 +89,31 @@ public class JMXBookAgent {
         } catch (Exception e) {
             ExceptionUtil.printException(e);
         }
+    }
+
+    /**
+     *  ch7 代码进行修改后，注册到server中
+     */
+    protected void addModelMBean(){
+        ModelMBeanInfo modelMBean = ModelClass.createModelMBean();
+        ModelMBeanInfoBuilder builder = ModelClass.getBuilder();
+        RequiredModelMBean requiredModelMBean = builder.createModelMBean(new ModelClass(), modelMBean);
+        ObjectName objectName = null;
+        try {
+            objectName = new ObjectName("JMXBookAgent:name=Modeled");
+            server.registerMBean(requiredModelMBean,objectName);
+
+        } catch (MalformedObjectNameException e) {
+            e.printStackTrace();
+        } catch (NotCompliantMBeanException e) {
+            e.printStackTrace();
+        } catch (InstanceAlreadyExistsException e) {
+            e.printStackTrace();
+        } catch (MBeanRegistrationException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public static void main(String[] args) {

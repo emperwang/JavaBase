@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class ModelClass implements Serializable{
     private static Logger log = LoggerFactory.getLogger(ModelClass.class);
     private String attribute = "My Attribute";
-
+    private static ModelMBeanInfoBuilder builder = new ModelMBeanInfoBuilder();
     public String getMyAttribute(){
         log.info("Returning attribute to MBean");
         return attribute;
@@ -23,7 +23,6 @@ public class ModelClass implements Serializable{
     }
 
     public static ModelMBeanInfo createModelMBean(){
-        ModelMBeanInfoBuilder builder = new ModelMBeanInfoBuilder();
         // 创建ModelMBean
         Descriptor attributeDesc = builder.buildAttributeDescriptor("attribute", null, "always",
                 "10",null, "getAttribute", null, "10");
@@ -45,6 +44,10 @@ public class ModelClass implements Serializable{
 
         ModelMBeanInfo modelMBeanInfo = builder.buildModelMBeanInfo(mbeanDesc);
         return modelMBeanInfo;
+    }
+
+    public static ModelMBeanInfoBuilder getBuilder() {
+        return builder;
     }
 
     /**
