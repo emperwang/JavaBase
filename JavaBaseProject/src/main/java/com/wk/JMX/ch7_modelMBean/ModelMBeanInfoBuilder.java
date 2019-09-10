@@ -1,6 +1,8 @@
 package com.wk.JMX.ch7_modelMBean;
 
 import javax.management.Descriptor;
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanException;
 import javax.management.MBeanParameterInfo;
 import javax.management.modelmbean.*;
 import java.lang.reflect.Constructor;
@@ -12,6 +14,22 @@ public class ModelMBeanInfoBuilder {
     protected Hashtable notifications = new Hashtable();
     protected Hashtable constructors = new Hashtable();
     protected Hashtable operations = new Hashtable();
+
+    public RequiredModelMBean createModelMBean(Object modelBean,ModelMBeanInfo info){
+        RequiredModelMBean model = null;
+        try {
+           model = new RequiredModelMBean();
+           model.setManagedResource(modelBean,"ObjectReference");
+           model.setModelMBeanInfo(info);
+        } catch (MBeanException e) {
+            e.printStackTrace();
+        } catch (InvalidTargetObjectTypeException e) {
+            e.printStackTrace();
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+        }
+        return model;
+    }
 
     public void addModelMBeanMethod(String name, String[] paramTypes, String[] paramNames, String[] paramDescs,
                                     String description, String rtype, int type, Descriptor desc){

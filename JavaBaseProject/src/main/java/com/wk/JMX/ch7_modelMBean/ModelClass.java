@@ -22,9 +22,7 @@ public class ModelClass implements Serializable{
         log.info("print attribute:"+attribute);
     }
 
-    public static void main(String[] args) throws MalformedObjectNameException, NotCompliantMBeanException, ReflectionException,
-                                        MBeanException, InstanceAlreadyExistsException, IOException, InstanceNotFoundException {
-        ModelClass modelClass = new ModelClass();
+    public static ModelMBeanInfo createModelMBean(){
         ModelMBeanInfoBuilder builder = new ModelMBeanInfoBuilder();
         // 创建ModelMBean
         Descriptor attributeDesc = builder.buildAttributeDescriptor("attribute", null, "always",
@@ -46,6 +44,19 @@ public class ModelClass implements Serializable{
                 ".", "ModeledClass", null, null);
 
         ModelMBeanInfo modelMBeanInfo = builder.buildModelMBeanInfo(mbeanDesc);
+        return modelMBeanInfo;
+    }
+
+    /**
+     * jmx in action示例使用的代码,原理是:先注册进入,然后利用反射,把信息注入到bean中
+     *          运行出错
+     * @param args
+     */
+    public static void main(String[] args) throws MalformedObjectNameException, NotCompliantMBeanException, ReflectionException,
+                                        MBeanException, InstanceAlreadyExistsException, IOException, InstanceNotFoundException {
+        ModelClass modelClass = new ModelClass();
+
+        ModelMBeanInfo modelMBeanInfo = createModelMBean();
 
         MBeanServerConnection connection = RMIClientFactory.getConnection();
         ObjectName objectName = new ObjectName("JMXBookAgent:name=Modeled");
