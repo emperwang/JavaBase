@@ -139,6 +139,15 @@ public class DynamicMBeanSupport implements DynamicMBean {
         return mBeanInfo;
     }
 
+    /**
+     * @param name   操作的名字,对应函数名
+     * @param paramTypes 参数类型
+     * @param paramNames 参数名字
+     * @param paramDescs 参数介绍
+     * @param desc  对函数的介绍
+     * @param rtype 函数返回类型
+     * @param type  函数属性什么类型,INFO ,ACTION,INFO_ACTION
+     */
     protected void addMBeanOperation(String name,String[] paramTypes,String[] paramNames,
                     String[] paramDescs,String desc,String rtype,int type){
         MBeanParameterInfo[] params = null;
@@ -152,15 +161,31 @@ public class DynamicMBeanSupport implements DynamicMBean {
         operations.put(name,new MBeanOperationInfo(name,desc,params,rtype,type));
     }
 
+    /**
+     * @param constructor  构造器
+     * @param desc 构造器  介绍
+     */
     protected void addMBeanConstructor(Constructor constructor,String desc){
         this.constructors.put(constructor,new MBeanConstructorInfo(desc,constructor));
     }
 
+    /***
+     * @param name 属性名字
+     * @param type 属性的类型
+     * @param read 属性是否可读
+     * @param write 属性是否可写
+     * @param is   属性是否死活boolean类型
+     * @param desc  属性的介绍
+     */
     protected void addMBeanAttribute(String name,String type,boolean read,boolean write,
                                      boolean is,String desc){
         attributes.put(name,new MBeanAttributeInfo(name,type,desc,read,write,is));
     }
 
+    /**
+     *  创建DynamicMBean
+     * @throws Exception
+     */
     protected void buildDynamicMBeanInfo() throws Exception{
         MBeanOperationInfo[] ops = new MBeanOperationInfo[operations.size()];
         copyInfo(ops,operations);
@@ -173,7 +198,6 @@ public class DynamicMBeanSupport implements DynamicMBean {
 
         mBeanInfo = new MBeanInfo(this.getClass().getName(),description,attrs,constructorInfos,
                 ops,null);
-
     }
 
     private void copyInfo(Object[] array,Hashtable table){
