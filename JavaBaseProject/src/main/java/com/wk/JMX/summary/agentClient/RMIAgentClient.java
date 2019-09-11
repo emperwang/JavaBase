@@ -1,6 +1,5 @@
 package com.wk.JMX.summary.agentClient;
 
-import com.wk.JMX.summary.standardMbean.Hello;
 import com.wk.JMX.summary.standardMbean.HelloMBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,7 @@ import javax.management.*;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.Set;
 
 public class RMIAgentClient {
@@ -48,16 +47,20 @@ public class RMIAgentClient {
             // print domain
             String defaultDomain = connection.getDefaultDomain();
             String[] domains = connection.getDomains();
-
+            log.info("defaultDomain is "+defaultDomain);
+            Arrays.asList(domains).forEach(domain -> {
+                    log.info("domain is :"+domain);
+            });
             // print MBean count
             Integer mBeanCount = connection.getMBeanCount();
-
+            log.info("mBeanCount is "+mBeanCount);
             // 动态set  value
             ObjectName helloBeanName = new ObjectName("jmxAgent:name=hello");
             connection.setAttribute(helloBeanName,new Attribute("Name","agentSetValue"));
 
             // 代理设置
-            HelloMBean hello = (HelloMBean) MBeanServerInvocationHandler.newProxyInstance(connection, helloBeanName,HelloMBean.class,false);
+            HelloMBean hello = (HelloMBean) MBeanServerInvocationHandler.newProxyInstance(connection, helloBeanName,
+                                                    HelloMBean.class,false);
             hello.helloWorld();
 
             // invoke via rmi
@@ -72,12 +75,80 @@ public class RMIAgentClient {
             mBeanInfo.getAttributes();
             mBeanInfo.getDescriptor();
             mBeanInfo.getConstructors();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            // query all MBean
-            Set<ObjectInstance> mBeans = connection.queryMBeans(null, null);
+    /**
+     * 查询所有
+     */
+    public static void QueryMBeanAll(){
+        MBeanServerConnection connection = getConnectionToServer();
+        // 查询所有
+        try {
+            Set<ObjectInstance> objectInstances = connection.queryMBeans(null, null);
+
+            objectInstances.forEach(instance->{
+                log.info("ClassName is " + instance.getClassName());
+                log.info("ObjectName is :" + instance.getObjectName().toString());
+                log.info("**************************************************************");
+            });
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     *  查询某一个ObjectName
+     */
+    public static void QueryMBeanByObjectName(ObjectName objectName){
+        MBeanServerConnection connection = getConnectionToServer();
+        // 查询所有
+        try {
+            Set<ObjectInstance> objectInstances = connection.queryMBeans(objectName, null);
+
+            objectInstances.forEach(instance->{
+                log.info("ClassName is " + instance.getClassName());
+                log.info("ObjectName is :" + instance.getObjectName().toString());
+                log.info("**************************************************************");
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  使用 匹配查询
+     */
+    public static void QueryMBeanByRegx(){
+        MBeanServerConnection connection = getConnectionToServer();
+        // 查询所有
+        try {
+            // 获取 HelloMBean 类中的 属性 name的值
+            AttributeValueExp name = Query.attr(HelloMBean.class.getName(), "name");
+            // 查询 name 的值为  HelloModel
+            QueryExp helloModel = Query.eq(name, Query.value("HelloModel"));
+
+            Set<ObjectInstance> objectInstances = connection.queryMBeans(null, helloModel);
+
+            objectInstances.forEach(instance->{
+                log.info("ClassName is " + instance.getClassName());
+                log.info("ObjectName is :" + instance.getObjectName().toString());
+                log.info("**************************************************************");
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void main(String[] args) throws MalformedObjectNameException {
+        // QueryMBeanAll();
+        // ObjectName objectName = new ObjectName("jmxAgent:name=HelloModelMBean");
+        // QueryMBeanByObjectName(objectName);
+
+        QueryMBeanByRegx();
     }
 }
