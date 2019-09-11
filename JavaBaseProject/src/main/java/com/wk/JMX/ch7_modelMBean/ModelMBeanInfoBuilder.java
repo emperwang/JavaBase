@@ -11,10 +11,10 @@ import java.util.Vector;
  *  创建 ModelMBean 的工具类
  */
 public class ModelMBeanInfoBuilder {
-    protected Hashtable attributes = new Hashtable();
-    protected Hashtable notifications = new Hashtable();
-    protected Hashtable constructors = new Hashtable();
-    protected Hashtable operations = new Hashtable();
+    protected static Hashtable attributes = new Hashtable();
+    protected static Hashtable notifications = new Hashtable();
+    protected static Hashtable constructors = new Hashtable();
+    protected static Hashtable operations = new Hashtable();
 
     /**
      *  创建RequiredModelMBean，被ModelMBean管理的资源，会 RequiredModelMBean 进行包装
@@ -22,7 +22,7 @@ public class ModelMBeanInfoBuilder {
      * @param info  ModelMBeanInfo 表示相关的信息
      * @return
      */
-    public RequiredModelMBean createModelMBean(Object modelBean,ModelMBeanInfo info){
+    public static RequiredModelMBean createModelMBean(Object modelBean,ModelMBeanInfo info){
         RequiredModelMBean model = null;
         try {
            model = new RequiredModelMBean();
@@ -45,7 +45,7 @@ public class ModelMBeanInfoBuilder {
      * @param type   INFO,ACTION,INFO_ACTION，表示此方法属于哪种类型
      * @param desc   方法的 Descriptor
      */
-    public void addModelMBeanMethod(String name, String[] paramTypes, String[] paramNames, String[] paramDescs,
+    public static void addModelMBeanMethod(String name, String[] paramTypes, String[] paramNames, String[] paramDescs,
                                     String description, String rtype, int type, Descriptor desc){
         MBeanParameterInfo[] params = null;
         if (paramTypes != null){
@@ -65,7 +65,7 @@ public class ModelMBeanInfoBuilder {
      * @param description  对此notification 的介绍
      * @param desc
      */
-    public void addModelMBeanNotification(String[] type,String className,String description,Descriptor desc){
+    public static void addModelMBeanNotification(String[] type,String className,String description,Descriptor desc){
         notifications.put(className,new ModelMBeanNotificationInfo(type,className,description,desc));
     }
 
@@ -79,7 +79,7 @@ public class ModelMBeanInfoBuilder {
      * @param description 对此属性的一个介绍
      * @param desc
      */
-    public void addModelMBeanAttribute(String name,String type,boolean read,boolean write,boolean is,
+    public static void addModelMBeanAttribute(String name,String type,boolean read,boolean write,boolean is,
                                        String description,Descriptor desc){
         attributes.put(name,new ModelMBeanAttributeInfo(name,type,description,read,write,is,desc));
     }
@@ -90,7 +90,7 @@ public class ModelMBeanInfoBuilder {
      * @param description   对此构造器的介绍
      * @param desc
      */
-    public void addModelMBeanConstructor(Constructor c,String description,Descriptor desc){
+    public static void addModelMBeanConstructor(Constructor c,String description,Descriptor desc){
         constructors.put(c,new ModelMBeanConstructorInfo(description,c,desc));
     }
 
@@ -99,7 +99,7 @@ public class ModelMBeanInfoBuilder {
      * @param desc
      * @return
      */
-    public ModelMBeanInfo buildModelMBeanInfo(Descriptor desc){
+    public static ModelMBeanInfo buildModelMBeanInfo(Descriptor desc){
         ModelMBeanOperationInfo[] ops = new ModelMBeanOperationInfo[operations.size()];
         copyInfo(ops,operations);
 
@@ -109,7 +109,7 @@ public class ModelMBeanInfoBuilder {
         ModelMBeanConstructorInfo[] constrs = new ModelMBeanConstructorInfo[constructors.size()];
         copyInfo(constrs,constructors);
 
-        ModelMBeanNotificationInfo[] notifs = new ModelMBeanNotificationInfo[this.notifications.size()];
+        ModelMBeanNotificationInfo[] notifs = new ModelMBeanNotificationInfo[notifications.size()];
         copyInfo(notifs,notifications);
 
         ModelMBeanInfoSupport modelMBeanInfoSupport = new ModelMBeanInfoSupport("", "description",
@@ -130,7 +130,7 @@ public class ModelMBeanInfoBuilder {
      * @param currency
      * @return
      */
-    public Descriptor buildAttributeDescriptor(String name, String displayName, String persistPolicy,
+    public static Descriptor buildAttributeDescriptor(String name, String displayName, String persistPolicy,
                                                String persistPeriod, Object defaultValue, String getter,
                                                String setter, String currency){
         DescriptorSupport desc = new DescriptorSupport();
@@ -159,14 +159,14 @@ public class ModelMBeanInfoBuilder {
      *  创建 OperationDescriptor
      * @param name          函数名字
      * @param displayName   函数对外显示的名字
-     * @param role
+     * @param role          getter  setter operation，表示是get or  set方法或者是其他操作方法
      * @param targetObject  目标对象
      * @param targetType    目标对象类型
      * @param ownerClass    所属的类额全限定名
      * @param currency
      * @return
      */
-    public Descriptor buildOperationDescriptor(String name,String displayName,String role,Object targetObject,
+    public static Descriptor buildOperationDescriptor(String name,String displayName,String role,Object targetObject,
                                                Object targetType,String ownerClass,String currency){
         DescriptorSupport desc = new DescriptorSupport();
         if (name != null)
@@ -200,7 +200,7 @@ public class ModelMBeanInfoBuilder {
      * @param logFile       日志记录的文件
      * @return
      */
-    public Descriptor buildMBeanDescriptor(String name,String displayName,String persistPolicy,String persistPeriod,
+    public static Descriptor buildMBeanDescriptor(String name,String displayName,String persistPolicy,String persistPeriod,
                                            String persistLocation,String persistName,String log,String logFile){
         DescriptorSupport desc = new DescriptorSupport();
         if (name != null)
@@ -224,7 +224,7 @@ public class ModelMBeanInfoBuilder {
         return desc;
     }
 
-    private void copyInfo(Object[] array,Hashtable table){
+    private static void copyInfo(Object[] array,Hashtable table){
         Vector vector = new Vector(table.values());
         vector.copyInto(array);
     }
