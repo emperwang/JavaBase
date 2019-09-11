@@ -11,7 +11,7 @@ public class AppMBeanStarter {
         agent.registerDynamicBean();
         agent.registerDynamicCreateWithSupport();
         agent.registerModelMBean();
-
+        agent.registerNotification();
         /*********** Distribute service level ****************************************/
         agent.registerHtmlAdapter();
         agent.registerRMIConnectorServer();

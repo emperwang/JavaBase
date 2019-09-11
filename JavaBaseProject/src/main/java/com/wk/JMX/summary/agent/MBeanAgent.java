@@ -4,6 +4,8 @@ import com.sun.jdmk.comm.HtmlAdaptorServer;
 import com.wk.JMX.summary.DynamicMBean.HelloDynamic;
 import com.wk.JMX.summary.DynamicMBean.HelloDynamicWithSupport;
 import com.wk.JMX.summary.modelMbean.HelloModel;
+import com.wk.JMX.summary.notification.SayHello;
+import com.wk.JMX.summary.notification.SayHelloListener;
 import com.wk.JMX.summary.standardMbean.Hello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,7 @@ import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
 import java.lang.management.ManagementFactory;
 import java.rmi.registry.LocateRegistry;
+import java.util.Set;
 
 public class MBeanAgent {
     private static Logger log = LoggerFactory.getLogger(MBeanAgent.class);
@@ -93,6 +96,32 @@ public class MBeanAgent {
         }
     }
 
+    /**
+     *  注册监听器 相关的 MBean
+     */
+    public void registerNotification(){
+        SayHello sayHello = new SayHello();
+        try{
+            ObjectName notificationName = new ObjectName("jmxAgent:name=SayHelloNotification");
+            server.registerMBean(sayHello,notificationName);
+
+            server.addNotificationListener(notificationName,new SayHelloListener(),null,new Hello());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  MBean 查找
+     * @param beanName
+     */
+    public void queryMBean(ObjectName beanName){
+        // 此查找为: 属性 name 等于 张三
+        QueryExp query = Query.eq(Query.attr("name"),Query.value("zhangsan"));
+        Set<ObjectInstance> instances = server.queryMBeans(beanName, null);
+
+    }
 /********************** Adapter  or  connector(Distributed Service Level) ************************************/
     /**
      * 注册html适配器
