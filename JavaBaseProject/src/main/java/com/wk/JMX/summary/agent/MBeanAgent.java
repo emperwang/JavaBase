@@ -2,6 +2,7 @@ package com.wk.JMX.summary.agent;
 
 import com.sun.jdmk.comm.HtmlAdaptorServer;
 import com.wk.JMX.summary.DynamicMBean.HelloDynamic;
+import com.wk.JMX.summary.DynamicMBean.HelloDynamicWithSupport;
 import com.wk.JMX.summary.standardMbean.Hello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,19 @@ public class MBeanAgent {
             HelloDynamic helloDynamic = new HelloDynamic();
 
             server.registerMBean(helloDynamic,dynamicName);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  注册使用DynamicMBeanSupport构造的dynamic MBean
+     */
+    public void registerDynamicCreateWithSupport(){
+        try{
+            ObjectName dynamicName = new ObjectName("jmxAgent:name=dynamicSupportMbean");
+            HelloDynamicWithSupport helloDynamicWithSupport = new HelloDynamicWithSupport();
+            server.registerMBean(helloDynamicWithSupport,dynamicName);
         }catch (Exception e){
             e.printStackTrace();
         }
