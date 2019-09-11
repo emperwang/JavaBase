@@ -94,17 +94,17 @@ public class HelloDynamic implements DynamicMBean{
             log.info("setAttribute ,but given attribute is null");
             return;
         }
-        String name = attribute.getName();
+        String temp = attribute.getName();
         Object value = attribute.getValue();
         log.info("setAttribute,name is:"+name +", the value is :"+value.toString());
         try{
-            if (name.equals("name")){
+            if (temp.equals("name")){
                 if (value == null){
                     log.info("the given value is null");
-                    name = null;
+                    this.name = null;
                 }else if ((Class.forName(String.class.getName()).isAssignableFrom(value.getClass()))){
                     log.info("setAttribute, is set ot not");
-                    name = (String)value;
+                    this.name = (String)value;
                 }
             }
         } catch (Exception e) {
