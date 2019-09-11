@@ -20,7 +20,7 @@ public class DynamicMBeanSupport implements DynamicMBean {
     protected String description = "Description of the MBean";
 
     public DynamicMBeanSupport(){
-        addMBeanAttribute("description","java.lang.String",true,true,
+        addMBeanAttribute("Description","java.lang.String",true,true,
                 false,"Description of the MBean");
         addMBeanConstructor(this.getClass().getConstructors()[0],"Default Constructor");
     }
@@ -42,6 +42,7 @@ public class DynamicMBeanSupport implements DynamicMBean {
     public void setAttribute(Attribute attribute) throws AttributeNotFoundException, InvalidAttributeValueException, MBeanException, ReflectionException {
         String name = attribute.getName();
         Object value = attribute.getValue();
+        log.info("setAttribute, name is:"+name +", value is:"+value);
         Class<? extends DynamicMBeanSupport> c = this.getClass();
         String type = getType(name, false, true);
         if (type == null)
@@ -97,7 +98,36 @@ public class DynamicMBeanSupport implements DynamicMBean {
 
     @Override
     public AttributeList setAttributes(AttributeList attributes) {
-        Attribute[] attrs = (Attribute[]) attributes.toArray();
+        log.info("setAttributes, the attributes is :"+attributes.toString());
+        if (attributes == null){
+            log.info("getAttributes ,but given attributes is null");
+            return null;
+        }
+        AttributeList resultList = new AttributeList();
+        // 如果参数的是空的，则返回空链表
+        if (attributes.size() == 0){
+            return resultList;
+        }
+        for (int i = 0; i < attributes.size(); i++) {
+            try{
+                Attribute attribute = (Attribute) attributes.get(i);
+                setAttribute(attribute);
+                String name = attribute.getName();
+                Object value = attribute.getValue();
+                resultList.add(new Attribute(name,value));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return resultList;
+    /**
+     *  使用下面转换会出错:
+     *  The MBeanServer throws a JMRuntimeException when setting attributes for [jmxAgent:name=dynamicSupportMbean] :
+     javax.management.RuntimeMBeanException: java.lang.ClassCastException: [Ljava.lang.Object; cannot be cast to
+     [Ljavax.management.Attribute;
+
+     */
+        /*Attribute[] attrs = (Attribute[]) attributes.toArray();
         try {
             for (int i = 0; i < attrs.length; i++) {
                 Attribute attribute = attrs[i];
@@ -105,8 +135,7 @@ public class DynamicMBeanSupport implements DynamicMBean {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        return attributes;
+        }*/
     }
 
     @Override
@@ -196,13 +225,15 @@ public class DynamicMBeanSupport implements DynamicMBean {
         MBeanConstructorInfo[] constructorInfos = new MBeanConstructorInfo[constructors.size()];
         copyInfo(constructorInfos,constructors);
 
+        MBeanNotificationInfo[] mBeanNotificationInfos = new MBeanNotificationInfo[notifications.size()];
+        copyInfo(mBeanNotificationInfos,notifications);
+
         mBeanInfo = new MBeanInfo(this.getClass().getName(),description,attrs,constructorInfos,
-                ops,null);
+                ops,mBeanNotificationInfos);
     }
 
-    private void copyInfo(Object[] array,Hashtable table){
+    protected void copyInfo(Object[] array,Hashtable table){
         Vector temp = new Vector(table.values());
-
         temp.copyInto(array);
     }
 }
