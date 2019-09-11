@@ -161,7 +161,7 @@ public class DynamicMBeanSupport implements DynamicMBean {
         attributes.put(name,new MBeanAttributeInfo(name,type,desc,read,write,is));
     }
 
-    private void buildDynamicMBeanInfo() throws Exception{
+    protected void buildDynamicMBeanInfo() throws Exception{
         MBeanOperationInfo[] ops = new MBeanOperationInfo[operations.size()];
         copyInfo(ops,operations);
 
