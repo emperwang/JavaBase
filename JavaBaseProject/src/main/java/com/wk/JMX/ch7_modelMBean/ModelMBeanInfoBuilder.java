@@ -161,7 +161,8 @@ public class ModelMBeanInfoBuilder {
      *  创建 OperationDescriptor
      * @param name          函数名字
      * @param displayName   函数对外显示的名字
-     * @param role          getter  setter operation，表示是get or  set方法或者是其他操作方法
+     * @param role          getter  setter operation constructor，表示是get or  set方法或者是其他操作方法
+     *                        set 和 get方法分别对应setter  getter，其他打印方法对应 operation，构造方法对应 constructor
      * @param targetObject  目标对象
      * @param targetType    目标对象类型
      * @param ownerClass    所属的类额全限定名
@@ -192,7 +193,7 @@ public class ModelMBeanInfoBuilder {
 
     /**
      *  创建 MBeanDescription
-     * @param name          MBean的名字
+     * @param name          MBean的全限定名
      * @param displayName   bean对外显示名称
      * @param persistPolicy 持久化策略
      * @param persistPeriod 持久化周期
