@@ -8,7 +8,7 @@ public class AppMBeanStarter {
 
         /*********** Instrumentation level ****************************************/
         agent.registerStandardMBean();
-
+        agent.registerDynamicBean();
 
         /*********** Distribute service level ****************************************/
         agent.registerHtmlAdapter();

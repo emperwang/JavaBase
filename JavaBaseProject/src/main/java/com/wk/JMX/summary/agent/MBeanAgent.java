@@ -1,6 +1,7 @@
 package com.wk.JMX.summary.agent;
 
 import com.sun.jdmk.comm.HtmlAdaptorServer;
+import com.wk.JMX.summary.DynamicMBean.HelloDynamic;
 import com.wk.JMX.summary.standardMbean.Hello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,20 @@ public class MBeanAgent {
             server.registerMBean(hello,helloBeanName);
 
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  注册一个Dynamic MBean
+     */
+    public void registerDynamicBean(){
+        try{
+            ObjectName dynamicName = new ObjectName("jmxAgent:name=dynamicMbean");
+            HelloDynamic helloDynamic = new HelloDynamic();
+
+            server.registerMBean(helloDynamic,dynamicName);
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
