@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class ModelClass implements Serializable{
     private static Logger log = LoggerFactory.getLogger(ModelClass.class);
     private String attribute = "My Attribute";
-    private static ModelMBeanInfoBuilder builder = new ModelMBeanInfoBuilder();
+    private static ModelMBeanInfoBuilder builder = ModelMBeanInfoBuilder.getInstalce();
     public String getMyAttribute(){
         log.info("Returning attribute to MBean");
         return attribute;
