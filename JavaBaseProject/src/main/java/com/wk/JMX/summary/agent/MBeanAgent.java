@@ -3,11 +3,13 @@ package com.wk.JMX.summary.agent;
 import com.sun.jdmk.comm.HtmlAdaptorServer;
 import com.wk.JMX.summary.DynamicMBean.HelloDynamic;
 import com.wk.JMX.summary.DynamicMBean.HelloDynamicWithSupport;
+import com.wk.JMX.summary.modelMbean.HelloModel;
 import com.wk.JMX.summary.standardMbean.Hello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.management.*;
+import javax.management.modelmbean.RequiredModelMBean;
 import javax.management.remote.JMXConnectorServer;
 import javax.management.remote.JMXConnectorServerFactory;
 import javax.management.remote.JMXServiceURL;
@@ -72,6 +74,21 @@ public class MBeanAgent {
             HelloDynamicWithSupport helloDynamicWithSupport = new HelloDynamicWithSupport();
             server.registerMBean(helloDynamicWithSupport,dynamicName);
         }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *  注册一个ModelMbean
+     */
+    public void registerModelMBean(){
+        RequiredModelMBean helloModelInfo = HelloModel.createHelloModelInfo();
+        try{
+            ObjectName modelName = new ObjectName("jmxAgent:name=HelloModelMBean");
+
+            server.registerMBean(helloModelInfo,modelName);
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
