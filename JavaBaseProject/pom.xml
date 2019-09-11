@@ -142,6 +142,13 @@
             <artifactId>commons-configuration</artifactId>
             <version>${commons-configuration.version}</version>
         </dependency>
+        <!--xml 编写MBean-->
+        <dependency>
+            <groupId>commons-modeler</groupId>
+            <artifactId>commons-modeler</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
