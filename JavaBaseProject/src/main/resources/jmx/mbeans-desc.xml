@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mbeans-descriptors>
+    <mbean name="Hello" description="the hello bean" domain="jmxAgent" group="helloGroup"
+            type="com.wk.JMX.modeler.Hello">
+        <attribute name="name" description="a name attribute" type="java.lang.String" writeable="true"/>
+        <operation name="printHello" descriiption="a operation to print hello" impact="INFO" returnType="String"/>
+    </mbean>
+</mbeans-descriptors>
