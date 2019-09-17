@@ -12,7 +12,7 @@ public class ValidateBean {
         Bean bean = new Bean();
         bean.setBrithday("2019-09-1711:58:00");
 
-        Validator validator = ValidatorUtil.getvalidator();
+        Validator validator = ValidatorUtil.getValidator();
 
         Set<ConstraintViolation<Bean>> violations = validator.validate(bean, Default.class);
 

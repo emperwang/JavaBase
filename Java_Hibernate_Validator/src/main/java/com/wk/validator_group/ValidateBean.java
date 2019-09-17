@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class ValidateBean {
     public static void main(String[] args) {
-        Validator validator = ValidatorUtil.getvalidator();
+        Validator validator = ValidatorUtil.getValidator();
 
         FtpSocketServiceBean ftpSocketServiceBean = new FtpSocketServiceBean();
         ftpSocketServiceBean.setProtocolType("ftp");
