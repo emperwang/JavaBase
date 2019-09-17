@@ -41,6 +41,7 @@
     <module>java_kafka_demo</module>
       <module>JavaSSL</module>
       <module>Java_Hibernate_Validator</module>
+      <module>ZabbixClient</module>
   </modules>
 
 
