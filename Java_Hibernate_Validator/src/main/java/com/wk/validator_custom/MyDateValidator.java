@@ -9,9 +9,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ *  自定义注解 校验器
+ */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+// 指定使哪个类进行校验
 @Constraint(validatedBy = {MyDateValidator.DateValidatorInner.class})
 public @interface MyDateValidator {
     /**
@@ -44,6 +48,10 @@ public @interface MyDateValidator {
     class DateValidatorInner implements ConstraintValidator<MyDateValidator,String>{
         private String dataFormat;
 
+        /**
+         *  校验类的初始化
+         * @param myDateValidator
+         */
         @Override
         public void initialize(MyDateValidator myDateValidator) {
             System.out.println("DateValidatorInner initialize");
