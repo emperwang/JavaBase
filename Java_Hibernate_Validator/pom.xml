@@ -21,6 +21,9 @@
         <hibernate-validator-version>6.0.16.Final</hibernate-validator-version>
         <junit-version>4.12</junit-version>
         <javax-el-version>3.0.1-b08</javax-el-version>
+        <java-el-api-veriosn>3.0.0</java-el-api-veriosn>
+        <paranamer-version>2.3</paranamer-version>
+        <lombok-version>1.18.8</lombok-version>
     </properties>
 
     <dependencies>
@@ -30,27 +33,37 @@
             <version>${junit-version}</version>
             <scope>test</scope>
         </dependency>
-
+        <!--validator -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator-version}</version>
         </dependency>
+        <!--validator Expression Language -->
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
-            <version>3.0.0</version>
+            <version>${java-el-api-veriosn}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish</groupId>
             <artifactId>javax.el</artifactId>
             <version>${javax-el-version}</version>
         </dependency>
+        <!--
+        ExecutableValidator 方法参数校验的依赖包
+        com.thoughtworks.paranamer.Paranamer依赖包
+        -->
+        <dependency>
+            <groupId>com.thoughtworks.paranamer</groupId>
+            <artifactId>paranamer</artifactId>
+            <version>${paranamer-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
+            <version>${lombok-version}</version>
             <scope>provided</scope>
         </dependency>
 
