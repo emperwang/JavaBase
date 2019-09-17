@@ -33,4 +33,8 @@ public class MyCount {
     @Max(10)
     @Min(1)
     private Integer level;
+
+    public void printName(@Length(max = 2) String name){
+        System.out.println("name = "+name);
+    }
 }
