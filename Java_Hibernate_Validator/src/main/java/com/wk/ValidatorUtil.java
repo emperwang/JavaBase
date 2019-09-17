@@ -23,8 +23,12 @@ public class ValidatorUtil {
      *  获取 校验器
      * @return
      */
-    public static Validator getvalidator(){
+    public static Validator getValidator() {
         return validator;
+    }
+
+    public static ExecutableValidator getExecutableValidator() {
+        return executableValidator;
     }
 
     /**
