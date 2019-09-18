@@ -28,19 +28,19 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
+        <!--send msg to zabbix-->
         <dependency>
             <groupId>io.github.hengyunabc</groupId>
             <artifactId>zabbix-sender</artifactId>
             <version>0.0.5</version>
         </dependency>
-
+        <!--get msg from zabbix-->
         <dependency>
             <groupId>io.github.hengyunabc</groupId>
             <artifactId>zabbix-api</artifactId>
             <version>0.0.2</version>
         </dependency>
-
+        <!--对api的进一步封装-->
         <dependency>
             <groupId>com.github.0312birdzhang</groupId>
             <artifactId>Zabbix4j</artifactId>
