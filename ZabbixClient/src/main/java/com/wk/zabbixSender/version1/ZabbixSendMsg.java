@@ -16,8 +16,8 @@ public class ZabbixSendMsg {
         ZabbixSender sender = new ZabbixSender(host, Port);
 
         DataObject dataObject = new DataObject();
-        dataObject.setHost(host);
-        dataObject.setKey("test_item");
+        dataObject.setHost("name2");
+        dataObject.setKey("keytest");
         dataObject.setValue("10");
 
         dataObject.setClock(System.currentTimeMillis()/1000);
@@ -25,5 +25,6 @@ public class ZabbixSendMsg {
         SenderResult result = sender.send(dataObject);
         boolean success = result.success();
         log.info("send result : "+success);
+        log.info(result.toString());
     }
 }
