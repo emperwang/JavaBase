@@ -1,7 +1,10 @@
 package com.wk.FTPUtil;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -16,14 +19,16 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@Setter
+@Getter
 public class FTPUtil {
-    private static final String HOST = "127.0.0.1";
+    private static  String HOST = "127.0.0.1";
 
-    private static final Integer PORT = 21;
+    private static  Integer PORT = 21;
 
-    private static final String UserName = "root";
+    private static  String UserName = "root";
 
-    private static final String Password = "admin";
+    private static  String Password = "admin";
     /**
      *  ftpClient 客户端
      */
@@ -67,6 +72,13 @@ public class FTPUtil {
         ftpClient.login(userName,password);
         // 设置传输的文件类型
         ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
+
+        ftpClient.setAutodetectUTF8(true);
+        // 进入主动模式, 外网一般使用主动
+        ftpClient.enterLocalActiveMode();
+        // 进入被动模式, 内网一般使用被动
+        // ftpClient.enterLocalPassiveMode();
+
         int replyCode = ftpClient.getReplyCode();
         if (!FTPReply.isPositiveCompletion(replyCode)){
             closeConnect();
@@ -262,7 +274,7 @@ public class FTPUtil {
      * @return
      */
     public static Boolean downLoadfile(String ftpPath,String fileName,String localPath) throws IOException {
-        login(HOST,PORT,UserName,Password);
+        //login(HOST,PORT,UserName,Password);
         boolean flag = false;
         if (ftpClient != null){
             String path = changEncoding(BasePath + ftpPath);
@@ -550,4 +562,21 @@ public class FTPUtil {
         return flag;
     }
 
+    public static void listFile() throws IOException {
+        FTPFile[] ftpFiles = ftpClient.listFiles();
+        for (FTPFile ftpFile : ftpFiles) {
+            log.info(ftpFile.getName());
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        String hosts = "192.168.72.18";
+        int port  = 21;
+        String pwd = "loongson";
+        String user = "root";
+        String localPath = "H:\\FTPTest";
+        FTPUtil.login(hosts,port,user,pwd);
+        FTPUtil.listFile();
+        FTPUtil.downLoadfile("/mnt","user.txt",localPath);
+    }
 }
