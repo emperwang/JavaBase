@@ -12,6 +12,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
  *  启动
+ *  此启动是手动定义好需要的bean,并把彼此的依赖注入
+ *  之后调用server的启动函数
  */
 public class StartApp {
     public static void main(String[] args) {
