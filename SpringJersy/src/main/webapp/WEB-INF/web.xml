@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    
+    <servlet>
+        <servlet-name>jserseyApp</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>  <!--如果有多个，使用分号进行分隔-->
+                com.wk.web.controller
+            </param-value>
+        </init-param>
+        <!-- 禁止递归扫描子包 -->
+<!--        <init-param>
+            <param-name>jersey.config.server.provider.scanning.recursive</param-name>
+            <param-value>false</param-value>
+        </init-param>-->
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>org.glassfish.jersey.filter.LoggingFilter</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jserseyApp</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <!--Character Encoding filter(字符集拦截转换)-->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>
+
+        <!--<servlet>
+            <servlet-name>jersey</servlet-name>
+            <servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+            <init-param>
+                <param-name>com.sun.jersey.config.feature.Redirect</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            <init-param>
+                <param-name>com.sun.jersey.config.feature.FilterForwardOn404</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            &lt;!&ndash;通过静态资源&ndash;&gt;
+            <init-param>
+                <param-name>com.sun.jersey.config.property.WebPageContentRegex</param-name>
+                <param-value>/(images|css|jsp|js|html)/.*</param-value>
+            </init-param>
+            &lt;!&ndash;Jersy返回PoJO对象必须添加否则会报MIME media type application/json was not found.异常&ndash;&gt;
+            <init-param>
+                <param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+                <param-value>true</param-value>
+            </init-param>
+            &lt;!&ndash;指定jersey 资源类包所在路径&ndash;&gt;
+            <init-param>
+                <param-name>com.sun.jersey.config.property.packages</param-name>
+                <param-value>com.wk.web.controller</param-value>
+            </init-param>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+        <servlet-mapping>
+            <servlet-name>jersey</servlet-name>
+            <url-pattern>/*</url-pattern>
+        </servlet-mapping>-->

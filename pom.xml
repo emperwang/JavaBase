@@ -42,6 +42,7 @@
       <module>JavaSSL</module>
       <module>Java_Hibernate_Validator</module>
       <module>ZabbixClient</module>
+    <module>SpringJersy</module>
   </modules>
 
 
