@@ -19,10 +19,10 @@ public class DigesterDemo {
     public void setSchool(School school) {
         this.school = school;
     }
-
+    private final static String filePath = "F:\\github_code\\Mine\\JavaBase\\JavaBaseProject\\src\\main\\resources\\digester\\school.xml";
     private void digester() throws IOException, SAXException {
         // 读取文件
-        File file = new File("F:\\github_code\\Mine\\JavaBase\\JavaBaseProject\\src\\main\\resources\\digester\\school.xml");
+        File file = new File(filePath);
         FileInputStream inputStream = new FileInputStream(file);
         InputSource inputSource = new InputSource(file.toURI().toURL().toString());
         inputSource.setByteStream(inputStream);
