@@ -22,9 +22,21 @@
         <jxl-version>2.6.12</jxl-version>
         <junit-version>4.12</junit-version>
         <lombok-version>1.18.2</lombok-version>
+        <logback.version>1.2.3</logback.version>
     </properties>
 
     <dependencies>
+        <!--log-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
