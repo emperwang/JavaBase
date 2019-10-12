@@ -45,6 +45,7 @@
     <module>SpringJersy</module>
     <module>SpringJerseyJetty</module>
       <module>POIExecl</module>
+      <module>logbackCustomHostName</module>
   </modules>
 
 
