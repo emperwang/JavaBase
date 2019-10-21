@@ -84,8 +84,73 @@ public class BaseDemo {
         });
     }
 
+    public static void demostation3(){
+        /**
+         *  .just 输入数据
+         *  filter 进行过滤操作
+         */
+        Observable.just(1,2,3,4,5,6,7,8,9)
+                .filter((value)->{
+                    return value % 2 == 1;
+                })
+                .subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        System.out.println("subscribe event");
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        System.out.println("onNext is :"+integer);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        System.out.println("Error");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("Complete");
+                    }
+                });
+    }
+
+    public static void demostration4(){
+        Observable.just(1,2,3,4,5,6,7)
+                .filter((value) ->{
+                    return value % 2==1;
+                })
+                .map((value) -> {  // 进行平方
+                    return Math.sqrt(value);
+                })
+                .subscribe(new Observer<Double>() {
+                    @Override
+                    public void onSubscribe(Disposable disposable) {
+                        System.out.println("subscribe event");
+                    }
+
+                    @Override
+                    public void onNext(Double aDouble) {
+                        System.out.println("next value is :"+aDouble);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        System.out.println("Error");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        System.out.println("Complete");
+                    }
+                });
+    }
+
     public static void main(String[] args) {
         //demostration1();
-        demostration2();
+        //demostration2();
+        //demostation3();
+        demostration4();
     }
 }
