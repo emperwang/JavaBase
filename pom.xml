@@ -46,6 +46,10 @@
     <module>SpringJerseyJetty</module>
       <module>POIExecl</module>
       <module>logbackCustomHostName</module>
+      <module>javaAgentPremain</module>
+    <module>javaAgentMainAgent</module>
+    <module>javaAgentPremainStarter</module>
+      <module>javaAgentMainAgentStarter</module>
   </modules>
 
 
