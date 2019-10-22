@@ -7,9 +7,13 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.security.ProtectionDomain;
 @Slf4j
-public class PreMainTraceAgent {
+/**
+ *  attach到运行中的jvm上
+ *  参考: https://www.cnblogs.com/rickiyang/p/11368932.html
+ */
+public class MainAgentTraceAgent {
 
-    public static void premain(String agentArgs, Instrumentation inst){
+    public static void agentmain(String agentArgs, Instrumentation inst){
         log.info("agentArgs: {}",agentArgs);
         inst.addTransformer(new DefineTransformer(),true);
     }

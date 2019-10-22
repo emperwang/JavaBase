@@ -44,6 +44,7 @@
     </dependencies>
 
     <build>
+        <finalName>javaAgentMainDemo</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -55,9 +56,8 @@
                             <addClasspath>true</addClasspath>
                         </manifest>
                         <manifestEntries>
-                            <Premain-Class>com.wk.PreMainTraceAgent</Premain-Class>
-                            <Agent-Class></Agent-Class>
-                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Agent-Class>com.wk.MainAgentTraceAgent</Agent-Class>
+                            <Can-Redefine-Classess>true</Can-Redefine-Classess>
                             <Can-Retransform-Classes>true</Can-Retransform-Classes>
                         </manifestEntries>
                     </archive>
