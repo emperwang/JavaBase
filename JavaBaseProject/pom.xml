@@ -34,6 +34,7 @@
         <javassist-version>3.22.0-GA</javassist-version>
         <rxjava-version>2.2.10</rxjava-version>
         <rxandroid-version>1.2.1</rxandroid-version>
+        <hystrix-version>1.5.12</hystrix-version>
     </properties>
 
     <dependencies>
@@ -175,6 +176,23 @@
             <artifactId>rxandroid</artifactId>
             <version>${rxandroid-version}</version>
         </dependency>
+        <!--hystrix-->
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-core</artifactId>
+            <version>${hystrix-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-metrics-event-stream</artifactId>
+            <version>${hystrix-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-javanica</artifactId>
+            <version>${hystrix-version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
