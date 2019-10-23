@@ -15,6 +15,7 @@ public class DynamicAddMethod {
         String qualifiedName = UserInfo.class.getName();  // 全限定名
         ClassPool pool = ClassPool.getDefault();
         CtClass ctClass = pool.getCtClass(qualifiedName);
+        // 创建方法 并 添加
         CtMethod sumMethod = CtNewMethod.make(Modifier.PUBLIC, CtClass.intType, "sum", new CtClass[]{CtClass.intType, CtClass.intType},
                 null, "{return $1+$2;}", ctClass);
         ctClass.addMethod(sumMethod);
@@ -38,11 +39,12 @@ public class DynamicAddMethod {
         CtMethod sumMethod = CtNewMethod.make(Modifier.PUBLIC, CtClass.intType, "sum", new CtClass[]{CtClass.intType, CtClass.intType},
                 null, "{return $1+$2;}", ctClass);
         ctClass.addMethod(sumMethod);
-
+        // 把生成的类  写入文件
         ctClass.writeFile("H:\\FTPTest");
 
         UserInfo userInfo = new UserInfo();
         userInfo.setAge(20);
+        // 使用自定义类加载器  进行加载
         AppCustomLoader appCustomLoader = AppCustomLoader.getInstance();
         Class<?> newClass = appCustomLoader.findClassByBytes(qualifiedName, ctClass.toBytecode());
         Object object = appCustomLoader.getObject(newClass, userInfo);
