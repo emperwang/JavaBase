@@ -128,7 +128,7 @@ public class AsmAopExample extends ClassLoader implements Opcodes{
                 if(opcode == Opcodes.RETURN)
                 {
                     visitMethodInsn(Opcodes.INVOKESTATIC, Monitor.class.getName().replace(".","/"),
-                            "end", "()V");
+                            "end", "()V",false);
                 }
                 super.visitInsn(opcode);
             }
