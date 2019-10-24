@@ -21,4 +21,8 @@ public class CustomLoader extends ClassLoader {
         log.info("there is no class availde");
         return null;
     }
+
+    public Class<?>  defineClass(){
+        return defineClass(className,classData,0,classData.length);
+    }
 }
