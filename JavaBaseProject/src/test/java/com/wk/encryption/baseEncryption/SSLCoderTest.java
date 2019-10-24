@@ -32,6 +32,7 @@ package com.wk.encryption.baseEncryption;
  格式 PKCS12。
  */
 
+import com.wk.asm.aop1.Student;
 import org.junit.Test;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -70,5 +71,11 @@ public class SSLCoderTest {
         dis.read(data);
         System.out.println(new String(data));
         httpsURLConnection.disconnect();
+    }
+
+    @Test
+    public void tests(){
+        String name = Student.class.getName();
+        System.out.println(name.replace(".","/"));
     }
 }
