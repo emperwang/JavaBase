@@ -40,7 +40,7 @@ public class AsmAopExample extends ClassLoader implements Opcodes{
             ClassReader cr = new ClassReader(Foo.class.getName());
             ClassWriter cw = new ClassWriter(cr, ClassWriter.COMPUTE_MAXS);
             MethodVisitor mv;
-            {
+            {   // 生成初始化方法
                 mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
                 mv.visitCode();
                 Label l0 = new Label();
