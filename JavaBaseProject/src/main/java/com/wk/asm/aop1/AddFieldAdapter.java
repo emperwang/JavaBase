@@ -22,8 +22,9 @@ public class AddFieldAdapter extends ClassVisitor{
     public FieldVisitor visitField(int access, String name, String desc,
                                    String signature, Object value) {
         if (name.equals(this.name)){
-            isFieldPresent = true;
+            isFieldPresent = true;  // 存在此属性,则不做操作
         }
+        // 遍历下一个
         return cv.visitField(access,name,desc,signature,value);
     }
 
