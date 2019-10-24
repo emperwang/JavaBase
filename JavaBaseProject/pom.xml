@@ -192,6 +192,12 @@
             <artifactId>hystrix-javanica</artifactId>
             <version>${hystrix-version}</version>
         </dependency>
+        <!--asm-->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm-all</artifactId>
+            <version>5.1</version>
+        </dependency>
 
     </dependencies>
 
