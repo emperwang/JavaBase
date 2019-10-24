@@ -62,7 +62,27 @@ public class ASMGettingStarted {
      }
      * @param args
      */
+    /*  反汇编
+    public class com.wk.asm.test {
+      public com.wk.asm.test();
+        descriptor: ()V
+        Code:
+           0: aload_0
+           1: invokespecial #8                  // Method java/lang/Object."<init>":
+    ()V
+           4: return
 
+      public void run();
+        descriptor: ()V
+        Code:
+           0: getstatic     #15                 // Field java/lang/System.out:Ljava/
+    io/PrintStream;
+           3: ldc           #17                 // String This is my First ASM test
+           5: invokevirtual #23                 // Method java/io/PrintStream.printl
+    n:(Ljava/lang/String;)V
+           8: return
+    }
+     */
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,
             IllegalAccessException, InstantiationException, InvocationTargetException, IOException {
         String dir = "H:\\FTPTest\\com\\wk\\asm\\";
