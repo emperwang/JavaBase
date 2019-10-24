@@ -50,6 +50,19 @@ public class ASMGettingStarted {
         return writer.toByteArray();
     }
 
+    /**   最终构建的类
+     * package com.wk.asm;
+     import java.io.PrintStream;
+     public class test
+     {
+     public void run()
+     {
+     System.out.println("This is my First ASM test");
+     }
+     }
+     * @param args
+     */
+
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException,
             IllegalAccessException, InstantiationException, InvocationTargetException, IOException {
         String dir = "H:\\FTPTest\\com\\wk\\asm\\";
