@@ -35,6 +35,7 @@
         <rxjava-version>2.2.10</rxjava-version>
         <rxandroid-version>1.2.1</rxandroid-version>
         <hystrix-version>1.5.12</hystrix-version>
+        <benchmark-version>1.21</benchmark-version>
     </properties>
 
     <dependencies>
@@ -203,6 +204,18 @@
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-all</artifactId>
             <version>5.2</version>
+        </dependency>
+        <!--Benchmark-->
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${benchmark-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${benchmark-version}</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
