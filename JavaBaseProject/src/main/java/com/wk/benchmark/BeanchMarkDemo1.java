@@ -7,7 +7,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 import java.util.concurrent.TimeUnit;
-
+// 参考:https://www.jianshu.com/p/5a501cb6403c    https://blog.csdn.net/lxbjkben/article/details/79410740
 @BenchmarkMode(value = {Mode.Throughput,Mode.AverageTime})
 @OutputTimeUnit(value = TimeUnit.SECONDS)
 @State(Scope.Thread) // 每个测试线程一个实例
