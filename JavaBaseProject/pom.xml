@@ -61,6 +61,12 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>${cglib.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.ow2.asm</groupId>
+                    <artifactId>asm</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--使用spring的aop进行切面编程-->
         <dependency>
@@ -171,11 +177,11 @@
             <artifactId>rxjava</artifactId>
             <version>${rxjava-version}</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>io.reactivex</groupId>
             <artifactId>rxandroid</artifactId>
             <version>${rxandroid-version}</version>
-        </dependency>
+        </dependency>-->
         <!--hystrix-->
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
@@ -196,7 +202,7 @@
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm-all</artifactId>
-            <version>5.1</version>
+            <version>5.2</version>
         </dependency>
 
     </dependencies>
