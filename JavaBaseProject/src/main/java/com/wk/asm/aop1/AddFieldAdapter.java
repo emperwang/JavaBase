@@ -18,6 +18,15 @@ public class AddFieldAdapter extends ClassVisitor{
         this.desc = desc;
     }
 
+    /**
+     *
+     * @param access  修饰符
+     * @param name    fieldname
+     * @param desc    类型
+     * @param signature  泛型
+     * @param value   值
+     * @return
+     */
     @Override
     public FieldVisitor visitField(int access, String name, String desc,
                                    String signature, Object value) {
