@@ -7,8 +7,19 @@ public class StarterMain {
         // GetInstance1();
         GetInstance2();
         GetInstance3();
+        GetInstance4();
     }
 
+    private static void GetInstance4() {
+        Injector injector = Guice.createInjector(new Module() {
+            @Override
+            public void configure(Binder binder) {  // 此处的in指定了是否是单例
+                binder.bind(HelloService.class).to(HelloServiceImpl.class).in(Scopes.SINGLETON);
+            }
+        });
+        HelloService instance = injector.getInstance(HelloService.class);
+        instance.printInfo();
+    }
     private static void GetInstance3() {
         Injector injector = Guice.createInjector(new Module() {
             @Override
