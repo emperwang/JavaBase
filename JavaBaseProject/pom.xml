@@ -37,6 +37,7 @@
         <hystrix-version>1.5.12</hystrix-version>
         <benchmark-version>1.21</benchmark-version>
         <guice-version>4.0</guice-version>
+        <guava-version>28.0-jre</guava-version>
     </properties>
 
     <dependencies>
@@ -224,7 +225,12 @@
             <artifactId>guice</artifactId>
             <version>${guice-version}</version>
         </dependency>
-
+        <!--guava-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava-version}</version>
+        </dependency>
     </dependencies>
 
     <build>
