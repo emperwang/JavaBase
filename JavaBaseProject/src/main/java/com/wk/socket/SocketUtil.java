@@ -391,6 +391,10 @@ public class SocketUtil {
     }
 
     public static void main(String[] args) throws Exception {
+        testIpv6();
+    }
+
+    private static void testIpv6(){
         String hostAddressIpv4 = "127.0.0.1";
         String hostAddressIpv6 = "fd15:4ba5:5a2b:1008:99e:1cf9:5ff4:8029";
         Socket socket = connectServer(hostAddressIpv6, 9001);
