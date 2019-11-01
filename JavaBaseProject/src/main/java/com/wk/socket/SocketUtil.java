@@ -77,6 +77,28 @@ public class SocketUtil {
             log.error("msg can not be null");
         }
         if (socket == null) {
+            // connectServer(HostAddress, HostPort);
+            log.info("socket is null ..... error");
+            return;
+        }
+        try {
+            OutputStream outputStream = socket.getOutputStream();
+            Writer writer = new OutputStreamWriter(outputStream);
+            writer.write(msg);
+            writer.flush();
+
+            writer.close();
+            closeConnect(socket);
+        } catch (IOException e) {
+            log.error("send msg error,error msg is:{}", e.getMessage());
+        }
+    }
+
+    public static void sendMsg2(String msg, Socket socket) {
+        if (msg == null || msg.length() == 0) {
+            log.error("msg can not be null");
+        }
+        if (socket == null) {
             connectServer(HostAddress, HostPort);
         }
         try {
@@ -369,6 +391,13 @@ public class SocketUtil {
     }
 
     public static void main(String[] args) throws Exception {
+        String hostAddressIpv4 = "127.0.0.1";
+        String hostAddressIpv6 = "fd15:4ba5:5a2b:1008:99e:1cf9:5ff4:8029";
+        Socket socket = connectServer(hostAddressIpv6, 9001);
+        sendMsg("this is ipv6 test",socket);
+    }
+
+    private static void testFcaps() throws Exception {
         Socket socket = connectServer(HostAddress, HostPort);
         boolean omc = login("omc", "123", socket);
         log.info("登录服务.." + omc);
