@@ -68,10 +68,20 @@ public class TestStartMain {
         String s = HttpClientUtil.httpGetMethod(config);
         log.info("double authentication..:"+s);
     }
+    // fd15:4ba5:5a2b:1008:3511:6c4f:3082:a429
+    public static void sendRequestWithIpv6() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        CloseableHttpClient httpClient = ClientFactory.createHttpClientWithPoolNoAuth(10000, 10000);
+        HttpConfig httpConfig = HttpConfig.instance().client(httpClient)
+                .methods(HttpMethods.GET)
+                .url("http://[fd15:4ba5:5a2b:1008:3511:6c4f:3082:a429]:8989/user/getuser");
+        String result = HttpClientUtil.httpGetMethod(httpConfig);
+        System.out.println("result is :"+result);
+    }
 
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         // trustAll();
         // authenticationOne();
-        authenticationDouble();
+//        authenticationDouble();
+        sendRequestWithIpv6();
     }
 }
