@@ -40,6 +40,7 @@
         <guava-version>28.0-jre</guava-version>
         <asynClient-version>4.1.3</asynClient-version>
         <httpCoreNio-version>4.4.5</httpCoreNio-version>
+        <common-pool2-version>2.6.2</common-pool2-version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,12 @@
             <version>${httpCoreNio-version}</version>
         </dependency>-->
 
+        <!--common-pool2-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${common-pool2-version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
