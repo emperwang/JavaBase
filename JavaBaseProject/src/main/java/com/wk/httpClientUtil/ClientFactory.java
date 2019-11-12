@@ -16,7 +16,13 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
+import org.apache.http.impl.nio.client.HttpAsyncClients;
+import org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager;
+import org.apache.http.impl.nio.reactor.DefaultConnectingIOReactor;
+import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.message.BasicHeaderElementIterator;
+import org.apache.http.nio.reactor.IOReactorException;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
@@ -414,5 +420,132 @@ public class ClientFactory {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     *  创建一个base ayncHttpClient
+     * @return
+     */
+    public static CloseableHttpAsyncClient createDefaultAsyncClient(Integer connectTimeout,Integer socketTimeout){
+        RequestConfig requestConfig = RequestConfig.custom()
+               // .setConnectionRequestTimeout(100) //从连接池中获取连接时 最大时间，获取不到就报错
+                .setConnectTimeout(connectTimeout)       // 创建tcp连接时的最大时间,超过则报错
+                .setSocketTimeout(socketTimeout)        // 接收数据时,数据间的最大间隔
+                .build();
+        CloseableHttpAsyncClient asyncClient =
+                HttpAsyncClients.custom()
+                        .setDefaultRequestConfig(requestConfig)
+                        .build();
+        asyncClient.start();
+        return asyncClient;
+    }
+
+    /**
+     *  创建带连接池的aynchttpClient
+     * @param connectTimeout
+     * @param socketTimeout
+     * @param connectionRequestTimeout
+     * @return
+     */
+    public static CloseableHttpAsyncClient AsyncClientWithPool(Integer connectTimeout,Integer socketTimeout,
+                                                               Integer connectionRequestTimeout){
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectionRequestTimeout(connectionRequestTimeout) //从连接池中获取连接时 最大时间，获取不到就报错
+                .setConnectTimeout(connectTimeout)       // 创建tcp连接时的最大时间,超过则报错
+                .setSocketTimeout(socketTimeout)        // 接收数据时,数据间的最大间隔
+                .build();
+        // 配置io线程
+        IOReactorConfig reactorConfig = IOReactorConfig.custom()
+                .setIoThreadCount(Runtime.getRuntime().availableProcessors())
+                .setSoKeepAlive(true)
+                .build();
+        // 设置连接池
+        DefaultConnectingIOReactor ioReactor = null;
+        try {
+            ioReactor = new DefaultConnectingIOReactor(reactorConfig);
+        } catch (IOReactorException e) {
+            e.printStackTrace();
+        }
+        PoolingNHttpClientConnectionManager poolingNHttpClientConnectionManager =
+                new PoolingNHttpClientConnectionManager(ioReactor);
+        poolingNHttpClientConnectionManager.setMaxTotal(10); // 最大连接数
+        poolingNHttpClientConnectionManager.setDefaultMaxPerRoute(5); //
+
+        CloseableHttpAsyncClient asyncClient = HttpAsyncClients.custom()
+                .setConnectionManager(poolingNHttpClientConnectionManager)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+        asyncClient.start();
+
+        return asyncClient;
+    }
+
+    /**
+     *  创建 异步 双向认证 client
+     * @param connectTimeout tcp连接超时时间
+     * @param socketTimeout  数据包之间的间隔时间,超过此时间报错
+     * @param connectionRequestTimeout  从连接池获取连接的最大时间
+     * @param isDouble 是否双向认证
+     * @param ifCheckHostName 是否检查hostname
+     * @param keyStorePath keystore 路径
+     * @param keyStorePassword keystore密码
+     * @param trustKeyStorePath trustkeystore 路径
+     * @param trustKeyStorePasswd trustkeystore 密码
+     * @return
+     */
+    public static CloseableHttpAsyncClient AsyncClientWithPoolWithSSl(Integer connectTimeout,Integer socketTimeout,
+                                                               Integer connectionRequestTimeout,boolean isDouble,
+                                                                      boolean ifCheckHostName,String keyStorePath,String keyStorePassword,
+                                                                      String trustKeyStorePath,String trustKeyStorePasswd){
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectionRequestTimeout(connectionRequestTimeout) //从连接池中获取连接时 最大时间，获取不到就报错
+                .setConnectTimeout(connectTimeout)       // 创建tcp连接时的最大时间,超过则报错
+                .setSocketTimeout(socketTimeout)        // 接收数据时,数据间的最大间隔
+                .build();
+        // 配置io线程
+        IOReactorConfig reactorConfig = IOReactorConfig.custom()
+                .setIoThreadCount(Runtime.getRuntime().availableProcessors())
+                .setSoKeepAlive(true)
+                .build();
+        // 设置连接池
+        DefaultConnectingIOReactor ioReactor = null;
+
+        try {
+            ioReactor = new DefaultConnectingIOReactor(reactorConfig);
+        } catch (IOReactorException e) {
+            e.printStackTrace();
+        }
+        PoolingNHttpClientConnectionManager poolingNHttpClientConnectionManager =
+                new PoolingNHttpClientConnectionManager(ioReactor);
+        poolingNHttpClientConnectionManager.setMaxTotal(10); // 最大连接数
+        poolingNHttpClientConnectionManager.setDefaultMaxPerRoute(5); //
+
+        // 是否双向认证
+        SSLContext customSSLContext = null;
+        if (isDouble){
+            customSSLContext = CustomSSLContextFactory.createTwoSSLContext(keyStorePath, keyStorePassword, trustKeyStorePath,
+                                    trustKeyStorePasswd);
+        }else{
+            customSSLContext = CustomSSLContextFactory.createOneSSLContext(trustKeyStorePath,trustKeyStorePasswd);
+        }
+
+        CloseableHttpAsyncClient asyncClient= null;
+        if (ifCheckHostName){
+            asyncClient = HttpAsyncClients.custom()
+                    .setConnectionManager(poolingNHttpClientConnectionManager)
+                    .setSSLContext(customSSLContext)
+                    .setSSLHostnameVerifier(SSLConnectionSocketFactory.getDefaultHostnameVerifier())
+                    .setDefaultRequestConfig(requestConfig)
+                    .build();
+        }else{
+            asyncClient = HttpAsyncClients.custom()
+                    .setConnectionManager(poolingNHttpClientConnectionManager)
+                    .setSSLContext(customSSLContext)
+                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                    .setDefaultRequestConfig(requestConfig)
+                    .build();
+        }
+        asyncClient.start();
+        return asyncClient;
     }
 }
