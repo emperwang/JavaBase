@@ -1,6 +1,7 @@
 package com.wk.common_pool2.generate;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.pool2.impl.GenericKeyedObjectPoolConfig;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.apache.commons.pool2.impl.SoftReferenceObjectPool;
@@ -8,14 +9,21 @@ import org.apache.commons.pool2.impl.SoftReferenceObjectPool;
 @Slf4j
 public class TestPooledObject {
     public static void main(String[] args) {
-        //genericObjectPool_demo();
-        softReferenceObjectPool_demo();
+        genericObjectPool_demo();
+        //softReferenceObjectPool_demo();
     }
     // softReferencePool
     public static void softReferenceObjectPool_demo(){
         DbConnectFactory dbConnectFactory = new DbConnectFactory();
-
-        SoftReferenceObjectPool<DBConnection> pool = new SoftReferenceObjectPool<DBConnection>(dbConnectFactory);
+        // 配置 如何使用呢?
+        GenericKeyedObjectPoolConfig<DBConnection> poolConfig = new GenericKeyedObjectPoolConfig<>();
+        poolConfig.setMaxTotalPerKey(100);
+        poolConfig.setMaxTotal(500);
+        poolConfig.setMinIdlePerKey(10);
+        poolConfig.setMaxIdlePerKey(50);
+        poolConfig.setTestOnCreate(true);
+        SoftReferenceObjectPool<DBConnection> pool =
+                new SoftReferenceObjectPool<DBConnection>(dbConnectFactory);
         DBConnection connection = null;
         try {
             connection = pool.borrowObject();
