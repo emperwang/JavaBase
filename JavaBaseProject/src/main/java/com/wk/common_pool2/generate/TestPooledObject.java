@@ -8,9 +8,10 @@ import org.apache.commons.pool2.impl.SoftReferenceObjectPool;
 
 @Slf4j
 public class TestPooledObject {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         genericObjectPool_demo();
         //softReferenceObjectPool_demo();
+        Thread.sleep(Long.MAX_VALUE);
     }
     // softReferencePool
     public static void softReferenceObjectPool_demo(){
