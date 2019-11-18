@@ -52,6 +52,7 @@
       <module>javaAgentMainAgentStarter</module>
       <module>JavaLucence</module>
     <module>SimpleWebsocket</module>
+      <module>SimpleSebservice</module>
   </modules>
 
 
