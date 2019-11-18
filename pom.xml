@@ -50,6 +50,7 @@
     <module>javaAgentMainAgent</module>
     <module>javaAgentPremainStarter</module>
       <module>javaAgentMainAgentStarter</module>
+      <module>JavaLucence</module>
   </modules>
 
 
