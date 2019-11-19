@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -15,17 +17,20 @@ import java.io.IOException;
 
 @Slf4j
 public class LuceneService {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParseException {
 //        generateIndex();
 //        deleteByCondition();
-        update();
-        QueryAll();
+//        update();
+//        QueryAll();
+//        queryParse();
 //        QueryByFileName();
 //        deletAll();
 //        queryRange();
 //        queryMulti();
 //        queryWildcardQuery();
-
+//        queryPrefixQuery();
+//        queryPhraseQuery();
+        queryFuzzyQuery();
     }
 
     /**
@@ -62,6 +67,7 @@ public class LuceneService {
 
     public static void printResult(IndexSearcher searcher,Query query) throws IOException {
         TopDocs topDocs = searcher.search(query, 100);
+        log.debug(query.toString());
         ScoreDoc[] scoreDocs = topDocs.scoreDocs;
         for (int i = 0; i < scoreDocs.length; i++) {
             int doc = scoreDocs[i].doc;
@@ -134,7 +140,71 @@ public class LuceneService {
         searcher.getIndexReader().close();
     }
 
-    // 多个term进行查找
+    public static void queryParse() throws IOException, ParseException {
+        String indexPath ="D:\\luccene\\index2";
+        // index索引存储的地方
+        Directory directory = FSDirectory.open(new File(indexPath));
+        // 读取index
+        IndexReader reader = DirectoryReader.open(directory);
+        IndexSearcher searcher = new IndexSearcher(reader);
+        String searchField="fileName";      // 要查询的字段
+        // 1. 精确查找
+        //String query = "lucene.txt";  // 精确查找 表示：fileName:lucene.txt
+        String query = "lucene~";  // 模糊查找
+        /**
+         * 2. 分词查询
+         * parser.parse("lucene.txt  apache.txt")
+         * 空格表示或，即： fileName=lucene.txt or fileName=apache.txt
+         *
+         * 3.修改属性域
+         * parser.parse("fileSize:20")
+         * 此表示查询的是fileSize=20的文件
+         *
+         * 4.通配符匹配
+         *  parser.parse("fileName:L*")
+         *  parser.parse("fileName:L???")
+         *  parser.setAllowLeadingWildcard(true); // lucene认为通配符在前的查询方式效率低,故要设置一下
+         *  parser.parse("fileName:*k")
+         *
+         * 5.区间查找
+         *  TO: 表示全部大写
+         *  开区间: 不包含两个端点的值.(2,5)   2<x<5
+         *  闭区间: 包含两个端点的值.[2,5]     2<=x<=5
+         *  没有半开区间
+         *  parser.parse("id:[1 TO 3]")
+         *  parser.parse("id:{1 TO 3}")
+         *  parser.parse("author:[M TO Z]")
+         *
+         * 区间无法对数值类型进行查询
+         * parser.parse("size:[1 TO 1000]")
+         *
+         * 6.多条件查找
+         * -: 必须不包含(排除)
+         * +: 必须包含
+         * // 查询author不好喊Mike 或 content 中包含my的所有条目
+         *  parser.parse("-author:Mike + content:my")
+         *
+         * 7.and连接符
+         * parser.parse("my and  mother")
+         *
+         * 8.短语查找
+         * parser.parse("\"my and  mother\"")
+         *
+         * 9.距离查询
+         * // ~2 表示词语之间包含两个词语
+         *  parser.parse("\"my and  mother\"~2")
+         *
+         * 10.模糊匹配
+         *  parser.parse("lucene~")
+         *
+         */
+        QueryParser queryParser = new QueryParser(searchField, new IKAnalyzer());
+        Query parse = queryParser.parse(query);
+        printResult(searcher,parse);
+    }
+
+
+    // 通配符查询
     public static void queryWildcardQuery() throws IOException {
         String indexPath ="D:\\luccene\\index2";
         // index索引存储的地方
@@ -143,7 +213,59 @@ public class LuceneService {
         IndexReader reader = DirectoryReader.open(directory);
         IndexSearcher searcher = new IndexSearcher(reader);
 
-        WildcardQuery query = new WildcardQuery(new Term("file*"));
+        WildcardQuery query = new WildcardQuery(new Term("fileName","lucene*"));
+        printResult(searcher,query);
+
+        searcher.getIndexReader().close();
+    }
+
+
+    // 使用前缀查询
+    public static void queryPrefixQuery() throws IOException {
+        String indexPath ="D:\\luccene\\index2";
+        // index索引存储的地方
+        Directory directory = FSDirectory.open(new File(indexPath));
+        // 读取index
+        IndexReader reader = DirectoryReader.open(directory);
+        IndexSearcher searcher = new IndexSearcher(reader);
+        // 表示文件名字是 L开头
+        PrefixQuery query = new PrefixQuery(new Term("fileName", "l"));
+        printResult(searcher,query);
+
+        searcher.getIndexReader().close();
+    }
+
+    // 多关键字查询
+    public static void queryPhraseQuery() throws IOException {
+        String indexPath ="D:\\luccene\\index2";
+        // index索引存储的地方
+        Directory directory = FSDirectory.open(new File(indexPath));
+        // 读取index
+        IndexReader reader = DirectoryReader.open(directory);
+        IndexSearcher searcher = new IndexSearcher(reader);
+        PhraseQuery query = new PhraseQuery();
+        // Exception in thread "main" java.lang.IllegalStateException: field "fileName" was indexed without
+        // position data;cannot run PhraseQuery (term=lucene.txt)
+        query.add(new Term("fileName","lucene.txt"));
+        query.add(new Term("fileName","apache-lucene.txt"));
+
+        printResult(searcher,query);
+
+        searcher.getIndexReader().close();
+    }
+
+    // 相近词语的搜索
+    //FuzzyQuery是一种模糊查询，它可以简单地识别两个相近的词语
+    public static void queryFuzzyQuery() throws IOException {
+        String indexPath ="D:\\luccene\\index2";
+        // index索引存储的地方
+        Directory directory = FSDirectory.open(new File(indexPath));
+        // 读取index
+        IndexReader reader = DirectoryReader.open(directory);
+        IndexSearcher searcher = new IndexSearcher(reader);
+
+        FuzzyQuery query = new FuzzyQuery(new Term("fileContent","lucene"));
+
         printResult(searcher,query);
 
         searcher.getIndexReader().close();
