@@ -45,6 +45,27 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>9.4.22.v20191022</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <!--<scanClassesPattern></scanClassesPattern>
+                    <scanTargetPatterns></scanTargetPatterns>
+                    <scanTargets></scanTargets>
+                    <scanTestClassesPattern></scanTestClassesPattern>
+                    <contextXml></contextXml>-->
+                    <reload>automatic</reload>
+                    <!--<stopKey></stopKey>
+                    <stopPort></stopPort>-->
+                    <systemProperties>
+                        <systemProperties>
+                            <name>test</name>
+                            <value>testVale</value>
+                            <name>test1</name>
+                            <value>test1value</value>
+                        </systemProperties>
+                    </systemProperties>
+                    <!--fileExample: test=testValue -->
+                    <!--<systemPropertiesFile>/filepath</systemPropertiesFile>-->
+                </configuration>
             </plugin>
         </plugins>
     </build>
