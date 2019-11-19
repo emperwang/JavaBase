@@ -54,6 +54,7 @@
     <module>SimpleWebsocket</module>
       <module>SimpleSebservice</module>
       <module>TomcatPlugin</module>
+      <module>SolrJ</module>
   </modules>
 
 
