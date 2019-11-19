@@ -53,6 +53,7 @@
       <module>JavaLucence</module>
     <module>SimpleWebsocket</module>
       <module>SimpleSebservice</module>
+      <module>TomcatPlugin</module>
   </modules>
 
 
