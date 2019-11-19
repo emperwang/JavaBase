@@ -62,6 +62,7 @@ public class LuceneService {
             document.add(fileContent);
             indexWriter.addDocument(document);
         }
+        indexWriter.commit();
         indexWriter.close();
     }
 
