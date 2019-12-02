@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+// https://blog.csdn.net/haoyuyang/article/details/53469269
 public class CuratorDemo {
     private static final String CONNECT_ADDR="192.168.72.15:2181";
     private static final int SESSION_TIMEOUT=50000;
