@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 // https://blog.csdn.net/haoyuyang/article/details/53469269
 public class CuratorDemo {
-    private static final String CONNECT_ADDR="192.168.72.15:2181";
+    private static final String CONNECT_ADDR="127.0.0.1:2181";
     private static final int SESSION_TIMEOUT=50000;
 
     public static void main(String[] args) throws Exception {
@@ -30,7 +30,7 @@ public class CuratorDemo {
          * 创建节点
          * creatingParentsIfNeeded  如果父节点不存在  连同父节点一起创建
          * withMode   创建的节点的模式
-         * inBackground  回调函数
+         * inBackground  回调函数, 可以使用个线程池 改进性能
          * forpath  创建的节点的路径 以及其内容
          */
         curator.create().creatingParentsIfNeeded().withMode(CreateMode.PERSISTENT)

@@ -48,17 +48,17 @@ public class ExampleClientThatLocks {
         int QTY = 5;
         int REPETITIONS = QTY * 5;
         String PATH = "/example/locks";
-        String CONNECT_ADDR = "localhost:2181";
+        String CONNECT_ADDR = "192.168.30.10:2181";
         FakeLimitedResources fakeLimitedResources = new FakeLimitedResources();
         ExecutorService executorService = Executors.newFixedThreadPool(QTY);
 
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < 5; i++) {
                 int index = 1;
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         CuratorFramework curator = CuratorFrameworkFactory.newClient(CONNECT_ADDR,
-                                new RetryNTimes(3, 1000));
+                                new RetryNTimes(3, 10000));
                         curator.start();
                         try {
                             ExampleClientThatLocks exampleClientThatLocks = new ExampleClientThatLocks(curator, PATH, fakeLimitedResources,
@@ -94,11 +94,12 @@ public class ExampleClientThatLocks {
             }
 
         try {
+            executorService.shutdown();
             executorService.awaitTermination(Long.MAX_VALUE,TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }finally {
-            executorService.shutdown();
+
         }
     }
 }
