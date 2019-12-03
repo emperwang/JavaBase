@@ -28,12 +28,10 @@ public class ExampleClientThatLocks {
             throw new IllegalStateException(clientName+" could not acquire a lock");
         }
         log.info(clientName + " has a lock");
-        System.out.println(clientName + " has a lock");
         try{
             resources.use();
         }finally {
             log.info(clientName+" releasing the lock");
-            System.out.println(clientName+" releasing the lock");
             lock.release();
         }
     }
@@ -48,10 +46,9 @@ public class ExampleClientThatLocks {
         int QTY = 5;
         int REPETITIONS = QTY * 5;
         String PATH = "/example/locks";
-        String CONNECT_ADDR = "192.168.30.10:2181";
+        String CONNECT_ADDR = "192.168.72.11:2181";
         FakeLimitedResources fakeLimitedResources = new FakeLimitedResources();
         ExecutorService executorService = Executors.newFixedThreadPool(QTY);
-
             for (int i = 0; i < 5; i++) {
                 int index = 1;
                 Runnable runnable = new Runnable() {
@@ -61,11 +58,12 @@ public class ExampleClientThatLocks {
                                 new RetryNTimes(3, 10000));
                         curator.start();
                         try {
-                            ExampleClientThatLocks exampleClientThatLocks = new ExampleClientThatLocks(curator, PATH, fakeLimitedResources,
-                                    "Client" + index);
+                            ExampleClientThatLocks exampleClientThatLocks = new ExampleClientThatLocks(curator, PATH,
+                                    fakeLimitedResources,"Client" + index);
 
                             for (int j = 0; j < REPETITIONS; j++) {
                                 exampleClientThatLocks.doWork(10, TimeUnit.SECONDS);
+
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
