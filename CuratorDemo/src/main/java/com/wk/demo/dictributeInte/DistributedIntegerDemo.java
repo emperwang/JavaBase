@@ -1,4 +1,4 @@
-package com.wk.demo.lock;
+package com.wk.demo.dictributeInte;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
