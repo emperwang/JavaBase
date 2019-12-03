@@ -1,4 +1,4 @@
-package com.wk.demo.lock;
+package com.wk.demo.lock.interProcessMutex;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class ExampleClientThatLocks {
+    // 可重入锁
     private InterProcessMutex lock;
     private FakeLimitedResources resources;
     private String clientName;
@@ -42,6 +43,10 @@ public class ExampleClientThatLocks {
 你可以在每个线程中都生成一个InterProcessMutex实例，
 它们的path都一样，这样它们可以共享同一个锁。
  */
+    /**
+     *  可重入锁演示
+     * @param args
+     */
     public static void main(String[] args) {
         int QTY = 5;
         int REPETITIONS = QTY * 5;

@@ -1,4 +1,4 @@
-package com.wk.demo.lock;
+package com.wk.demo.lock.interProcessMutex;
 
 import lombok.extern.slf4j.Slf4j;
 
