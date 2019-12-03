@@ -5,8 +5,11 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.atomic.AtomicValue;
 import org.apache.curator.framework.recipes.atomic.DistributedAtomicInteger;
+import org.apache.curator.framework.recipes.atomic.PromotedToLock;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.retry.RetryNTimes;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * 分布式计数器
@@ -22,9 +25,11 @@ public class DistributedIntegerDemo {
         CuratorFramework curator = CuratorFrameworkFactory.builder().connectString(CONNECT_ADDR)
                 .sessionTimeoutMs(SESSION_TIMEOUT).retryPolicy(policy).build();
         curator.start();
-
+        // promotedToLock 对分布式计数器添加了分布式锁
+        PromotedToLock promotedToLock = PromotedToLock.builder().lockPath("/atomic/lock").retryPolicy(new RetryNTimes(3, 1000))
+                .timeout(10, TimeUnit.SECONDS).build();
         DistributedAtomicInteger distributedAtomicInteger = new DistributedAtomicInteger(curator, "/super",
-                new RetryNTimes(3, 1000));
+                new RetryNTimes(3, 1000),promotedToLock);
         try {
             AtomicValue<Integer> value = distributedAtomicInteger.add(1);
             System.out.println(value.succeeded());
