@@ -50,12 +50,12 @@ public class ExampleClientThatLocks {
     public static void main(String[] args) {
         int QTY = 5;
         int REPETITIONS = QTY * 5;
-        String PATH = "/example/locks";
+        String PATH = "/example/locksmutext";
         String CONNECT_ADDR = "192.168.72.11:2181";
         FakeLimitedResources fakeLimitedResources = new FakeLimitedResources();
         ExecutorService executorService = Executors.newFixedThreadPool(QTY);
             for (int i = 0; i < 5; i++) {
-                int index = 1;
+                final int index = i;
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
@@ -64,11 +64,11 @@ public class ExampleClientThatLocks {
                         curator.start();
                         try {
                             ExampleClientThatLocks exampleClientThatLocks = new ExampleClientThatLocks(curator, PATH,
-                                    fakeLimitedResources,"Client" + index);
+                                    fakeLimitedResources,"Client#" + index);
 
                             for (int j = 0; j < REPETITIONS; j++) {
                                 exampleClientThatLocks.doWork(10, TimeUnit.SECONDS);
-
+                                Thread.sleep(5000);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
