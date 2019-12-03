@@ -24,6 +24,7 @@ public class CuratorDemo {
         CuratorFramework curator = builder.build();
         //开启连接
         curator.start();
+        // 这只回调函数的线程池
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         /**
@@ -47,10 +48,12 @@ public class CuratorDemo {
         //检查节点是否存在
         Stat stat = curator.checkExists().forPath("/surper/c1");
         System.out.println(stat);
+        // 更新节点内容
         curator.setData().forPath("/surper/c1","c1NewData".getBytes());
         s = new String(curator.getData().forPath("/surper/c1"));
         System.out.println(s);
 
+        // 去子节点
         List<String> childrens = curator.getChildren().forPath("/surper");
         for (String children:childrens){
             System.out.println(children);
