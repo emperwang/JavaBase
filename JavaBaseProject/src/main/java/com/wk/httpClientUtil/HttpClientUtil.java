@@ -122,9 +122,9 @@ public class HttpClientUtil {
             if (200 != statusCode && 201 != statusCode) {
                 entityString = convertResponseToString(response);
             }
-            logger.info("httpPostMethodWithStatusCode response is {}",result.toString());
             result.put("code",statusCode.toString());
             result.put("message",entityString);
+            logger.info("httpPostMethodWithStatusCode response is {}",result.toString());
             return result;
         } catch (IOException e) {
             logger.error("Httpclient httpPostMethodWithStatusCode error,the url is{},the error msg is{}",
@@ -183,9 +183,9 @@ public class HttpClientUtil {
             if (200 != statusCode && 201 != statusCode) {
                 entityString = convertResponseToString(response);
             }
-            logger.info("httpDeleteMethodWithStatusCode response is {}",result.toString());
             result.put("code",statusCode.toString());
             result.put("message",entityString);
+            logger.info("httpDeleteMethodWithStatusCode response is {}",result.toString());
             return result;
         } catch (IOException e) {
             logger.error("Httpclient httpDeleteMethodWithStatusCode error,the url is{},the error msg is{}",
