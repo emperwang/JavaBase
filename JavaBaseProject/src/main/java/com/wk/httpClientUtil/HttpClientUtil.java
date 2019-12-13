@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,7 +44,44 @@ public class HttpClientUtil {
         }
         return null;
     }
-
+    public static Map<String,String> httpGetMethodWithStatusCode(HttpConfig httpConfig){
+        HttpRequestBase getMethod = null;
+        getMethod = getRequestByParam(httpConfig);
+        configRequest(getMethod,httpConfig);
+        CloseableHttpResponse response = null;
+        Map<String, String> result = new HashMap<>();
+        Integer statusCode = null;
+        String entityString="";
+        try {
+            response = (CloseableHttpResponse) httpConfig.getClient().execute(getMethod);
+            statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode != null) {
+                if (200 != statusCode && 201 != statusCode) {
+                    entityString = convertResponseToString(response);
+                }
+            }
+            logger.info("httpGetMethodWithStatusCode response is {}",result.toString());
+            result.put("code",statusCode.toString());
+            result.put("message",entityString);
+            return result;
+        } catch (Exception e) {
+            logger.error("Httpclient httpGetMethodWithStatusCode error,the url is{},the error msg is{}",
+                    httpConfig.getUrl(),e.getMessage());
+            if (null != statusCode){
+                result.put("code",statusCode.toString());
+            }else{
+                result.put("code","500");
+            }
+            if (!"".equals(entityString)){
+                result.put("message",entityString);
+            }else {
+                result.put("message", e.getMessage());
+            }
+            return result;
+        }finally {
+            close((CloseableHttpClient) httpConfig.getClient(),response);
+        }
+    }
 
     /**
      *  http post 请求无参数
@@ -68,6 +107,44 @@ public class HttpClientUtil {
         return null;
     }
 
+    public static Map<String,String> httpPostMethodWithStatusCode(HttpConfig httpConfig){
+        logger.debug("httpclient post method start,the url is{}",httpConfig.getUrl());
+        CloseableHttpResponse response = null;
+        HttpPost request = (HttpPost) getRequest(httpConfig.getUrl(),httpConfig.getMethods());
+        Map<String,String> result = new HashMap<>(2);
+        Integer statusCode = null;
+        String entityString = "";
+        try {
+            configRequest(request,httpConfig);
+            configParamEntity(request,httpConfig);
+            response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
+            statusCode = response.getStatusLine().getStatusCode();
+            if (200 != statusCode && 201 != statusCode) {
+                entityString = convertResponseToString(response);
+            }
+            logger.info("httpPostMethodWithStatusCode response is {}",result.toString());
+            result.put("code",statusCode.toString());
+            result.put("message",entityString);
+            return result;
+        } catch (IOException e) {
+            logger.error("Httpclient httpPostMethodWithStatusCode error,the url is{},the error msg is{}",
+                    httpConfig.getUrl(),e.getMessage());
+            if (null != statusCode){
+                result.put("code",statusCode.toString());
+            }else{
+                result.put("code","500");
+            }
+            if (!"".equals(entityString)){
+                result.put("message", entityString);
+            }else {
+                result.put("message", e.getMessage());
+            }
+            return result;
+        }finally {
+            close((CloseableHttpClient) httpConfig.getClient(),response);
+        }
+    }
+
     /**
      *  delete 方法访问
      * @param httpConfig
@@ -90,6 +167,43 @@ public class HttpClientUtil {
             close((CloseableHttpClient) httpConfig.getClient(),response);
         }
         return null;
+    }
+
+    public static Map<String,String> httpDeleteMethodWithStatusCode(HttpConfig httpConfig){
+        logger.debug("httpclient delete method start,the url is{}",httpConfig.getUrl());
+        CloseableHttpResponse response = null;
+        HttpDelete request = (HttpDelete) getRequest(httpConfig.getUrl(),httpConfig.getMethods());
+        Map<String,String> result = new HashMap<>(2);
+        Integer statusCode = null;
+        String entityString = "";
+        try {
+            configRequest(request,httpConfig);
+            response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
+            statusCode = response.getStatusLine().getStatusCode();
+            if (200 != statusCode && 201 != statusCode) {
+                entityString = convertResponseToString(response);
+            }
+            logger.info("httpDeleteMethodWithStatusCode response is {}",result.toString());
+            result.put("code",statusCode.toString());
+            result.put("message",entityString);
+            return result;
+        } catch (IOException e) {
+            logger.error("Httpclient httpDeleteMethodWithStatusCode error,the url is{},the error msg is{}",
+                    httpConfig.getUrl(),e.getMessage());
+            if (null != statusCode){
+                result.put("code",statusCode.toString());
+            }else{
+                result.put("code","500");
+            }
+            if (!"".equals(entityString)){
+                result.put("message", entityString);
+            }else {
+                result.put("message", e.getMessage());
+            }
+            return result;
+        }finally {
+            close((CloseableHttpClient) httpConfig.getClient(),response);
+        }
     }
 
     /**
@@ -125,6 +239,51 @@ public class HttpClientUtil {
         return null;
     }
 
+    /**
+     *  返回 响应码  响应体
+     * @param httpConfig
+     * @return
+     */
+    public static Map<String,String>  httpPutMethodWithStatusCode(HttpConfig httpConfig){
+        logger.debug("httpclient put method start,the url is{}",httpConfig.getUrl());
+        CloseableHttpResponse response = null;
+        HttpPut request = (HttpPut) getRequest(httpConfig.getUrl(),httpConfig.getMethods());
+        Map<String,String> result = new HashMap<>(2);
+        Integer statusCode = null;
+        String entityString = "";
+        try {
+            configRequest(request,httpConfig);
+            configParamEntity(request,httpConfig);
+            response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
+            statusCode = response.getStatusLine().getStatusCode();
+            logger.info("httpPutMethodWithStatusCode statusCode is {}",statusCode);
+            if (200 != statusCode && 201 != statusCode) {
+                entityString = convertResponseToString(response);
+            }
+            result.put("code",statusCode.toString());
+            result.put("message",entityString);
+            if (logger.isDebugEnabled()){
+                logger.debug("httpPutMethodWithStatusCode response:{}",result.toString());
+            }
+            return result;
+        } catch (Exception e) {
+            logger.error("Httpclient httpPutMethodWithStatusCode error,the url is{},the error msg is{}",
+                    httpConfig.getUrl(),e.getMessage());
+            if (null != statusCode){
+                result.put("code",statusCode.toString());
+            }else{
+                result.put("code","500");
+            }
+            if (!"".equals(entityString)){
+                result.put("message", entityString);
+            }else {
+                result.put("message", e.getMessage());
+            }
+            return result;
+        }finally {
+            close((CloseableHttpClient) httpConfig.getClient(),response);
+        }
+    }
     /**
      *  把参数准换为字符串
      * @param params
@@ -179,9 +338,11 @@ public class HttpClientUtil {
         Map<String, String> paramMap = httpConfig.getParamMap();
         StringEntity entity = null;
         if (paramMap != null && paramMap.size() > 0) {
-             entity = new StringEntity(JSONUtil.beanToJson(paramMap));
+             entity = new StringEntity(JSONUtil.beanToJson(paramMap), Charset.forName("UTF-8"));
+             entity.setContentEncoding("UTF-8");
         }else{
-            entity = new StringEntity(httpConfig.getBeanParam());
+            entity = new StringEntity(httpConfig.getBeanParam(), Charset.forName("UTF-8"));
+            entity.setContentEncoding("UTF-8");
         }
         if (request instanceof HttpPost){
             HttpPost httpPost = (HttpPost) request;

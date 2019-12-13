@@ -626,6 +626,7 @@ public class HttpHeader {
         public static final String TEXT_HTML = "text/html";
         public static final String TEXT_XML = "text/xml";
         public static final String TEXT_JSON = "application/json";
+        public static final String TEXT_JSON_UTF8 = "application/json;Charset=utf-8";
         public static final String CONNECTION_CLOSE = "close";
         public static final String KEEP_ALIVE = "keep-alive";
         public static final String EXPECT_CONTINUE = "100-continue";
