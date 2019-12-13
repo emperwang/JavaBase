@@ -64,6 +64,17 @@ public class ClientFactory {
         return httpClient;
     }
 
+    public static CloseableHttpClient httpClientPooled(Integer connectTimeout,Integer socketTime){
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(socketTime).build();
+        PoolingHttpClientConnectionManager pool = new PoolingHttpClientConnectionManager();
+        pool.setMaxTotal(20);
+        pool.setDefaultMaxPerRoute(20);
+        CloseableHttpClient client = HttpClients.custom().setConnectionManager(pool)
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+        return client;
+    }
+
     /**
      *  HTTPS 绕过证书
      * @return
