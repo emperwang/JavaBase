@@ -1,11 +1,14 @@
 package com.wk.httpClientUtil;
 
+import com.wk.httpClientUtil.bean.test.Content;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Header;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 /**
  *
@@ -78,10 +81,25 @@ public class TestStartMain {
         System.out.println("result is :"+result);
     }
 
+    public static void sendChinese(){
+        String url = "http://192.168.72.1:8989/user/chinese";
+        String msg = "收到活动告警，告警标题：vim与omc关联，告警级别：3，告警发生时间：2019-13-18 16:15:14";
+        Content content = new Content();
+        content.setContent(msg);
+        CloseableHttpClient httpClient = ClientFactory.httpClientPooled(10000, 10000);
+        Header[] headers = HttpHeader.instance().contentType("application/json;charset=utf-8").build();
+        HttpConfig config = HttpConfig.instance().methods(HttpMethods.POST)
+                .url(url).header(headers).client(httpClient).beanParam(JSONUtil.beanToJson(content));
+        Map<String, String> result = HttpClientUtil.httpPostMethodWithStatusCode(config);
+
+        System.out.println(result.toString());
+    }
+
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         // trustAll();
         // authenticationOne();
 //        authenticationDouble();
-        sendRequestWithIpv6();
+       // sendRequestWithIpv6();
+        sendChinese();
     }
 }
