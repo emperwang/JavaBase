@@ -15,15 +15,27 @@ public class ParamVal {
     public void paramPass(){
         System.out.println("======================String=================================");
         String a = "123";
-        System.out.println("before : " + a);
         testStr(a);
-        System.out.println("after :"+a);
+        System.out.println("String after :"+a);
         System.out.println("======================String   end=================================");
+
+        System.out.println("======================Integer=================================");
+        Integer iii = 10;
+        testInt(iii);
+        System.out.println("Integer after :"+iii);
+        System.out.println("======================Integer   end=================================");
+
+        System.out.println("======================Boolean=================================");
+        Boolean bbb = true;
+        testBoolean(bbb);
+        System.out.println("Boolean after :"+bbb);
+        System.out.println("======================Boolean   end=================================");
+
 
         System.out.println("=========================Array================================");
         String[] b = {"aa","bb"};
         testArray(b);
-        System.out.println("after change: "+ Arrays.asList(b));
+        System.out.println("Array after change: "+ Arrays.asList(b));
         System.out.println("=========================Array end===============================");
 
         System.out.println("=========================List================================");
@@ -31,7 +43,7 @@ public class ParamVal {
         lists.add("first");
         lists.add("seconds");
         testList(lists);
-        System.out.println("after change  :" + lists.toString());
+        System.out.println("List after change  :" + lists.toString());
         System.out.println("=========================List end===============================");
 
 
@@ -40,7 +52,7 @@ public class ParamVal {
         maps.put("one","aa");
         maps.put("two","bb");
         testMap(maps);
-
+        System.out.println("Map after change: "+ maps.toString());
         System.out.println("=========================Map end===============================");
 
     }
@@ -68,6 +80,18 @@ public class ParamVal {
         System.out.println("recv b :" + b);
         b = "10000";
         System.out.println("testStr change : "+b);
+    }
+
+    public void testInt(Integer ii){
+        System.out.println("rev int :" + ii);
+        ii = 0;
+        System.out.println("testInt change :" + ii);
+    }
+
+    public void testBoolean(Boolean bb){
+        System.out.println("rev boolean : "+ bb);
+        bb = false;
+        System.out.println("testBoolean change :" + bb);
     }
 
 }
