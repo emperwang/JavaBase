@@ -105,12 +105,31 @@ public class TestStartMain {
         System.out.println("result :"+ map.toString());
     }
 
+    public static void  testPoolClient(int counts){
+        String url = "http://192.168.72.1:8989/user/del.do";
+        String msg = "{\"sourceId\": \"030\",\"taskId\": 355}";
+        Header[] headers = HttpHeader.instance().contentType(HttpHeader.Headers.TEXT_JSON_UTF8).build();
+        for (int i=0; i < counts; i++) {
+            System.out.println("count : " + i);
+            CloseableHttpClient httpClient = ClientFactoryWithPool.getHttpClient();
+            HttpConfig config = HttpConfig.instance().url(url).client(httpClient).beanParam(msg).header(headers);
+            Map<String, String> map = HttpClientUtil.httpDeleteMethodWithEntityWithStatusCode(config);
+            System.out.println("result :" + map.toString());
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         // trustAll();
         // authenticationOne();
 //        authenticationDouble();
        // sendRequestWithIpv6();
 //        sendChinese();
-        deleteWithEntity();
+//        deleteWithEntity();
+        testPoolClient(50);
     }
 }

@@ -240,7 +240,7 @@ public class HttpClientUtil {
             }
             return result;
         }finally {
-            close((CloseableHttpClient) httpConfig.getClient(),response);
+            // close((CloseableHttpClient) httpConfig.getClient(),response);
         }
     }
 
