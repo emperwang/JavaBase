@@ -95,11 +95,22 @@ public class TestStartMain {
         System.out.println(result.toString());
     }
 
+    public static void  deleteWithEntity(){
+        String url = "http://192.168.72.1:8989/user/del.do";
+        String msg = "{\"sourceId\": \"030\",\"taskId\": 355}";
+        Header[] headers = HttpHeader.instance().contentType(HttpHeader.Headers.TEXT_JSON_UTF8).build();
+        CloseableHttpClient httpClient = ClientFactory.httpClientPooled(1000, 1000);
+        HttpConfig config = HttpConfig.instance().url(url).client(httpClient).beanParam(msg).header(headers);
+        Map<String, String> map = HttpClientUtil.httpDeleteMethodWithEntityWithStatusCode(config);
+        System.out.println("result :"+ map.toString());
+    }
+
     public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
         // trustAll();
         // authenticationOne();
 //        authenticationDouble();
        // sendRequestWithIpv6();
-        sendChinese();
+//        sendChinese();
+        deleteWithEntity();
     }
 }

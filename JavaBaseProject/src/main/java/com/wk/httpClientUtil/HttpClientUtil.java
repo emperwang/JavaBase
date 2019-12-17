@@ -206,6 +206,44 @@ public class HttpClientUtil {
         }
     }
 
+    public static Map<String,String> httpDeleteMethodWithEntityWithStatusCode(HttpConfig httpConfig){
+        logger.debug("httpclient delete method start,the url is{}",httpConfig.getUrl());
+        CloseableHttpResponse response = null;
+        HttpDeleteWithEntity request = (HttpDeleteWithEntity) new HttpDeleteWithEntity(httpConfig.getUrl());
+        Map<String,String> result = new HashMap<>(2);
+        Integer statusCode = null;
+        String entityString = "";
+        try {
+            configRequest(request,httpConfig);
+            configParamEntity(request,httpConfig);
+            response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
+            statusCode = response.getStatusLine().getStatusCode();
+            if (200 != statusCode && 201 != statusCode) {
+                entityString = convertResponseToString(response);
+            }
+            result.put("code",statusCode.toString());
+            result.put("message",entityString);
+            logger.info("httpDeleteMethodWithStatusCode response is {}",result.toString());
+            return result;
+        } catch (IOException e) {
+            logger.error("Httpclient httpDeleteMethodWithStatusCode error,the url is{},the error msg is{}",
+                    httpConfig.getUrl(),e.getMessage());
+            if (null != statusCode){
+                result.put("code",statusCode.toString());
+            }else{
+                result.put("code","500");
+            }
+            if (!"".equals(entityString)){
+                result.put("message", entityString);
+            }else {
+                result.put("message", e.getMessage());
+            }
+            return result;
+        }finally {
+            close((CloseableHttpClient) httpConfig.getClient(),response);
+        }
+    }
+
     /**
      *  把responseEntity结果转换为string
      * @return
@@ -343,6 +381,11 @@ public class HttpClientUtil {
         }else{
             entity = new StringEntity(httpConfig.getBeanParam(), Charset.forName("UTF-8"));
             entity.setContentEncoding("UTF-8");
+        }
+        if (request instanceof HttpDeleteWithEntity){
+            HttpDeleteWithEntity httpDelete = (HttpDeleteWithEntity) request;
+            httpDelete.setEntity(entity);
+            return;
         }
         if (request instanceof HttpPost){
             HttpPost httpPost = (HttpPost) request;
