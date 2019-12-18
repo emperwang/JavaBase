@@ -1,6 +1,7 @@
 package com.wk.httpClientUtil;
 
 import com.wk.httpClientUtil.bean.test.Content;
+import com.wk.httpClientUtil.pooled.ClientFactoryWithPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.impl.client.CloseableHttpClient;
