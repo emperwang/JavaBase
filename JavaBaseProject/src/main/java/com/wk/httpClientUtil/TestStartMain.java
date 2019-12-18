@@ -31,7 +31,7 @@ public class TestStartMain {
      *  绕过认证测试
      */
     public static void trustAll() throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        // CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(socketTimeOut, connectTimeout);
+        // CloseableHttpClient httpSSLClient = ClientFactoryPool.createHttpSSLClient(socketTimeOut, connectTimeout);
         // 带连接池的测试
         CloseableHttpClient httpSSLClient = ClientFactory.createHttpClientWithPoolNoAuth(socketTimeOut, connectTimeout);
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
@@ -45,7 +45,7 @@ public class TestStartMain {
      *  单向认证测试
      */
     public static void authenticationOne(){
-        // CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
+        // CloseableHttpClient httpSSLClient = ClientFactoryPool.createHttpSSLClient(trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
         // 带连接池的测试
         CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientOneAuthenticateAndHostNameWithPool(clientKey2, trustKeyPwd,
                                                                                                 socketTimeOut, connectTimeout);
@@ -61,7 +61,7 @@ public class TestStartMain {
      * 双向认证测试
      */
     public static void authenticationDouble(){
-        /*CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClient(clientKey, clientKeyPwd,
+        /*CloseableHttpClient httpSSLClient = ClientFactoryPool.createHttpSSLClient(clientKey, clientKeyPwd,
                 trustKey, trustKeyPwd, socketTimeOut, connectTimeout);*/
         CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientDoubleAuthenticateAndHostNameWithPool(clientKey2,
                 clientKeyPwd,
