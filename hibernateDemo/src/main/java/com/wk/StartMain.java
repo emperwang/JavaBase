@@ -1,10 +1,14 @@
 package com.wk;
 
+import com.wk.entity.Grade;
 import com.wk.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+
+import java.util.List;
 
 /**
  * descripiton:
@@ -24,8 +28,29 @@ public class StartMain {
 
 
     public static void main(String[] args) {
-        insertRec();
+//        insertRec();
+        annoInsert();
+        annoQuery();
         getAll();
+    }
+
+    public static void annoInsert(){
+        Grade grade = new Grade();
+        grade.setAddr("bj");
+        grade.setCname("kim");
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.saveOrUpdate(grade);
+        transaction.commit();
+        session.close();
+    }
+
+    public static void annoQuery(){
+        Session session = sessionFactory.openSession();
+        Query query = session.createQuery("from Grade");
+        List list = query.list();
+        System.out.println(list.toString());
+        session.close();
     }
 
     public static void insertRec(){
@@ -43,7 +68,9 @@ public class StartMain {
     public static void getAll(){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        User user = session.get(User.class, 1);
+        // User user = session.get(User.class, 1);
+        Query query = session.createQuery("from User");
+        List user = query.list();
         System.out.println(user.toString());
         transaction.commit();
 

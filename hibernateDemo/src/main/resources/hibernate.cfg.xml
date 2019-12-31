@@ -23,9 +23,11 @@
         <!--格式化sql-->
         <property name="format_sql">true</property>
         <property name="hibernate.show_sql">true</property>
-        <!--自动建表-->
-        <!--<property name="hbm2ddl.auto">create</property>-->
+        <!--自动建表 create update create-drop validate-->
+        <property name="hbm2ddl.auto">update</property>
         <!--关联hbm配置文件-->
         <mapping resource="hibernate.hbm.xml"/>
+        <!--使用注解配置-->
+        <mapping class="com.wk.entity.Grade"/>
     </session-factory>
 </hibernate-configuration>
