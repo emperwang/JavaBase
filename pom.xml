@@ -55,6 +55,7 @@
       <module>SimpleSebservice</module>
       <module>TomcatPlugin</module>
       <module>SolrJ</module>
+      <module>MybatisDemo</module>
   </modules>
 
 
