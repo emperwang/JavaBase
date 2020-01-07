@@ -41,7 +41,21 @@ public class MainStarter {
         }
     }
     public static void main(String[] args) {
-        selectAll();
+//        selectAll();
+        updateAgeList();
+    }
+
+    public static void updateAgeList(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<User> users = userMapper.selectAll();
+        for (User user : users) {
+            user.setAge(200);
+        }
+        userMapper.updateAgeList(users);
+
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     public static void selectAll(){

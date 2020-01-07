@@ -15,4 +15,11 @@
     <select id="selectAll" resultMap="baseResult">
         SELECT <include refid="baseSql"/> FROM user;
     </select>
+
+    <update id="updateAgeList" parameterType="com.wk.entity.User">
+        <foreach collection="list" separator=";" item="idx" close=";">
+            UPDATE user SET age=#{idx.age} where id=#{idx.id}
+        </foreach>
+    </update>
+
 </mapper>

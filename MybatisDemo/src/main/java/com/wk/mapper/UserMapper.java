@@ -14,4 +14,6 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> selectAll();
+
+    int updateAgeList(List<User> users);
 }
