@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wk.pmapper.UserMapper">
+    <resultMap id="baseResult" type="com.wk.entity.User">
+        <id property="id" column="id" jdbcType="INTEGER"></id>
+        <result property="name" column="name" jdbcType="VARCHAR"></result>
+        <result property="age" column="age" jdbcType="INTEGER"></result>
+    </resultMap>
+
+    <sql id="baseSql">
+        id,name,age
+    </sql>
+
+    <select id="getAll" resultMap="baseResult">
+        SELECT <include refid="baseSql"/> FROM users;
+    </select>
+
+    <update id="updateAges" parameterType="com.wk.entity.User">
+        <foreach collection="list" item="idx" separator=";" close=";">
+            UPDATE users SET age=#{idx.age} WHERE id=#{idx.id}
+        </foreach>
+    </update>
+
+</mapper>

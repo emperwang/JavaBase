@@ -1,7 +1,8 @@
 package com.wk;
 
+
 import com.wk.entity.User;
-import com.wk.mapper.UserMapper;
+import com.wk.pmapper.UserMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,18 +17,17 @@ import java.util.List;
  * descripiton:
  *
  * @author: wk
- * @time: 19:04 2019/12/31
+ * @time: 10:32 2020/1/7
  * @modifier:
  */
-public class MainStarter {
-    private static Logger log = Logger.getLogger(MainStarter.class);
+public class PostgresqlMain {
+    private static Logger log = Logger.getLogger(PostgresqlMain.class);
     private static Reader reader;
     private static SqlSessionFactory sessionFactory;
     static {
         try {
-            reader = Resources.getResourceAsReader("mybatis-config.xml");
+            reader = Resources.getResourceAsReader("mybatis-postgresql.xml");
             sessionFactory = new SqlSessionFactoryBuilder().build(reader);
-
         } catch (IOException e) {
             e.printStackTrace();
         }finally {
@@ -40,29 +40,30 @@ public class MainStarter {
             }
         }
     }
-    public static void main(String[] args) {
-        selectAll();
-//        updateAgeList();
+
+    public static void selectAll(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        List<User> users = mapper.getAll();
+        log.info(users.toString());
+        sqlSession.close();
     }
 
-    public static void updateAgeList(){
+    public static void updates(){
         SqlSession sqlSession = sessionFactory.openSession();
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        List<User> users = userMapper.selectAll();
-        for (User user : users) {
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        List<User> all = mapper.getAll();
+        for (User user : all) {
             user.setAge(200);
         }
-        userMapper.updateAgeList(users);
-
+        mapper.updateAges(all);
         sqlSession.commit();
         sqlSession.close();
     }
 
-    public static void selectAll(){
-        SqlSession sqlSession = sessionFactory.openSession();
-        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        List<User> users = userMapper.selectAll();
-        log.info(users.toString());
-        sqlSession.close();
+
+    public static void main(String[] args) {
+//        selectAll();
+        updates();
     }
 }
