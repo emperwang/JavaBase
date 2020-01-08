@@ -63,5 +63,13 @@
       WHERE id=#{id}
     </update>
 
+    <!--批量添加-->
+    <insert id="batchInsert" parameterType="java.util.List">
+      INSERT into USER(name,age,address) VALUES
+      <foreach collection="list" item="itm" separator=",">
+          (#{itm.name}, #{itm.age}, #{itm.address})
+      </foreach>
+    </insert>
+
 
 </mapper>

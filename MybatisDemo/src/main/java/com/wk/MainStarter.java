@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class MainStarter {
 //        selectById();
 //        selectByIdWithMap();
 //        selectiveUpdateSet();
-        selectiveUpdateTrim();
+//        selectiveUpdateTrim();
+        insertBatch();
     }
 
     public static void selectByIdWithMap(){
@@ -89,6 +91,23 @@ public class MainStarter {
         sqlSession.commit();
         sqlSession.close();
     }
+
+    public static void insertBatch(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<User> lists = new ArrayList<>();
+        for (int i=0;i<10;i++){
+            User user = new User();
+            user.setAge(155);
+            user.setName("洪七公 :"+i+"  徒弟");
+            user.setAddress("叫花鸡");
+            lists.add(user);
+        }
+        userMapper.batchInsert(lists);
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
     public static void updateAgeList(){
         SqlSession sqlSession = sessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);

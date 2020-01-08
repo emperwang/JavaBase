@@ -41,4 +41,6 @@ public interface UserMapper {
     int updateSelectFieldTrim(User user);
 
     int updateSelectField(User user);
+
+    int batchInsert(List<User> list);
 }
