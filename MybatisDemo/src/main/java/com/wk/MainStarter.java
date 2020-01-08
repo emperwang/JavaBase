@@ -49,7 +49,32 @@ public class MainStarter {
 //        selectByIdWithMap();
 //        selectiveUpdateSet();
 //        selectiveUpdateTrim();
-        insertBatch();
+//        insertBatch();
+//        batchDelete();
+//        batchDelArray();
+    }
+
+    public static void batchDelArray(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        Integer[] arr = {1,2,3,4,5};
+        mapper.batchDelArray(arr);
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    public static void batchDelete(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        List<User> list = new ArrayList<>();
+        for(int i = 10; i < 10; i++){
+            User user = new User();
+            user.setId(i);
+            list.add(user);
+        }
+        mapper.batchDeletes(list);
+        sqlSession.commit();
+        sqlSession.close();
     }
 
     public static void selectByIdWithMap(){

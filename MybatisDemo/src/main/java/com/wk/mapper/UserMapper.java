@@ -43,4 +43,9 @@ public interface UserMapper {
     int updateSelectField(User user);
 
     int batchInsert(List<User> list);
+
+    // todo  此函数测试不通过
+    int batchDeletes(List<User> list);
+
+    int batchDelArray(Integer[] id);
 }

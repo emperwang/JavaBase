@@ -71,5 +71,19 @@
       </foreach>
     </insert>
 
-
+    <!--目前有问题-->
+    <delete id="batchDeletes" parameterType="java.util.List">
+        DELETE FROM USER WHERE id IN
+          <foreach collection="list" item="itm" open="(" separator="," close=");">
+              #{itm.id, jdbcType='INTEGER'}
+          </foreach>
+    </delete>
+    
+    <delete id="batchDelArray" parameterType="int">
+        DELETE FROM user WHERE  id IN
+        <foreach collection="array"  item="id" open="(" separator="," close=");">
+            #{id}
+        </foreach>
+    </delete>
+    
 </mapper>
