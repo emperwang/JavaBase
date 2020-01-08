@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -41,10 +42,53 @@ public class MainStarter {
         }
     }
     public static void main(String[] args) {
-        selectAll();
+//        selectAll();
 //        updateAgeList();
+//        selectById();
+//        selectByIdWithMap();
+//        selectiveUpdateSet();
+        selectiveUpdateTrim();
     }
 
+    public static void selectByIdWithMap(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        HashMap<String, String> map = new HashMap<>(1);
+        map.put("id","1");
+        User user = mapper.selectByMap(map);
+        log.info(user.toString());
+        sqlSession.close();
+    }
+
+    public static void selectById(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = mapper.selectById(1);
+        log.info(user.toString());
+        sqlSession.close();
+    }
+
+    public static void selectiveUpdateSet(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User();
+        user.setId(1);
+        user.setAddress("金星5555");
+        mapper.updateSelectField(user);
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    public static void selectiveUpdateTrim(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User();
+        user.setId(2);
+        user.setAddress("火星bj");
+        mapper.updateSelectFieldTrim(user);
+        sqlSession.commit();
+        sqlSession.close();
+    }
     public static void updateAgeList(){
         SqlSession sqlSession = sessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
