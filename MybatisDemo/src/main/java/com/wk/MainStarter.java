@@ -52,6 +52,9 @@ public class MainStarter {
 //        insertBatch();
 //        batchDelete();
 //        batchDelArray();
+//        chooseSelect();
+//        chooseSelect2();
+        chooseSelect3();
     }
 
     public static void batchDelArray(){
@@ -76,6 +79,45 @@ public class MainStarter {
         sqlSession.commit();
         sqlSession.close();
     }
+
+    /**
+     *  查询 address = gc的记录
+     */
+    public static void chooseSelect(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User();
+        user.setAddress("gd");
+        List<User> users = mapper.chooseSelect(user);
+        System.out.println(users.toString());
+        sqlSession.close();
+    }
+
+    /**
+     *  查询默认记录
+     */
+    public static void chooseSelect2(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User();
+        List<User> users = mapper.chooseSelect(user);
+        System.out.println(users.toString());
+        sqlSession.close();
+    }
+
+    /**
+     * 查询年龄为200的记录
+     */
+    public static void chooseSelect3(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User();
+        user.setAge(200);
+        List<User> users = mapper.chooseSelect(user);
+        System.out.println(users.toString());
+        sqlSession.close();
+    }
+
 
     public static void selectByIdWithMap(){
         SqlSession sqlSession = sessionFactory.openSession();

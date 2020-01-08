@@ -31,6 +31,14 @@ public interface UserMapper {
      */
     User selectByMap(Map<String,String> map);
 
+    /**
+     * 根据条件选择性进行查询操作
+     * @param user
+     * @return
+     */
+    List<User> chooseSelect(User user);
+
+
     int updateAgeList(List<User> users);
 
     /**

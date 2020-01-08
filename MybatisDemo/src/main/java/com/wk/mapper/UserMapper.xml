@@ -23,6 +23,32 @@
     <select id="selectAll" resultMap="baseResult">
         SELECT <include refid="baseSql"/> FROM user;
     </select>
+
+    <!--choose select-->
+    <select id="chooseSelect" parameterType="com.wk.entity.User" resultMap="baseResult">
+        SELECT <include refid="baseSql"/> FROM USER
+        <where>
+            <choose>
+                <when test="id != null and id != ''">
+                    AND id = #{id}
+                </when>
+                <when test="name != null and name != ''">
+                    AND  name = #{name}
+                </when>
+                <when test="age != null and age != ''">
+                    AND age = #{age}
+                </when>
+                <when test="address != null and address != ''">
+                    AND address = #{address}
+                </when>
+                <otherwise>
+                    id = 6
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+
     <!-- 批量更新-->
     <update id="updateAgeList" parameterType="com.wk.entity.User">
         <foreach collection="list" separator=";" item="idx" close=";">
