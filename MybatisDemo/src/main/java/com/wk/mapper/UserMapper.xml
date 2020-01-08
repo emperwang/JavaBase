@@ -50,13 +50,13 @@
     <update id="updateSelectFieldTrim" parameterType="com.wk.entity.User">
       UPDATE USER
       <trim prefix="set" suffixOverrides=",">
-          <if test="name!=null and name != ''">
+          <if test="name!=null &amp;&amp; name != ''">
               name=#{name},
           </if>
-          <if test="age !=null and age != ''">
+          <if test="age !=null &amp;&amp; age != ''">
               age=#{},
           </if>
-          <if test="address!=null and address != ''">
+          <if test="address!=null &amp;&amp; address != ''">
               address=#{address}
           </if>
       </trim>
