@@ -4,11 +4,28 @@ import com.wk.httpClientUtil.bean.test.Content;
 import com.wk.httpClientUtil.pooled.ClientFactoryWithPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.SSLContexts;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.Map;
 
 /**
@@ -65,7 +82,7 @@ public class TestStartMain {
                 trustKey, trustKeyPwd, socketTimeOut, connectTimeout);*/
         CloseableHttpClient httpSSLClient = ClientFactory.createHttpSSLClientDoubleAuthenticateAndHostNameWithPool(clientKey2,
                 clientKeyPwd,
-                trustKey, trustKeyPwd, socketTimeOut, connectTimeout);
+                trustKey2, trustKeyPwd, socketTimeOut, connectTimeout);
         HttpConfig config = HttpConfig.instance().client(httpSSLClient)
                 .methods(HttpMethods.GET)
                 .url("https://169.254.110.194:9999/getUser");
@@ -124,13 +141,87 @@ public class TestStartMain {
         }
     }
 
-    public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, KeyStoreException, KeyManagementException, CertificateException, IOException, UnrecoverableKeyException {
         // trustAll();
         // authenticationOne();
 //        authenticationDouble();
+        testCollector();
        // sendRequestWithIpv6();
 //        sendChinese();
 //        deleteWithEntity();
-        testPoolClient(50);
+//        testPoolClient(50);
+    }
+
+    public static void testCollector() throws CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException, KeyStoreException, IOException {
+        CloseableHttpClient httpSSLClient = createCustomTrustHttpSSLClient(false, trustKey2, trustKeyPwd, true);
+        HttpConfig config = HttpConfig.instance().client(httpSSLClient)
+                .methods(HttpMethods.GET)
+                .url("https://169.254.110.194:9999/getUser");
+        String s = HttpClientUtil.httpGetMethod(config);
+        log.info("collector   double authentication..:"+s);
+    }
+
+
+    // test collector
+    private static SSLContextBuilder loadKeystore(
+            SSLContextBuilder sslContextBuilder)
+            throws UnrecoverableKeyException, NoSuchAlgorithmException,
+            KeyStoreException, CertificateException, IOException {
+        if (sslContextBuilder == null) {
+            throw new IllegalArgumentException("Null SSLContextBuilder.");
+        }
+
+        String keystore = clientKey2;
+        String storePassword = "123456";
+        String keyPassword = "123456";
+
+        return sslContextBuilder.loadKeyMaterial(new File(keystore),
+                storePassword.toCharArray(), keyPassword.toCharArray());
+    }
+
+    public static CloseableHttpClient createCustomTrustHttpSSLClient(boolean verifyHostName, String trustedStorePath,
+                                                                     String storePassword, boolean bidirectional) throws KeyManagementException, UnrecoverableKeyException,
+            NoSuchAlgorithmException, KeyStoreException, CertificateException, IOException {
+        HostnameVerifier hostnameVerifier;
+        if (verifyHostName) {
+            hostnameVerifier = SSLConnectionSocketFactory
+                    .getDefaultHostnameVerifier();
+        } else {
+            hostnameVerifier = NoopHostnameVerifier.INSTANCE;
+        }
+
+        char[] storePasswordCharArray = storePassword.toCharArray();
+        SSLContext sslcontext;
+        if (bidirectional) {
+            sslcontext = loadKeystore(SSLContexts.custom().loadTrustMaterial(
+                    new File(trustedStorePath), storePasswordCharArray))
+                    .build();
+        } else {
+            sslcontext = SSLContexts.custom().loadTrustMaterial(
+                    new File(trustedStorePath), storePasswordCharArray).build();
+        }
+
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext, hostnameVerifier);
+
+        return createHttpClient(sslsf);
+    }
+
+    public static CloseableHttpClient createHttpClient(
+            ConnectionSocketFactory sslSocketFactory) {
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
+                .<ConnectionSocketFactory>create()
+                .register("https", sslSocketFactory)
+                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                .build();
+        PoolingHttpClientConnectionManager pool = new PoolingHttpClientConnectionManager(
+                socketFactoryRegistry);
+        pool.setMaxTotal(20);
+        pool.setDefaultMaxPerRoute(20);
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setConnectTimeout(10000)
+                .setSocketTimeout(1000).build();
+        return HttpClients.custom().setConnectionManager(pool)
+                .setDefaultRequestConfig(requestConfig).build();
     }
 }
