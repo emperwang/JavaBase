@@ -8,10 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 /**
@@ -172,8 +169,34 @@ public class CriteriaMain {
         session.close();
     }
 
-    public static void insertRecord(){
+    /**
+     *  select * from user where id in ();
+     */
+    public static void selectWithIn(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+        criteriaQuery.select(userRoot);
+        criteriaQuery.where(userRoot.get("id").in(1,2,3,4));
+        Query<User> query = session.createQuery(criteriaQuery);
+        List<User> list = query.list();
+        System.out.println(list.toString());
 
+        transaction.commit();
+        session.close();
+    }
+
+     /**
+     * 记录删除
+     */
+    public static void deleteRec(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        transaction.commit();
+        session.close();
     }
 
     public static void main(String[] args) {
@@ -183,6 +206,7 @@ public class CriteriaMain {
 //        betweenAge();
 //        queryField();
 //        queryFields();
-        queryFieldsMulSet();
+//        queryFieldsMulSet();
+        selectWithIn();
     }
 }
