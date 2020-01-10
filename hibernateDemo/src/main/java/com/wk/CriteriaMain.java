@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
+import javax.persistence.Tuple;
 import javax.persistence.criteria.*;
 import java.util.List;
 
@@ -150,6 +151,27 @@ public class CriteriaMain {
     }
 
     /**
+     *  指定参数查询, 命名参数
+     */
+    public static void queryWithParam(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+        ParameterExpression<Integer> pid = criteriaBuilder.parameter(Integer.class);
+        criteriaQuery.select(userRoot)
+                .where(criteriaBuilder.equal(userRoot.get("id"), pid));
+        Query<User> query = session.createQuery(criteriaQuery);
+        query.setParameter(pid,1);
+        User user = query.uniqueResult();
+        System.out.println(user.toString());
+
+        transaction.commit();
+        session.close();
+    }
+
+    /**
      *  根据 年龄 范围查询, 并找年龄降序
      */
     public static void betweenAge(){
@@ -188,6 +210,53 @@ public class CriteriaMain {
         session.close();
     }
 
+    /**
+     *  分页查询
+     */
+    public static void queryWithLimit(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+        criteriaQuery.select(userRoot);
+        Query<User> query = session.createQuery(criteriaQuery);
+        query.setFirstResult(2);
+        query.setMaxResults(5);
+        List<User> list = query.getResultList();
+        System.out.println(list.toString());
+
+        transaction.commit();
+        session.close();
+    }
+
+    /**
+     *  groupBy 查询
+     */
+    public static void queryGroupBy(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Tuple> criteriaQuery = criteriaBuilder.createQuery(Tuple.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+        criteriaQuery.multiselect(userRoot.get("id").alias("id"),userRoot.get("age").alias("age"),
+                criteriaBuilder.count(userRoot).alias("cc"));
+        criteriaQuery.groupBy(userRoot.get("age"));
+        Query<Tuple> query = session.createQuery(criteriaQuery);
+        List<Tuple> resultList = query.getResultList();
+        for (Tuple tuple : resultList) {
+            int id = (int) tuple.get("id");
+            int age = (int) tuple.get("age");
+            Long count = (Long) tuple.get("cc");
+            System.out.println("id :"+id+", age:"+age+", count:"+count);
+            System.out.println(tuple.toString());
+            System.out.println("--------------");
+        }
+
+        transaction.commit();
+        session.close();
+    }
+
      /**
      * 记录删除
      */
@@ -207,6 +276,9 @@ public class CriteriaMain {
 //        queryField();
 //        queryFields();
 //        queryFieldsMulSet();
-        selectWithIn();
+//        selectWithIn();
+//        queryWithParam();
+//        queryGroupBy();
+        queryWithLimit();
     }
 }
