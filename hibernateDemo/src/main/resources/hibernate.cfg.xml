@@ -29,5 +29,6 @@
         <mapping resource="hibernate.hbm.xml"/>
         <!--使用注解配置-->
         <mapping class="com.wk.entity.Grade"/>
+        <mapping class="com.wk.entity.UserWrapper"/>
     </session-factory>
 </hibernate-configuration>
