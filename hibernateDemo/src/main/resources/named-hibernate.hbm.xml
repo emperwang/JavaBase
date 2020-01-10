@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.wk.entity.User" table="userh">
+        <id name="id" column="id">
+            <generator class="native"></generator>
+        </id>
+        <property name="age" column="age"></property>
+        <property name="address" column="address"></property>
+        <property name="name" column="name"></property>
+    </class>
+    <!--查询所有-->
+    <query name="HQL_GET_ALL_USER">from User</query>
+
+    <query name="HQL_GET_BY_ID">
+        <![CDATA[from User where id = :id]]>
+    </query>
+
+    <query name="HQL_GET_BY_AGE">
+        <![CDATA[from User where age > :age]]>
+    </query>
+
+    <sql-query name="SQL_GET_ALL">
+        <![CDATA[select * from  userh]]>
+    </sql-query>
+
+    <sql-query name="SQL_GET_BY_ID">
+        <![CDATA[select * from userh where id = :id]]>
+    </sql-query>
+    <!--联合查询-->
+<!--    <sql-query name="SQL_GET_ALL_EMP_ADDRESS">
+        <![CDATA[select {e.*}, {a.*} from Employee e join Address a ON e.emp_id=a.emp_id]]>
+        <return alias="e" class="com.journaldev.hibernate.model.Employee" />
+        <return-join alias="a" property="e.address"></return-join>
+    </sql-query>-->
+</hibernate-mapping>
+
