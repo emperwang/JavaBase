@@ -15,6 +15,10 @@
         SELECT <include refid="baseSql"/> FROM users;
     </select>
 
+    <select id="getAllId" resultType="java.lang.Integer">
+        SELECT id from users;
+    </select>
+
     <update id="updateAges" parameterType="com.wk.entity.User">
         <foreach collection="list" item="idx" separator=";" close=";">
             UPDATE users SET age=#{idx.age} WHERE id=#{idx.id}

@@ -15,6 +15,8 @@ public interface UserMapper {
 
     List<User> getAll();
 
+    List<Integer> getAllId();
+
     int updateAges(List<User> users);
 
 }

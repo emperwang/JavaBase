@@ -49,6 +49,14 @@ public class PostgresqlMain {
         sqlSession.close();
     }
 
+    public static void getAllId(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        List<Integer> allId = userMapper.getAllId();
+        log.info(allId.toString());
+        sqlSession.close();
+    }
+
     public static void updates(){
         SqlSession sqlSession = sessionFactory.openSession();
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
@@ -64,6 +72,7 @@ public class PostgresqlMain {
 
     public static void main(String[] args) {
 //        selectAll();
-        updates();
+        getAllId();
+//        updates();
     }
 }
