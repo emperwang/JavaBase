@@ -29,11 +29,12 @@ public class JedisClusterStarter {
     }
 
     public static void main(String[] args) {
-//        set("test1", "testValue");
-//        expire("test1", 50000);
+        set("test1", "testValue");
+        expire("test1", 50000);
+        get("test1");
         del("test1");
 
-        hset("hsetTest","hsetField","hsetValue");
+//        hset("hsetTest","hsetField","hsetValue");
     }
 
 
@@ -55,6 +56,26 @@ public class JedisClusterStarter {
         }
         return "";
     }
+
+    public static String get(String key){
+        boolean attempt = false;
+        while (! attempt) {
+            attempt = true;
+            try {
+                String get = jedisCluster.get(key);
+                System.out.println("get return :" + get);
+                return get;
+            }catch (JedisConnectionException e){
+                if (isRetry){
+                    attempt = false;
+                    System.out.println("get retry ......");
+                    sleep(3);
+                }
+            }
+        }
+        return "";
+    }
+
     public static long expire(String key, int expire) {
         boolean attempt = false;
         while (!attempt){
