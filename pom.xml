@@ -57,6 +57,7 @@
       <module>SolrJ</module>
       <module>MybatisDemo</module>
       <module>hibernateDemo</module>
+      <module>JedisClusterProject</module>
   </modules>
 
 
