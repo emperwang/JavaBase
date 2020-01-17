@@ -29,7 +29,11 @@ public class JedisClusterStarter {
     }
 
     public static void main(String[] args) {
-        set("test1", "testValue");
+//        set("test1", "testValue");
+//        expire("test1", 50000);
+        del("test1");
+
+        hset("hsetTest","hsetField","hsetValue");
     }
 
 
@@ -44,14 +48,69 @@ public class JedisClusterStarter {
             }catch (JedisConnectionException e){
                 if (isRetry){
                     attempt = false;
-                    System.out.println("retry ......");
+                    System.out.println("set retry ......");
                     sleep(3);
                 }
             }
         }
         return "";
     }
+    public static long expire(String key, int expire) {
+        boolean attempt = false;
+        while (!attempt){
+            attempt = true;
+            try {
+                Long expire1 = jedisCluster.expire(key, expire);
+                System.out.println("expire return: "+expire1);
+                return expire1;
+            }catch (JedisConnectionException e){
+                if (isRetry){
+                    attempt = false;
+                    System.out.println("expire retry ......");
+                    sleep(2);
+                }
+            }
+        }
+        return 0;
+    }
 
+    public static long del(String key) {
+        boolean attempt = false;
+        while (!attempt){
+            attempt = true;
+            try {
+                Long del = jedisCluster.del(key);
+                System.out.println("del return :" + del);
+                return del;
+            }catch (JedisConnectionException e){
+                if (isRetry) {
+                    attempt = false;
+                    System.out.println("del retry ......");
+                    sleep(2);
+                }
+            }
+        }
+        return 0;
+    }
+
+    public static long hset(String key, String field, String value) {
+        boolean attempt = false;
+        while (!attempt){
+            attempt = true;
+            try {
+                Long hset = jedisCluster.hset(key, field, value);
+                System.out.println("hset retrun : "+ hset);
+                return hset;
+            }catch (JedisConnectionException e){
+                if (isRetry) {
+                    attempt = false;
+                    System.out.println("hset retry ......");
+                    sleep(2);
+                }
+            }
+        }
+        return 0;
+    }
 
     private static void sleep(int seconds){
         try{
