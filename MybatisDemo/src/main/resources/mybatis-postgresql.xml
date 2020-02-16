@@ -23,6 +23,7 @@
         <!--<mapper resource=""></mapper>-->
         <!--第二种包扫描:需要xml文件和mapper接口文件放在一起-->
         <package name="com.wk.pmapper"></package>
+        <!--<package name="com.wk.pmapper.fcaps"></package>-->
     </mappers>
 
 </configuration>

@@ -71,6 +71,13 @@
                 <targetPath>com/wk/pmapper</targetPath>
             </resource>
             <resource>
+                <directory>src/main/java/com/wk/pmapper/fcaps</directory>
+                <includes>
+                    <include>*.xml</include>
+                </includes>
+                <targetPath>com/wk/pmapper/fcaps</targetPath>
+            </resource>
+            <resource>
                 <directory>src/main/resources/mapper</directory>
                 <includes>
                     <include>*.xml</include>

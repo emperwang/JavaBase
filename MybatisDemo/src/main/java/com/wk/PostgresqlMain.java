@@ -3,6 +3,8 @@ package com.wk;
 
 import com.wk.entity.User;
 import com.wk.pmapper.UserMapper;
+import com.wk.util.PostgresqlUtil;
+import lombok.Getter;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,26 +22,10 @@ import java.util.List;
  * @time: 10:32 2020/1/7
  * @modifier:
  */
+@Getter
 public class PostgresqlMain {
     private static Logger log = Logger.getLogger(PostgresqlMain.class);
-    private static Reader reader;
-    private static SqlSessionFactory sessionFactory;
-    static {
-        try {
-            reader = Resources.getResourceAsReader("mybatis-postgresql.xml");
-            sessionFactory = new SqlSessionFactoryBuilder().build(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (reader != null){
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+    private static SqlSessionFactory sessionFactory = PostgresqlUtil.getSessionFactory();
 
     public static void selectAll(){
         SqlSession sqlSession = sessionFactory.openSession();

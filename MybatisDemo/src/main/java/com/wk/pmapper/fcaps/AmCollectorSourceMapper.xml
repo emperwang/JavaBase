@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wk.pmapper.fcaps.AmCollectorSourceMapper" >
+  <resultMap id="BaseResultMap" type="com.wk.entity.fcaps.AmCollectorSource" >
+    <id column="source_id" property="sourceId" jdbcType="VARCHAR" />
+    <result column="source_name" property="sourceName" jdbcType="VARCHAR" />
+    <result column="source_type" property="sourceType" jdbcType="VARCHAR" />
+    <result column="vendor_id" property="vendorId" jdbcType="VARCHAR" />
+    <result column="cost_class" property="costClass" jdbcType="VARCHAR" />
+    <result column="collector_id" property="collectorId" jdbcType="VARCHAR" />
+    <result column="pm_period" property="pmPeriod" jdbcType="INTEGER" />
+    <result column="cm_fm_heartbeat" property="cmFmHeartBeat" jdbcType="INTEGER" />
+    <result column="domain_type" property="domainType" jdbcType="VARCHAR" />
+    <result column="ftp_or_sftp" property="ftpOrSftp" jdbcType="VARCHAR" />
+    <result column="ftp_ip" property="ftpIp" jdbcType="VARCHAR" />
+    <result column="ftp_port" property="ftpPort" jdbcType="INTEGER" />
+    <result column="ftp_user" property="ftpUser" jdbcType="VARCHAR" />
+    <result column="ftp_password" property="ftpPassword" jdbcType="VARCHAR" />
+    <result column="socket_ip" property="socketIp" jdbcType="VARCHAR" />
+    <result column="socket_port" property="socketPort" jdbcType="INTEGER" />
+    <result column="socket_user" property="socketUser" jdbcType="VARCHAR" />
+    <result column="socket_password" property="socketPassword" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="vnfm_endpoint_url" jdbcType="VARCHAR" property="vnfmEndpointUrl" />
+    <result column="vnfm_username" jdbcType="VARCHAR" property="vnfmUsername" />
+    <result column="vnfm_password" jdbcType="VARCHAR" property="vnfmPassword" />
+  </resultMap>
+  <resultMap id="base2" type="com.wk.entity.fcaps.AmCollectorSourceVo" extends="BaseResultMap">
+    <association property="fmHeartBeatTime" column="source_id"
+                 select="com.wk.pmapper.fcaps.AmCollectionSourceMonitorMapper.getHeatbeatTime"/>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    source_id, source_name, source_type, vendor_id, cost_class, collector_id, pm_period,
+    cm_fm_heartbeat, domain_type, ftp_or_sftp, ftp_ip, ftp_port, ftp_user, ftp_password,
+    socket_ip, socket_port, socket_user, socket_password, state, update_time, vnfm_endpoint_url,
+    vnfm_username, vnfm_password
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectorSourceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from am_collection_source
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="getCustomStatusIds" resultType="java.lang.String">
+    select source_id from am_collection_source WHERE state='${state}'
+  </select>
+
+  <select id="getSourceVo" resultMap="base2">
+    SELECT <include refid="Base_Column_List"/> FROM  am_collection_source
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from am_collection_source
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from am_collection_source
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wk.entity.fcaps.AmCollectorSourceExample" >
+    delete from am_collection_source
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wk.entity.fcaps.AmCollectorSource" >
+    insert into am_collection_source (source_id, source_name, source_type,
+      vendor_id, cost_class, collector_id,
+      pm_period, cm_fm_heartbeat, domain_type,
+      ftp_or_sftp, ftp_ip, ftp_port, 
+      ftp_user, ftp_password, socket_ip, 
+      socket_port, socket_user, socket_password, 
+      state, update_time, vnfm_endpoint_url,
+      vnfm_username, vnfm_password)
+    values (#{sourceId,jdbcType=VARCHAR}, #{sourceName,jdbcType=VARCHAR}, #{sourceType,jdbcType=VARCHAR}, 
+      #{vendorId,jdbcType=VARCHAR}, #{costClass,jdbcType=VARCHAR}, #{collectorId,jdbcType=VARCHAR},
+      #{pmPeriod,jdbcType=INTEGER}, #{cmFmHeartBeat,jdbcType=INTEGER}, #{domainType,jdbcType=VARCHAR}, 
+      #{ftpOrSftp,jdbcType=VARCHAR}, #{ftpIp,jdbcType=VARCHAR}, #{ftpPort},
+      #{ftpUser,jdbcType=VARCHAR}, #{ftpPassword,jdbcType=VARCHAR}, #{socketIp,jdbcType=VARCHAR}, 
+      #{socketPort}, #{socketUser,jdbcType=VARCHAR}, #{socketPassword,jdbcType=VARCHAR},
+      #{state,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{vnfmEndpointUrl,jdbcType=VARCHAR},
+      #{vnfmUsername,jdbcType=VARCHAR}, #{vnfmPassword,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wk.entity.fcaps.AmCollectorSource" >
+    insert into am_collection_source
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sourceId != null" >
+        source_id,
+      </if>
+      <if test="sourceName != null" >
+        source_name,
+      </if>
+      <if test="sourceType != null" >
+        source_type,
+      </if>
+      <if test="vendorId != null" >
+        vendor_id,
+      </if>
+      <if test="costClass != null" >
+        cost_class,
+      </if>
+      <if test="collectorId != null" >
+        collector_id,
+      </if>
+      <if test="pmPeriod != null" >
+        pm_period,
+      </if>
+      <if test="cmFmHeartBeat != null" >
+        cm_fm_heartbeat,
+      </if>
+      <if test="domainType != null" >
+        domain_type,
+      </if>
+      <if test="ftpOrSftp != null" >
+        ftp_or_sftp,
+      </if>
+      <if test="ftpIp != null" >
+        ftp_ip,
+      </if>
+      <if test="ftpPort != null" >
+        ftp_port,
+      </if>
+      <if test="ftpUser != null" >
+        ftp_user,
+      </if>
+      <if test="ftpPassword != null" >
+        ftp_password,
+      </if>
+      <if test="socketIp != null" >
+        socket_ip,
+      </if>
+      <if test="socketPort != null" >
+        socket_port,
+      </if>
+      <if test="socketUser != null" >
+        socket_user,
+      </if>
+      <if test="socketPassword != null" >
+        socket_password,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="vnfmEndpointUrl != null">
+        vnfm_endpoint_url,
+      </if>
+      <if test="vnfmUsername != null">
+        vnfm_username,
+      </if>
+      <if test="vnfmPassword != null">
+        vnfm_password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sourceId != null" >
+        #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceName != null" >
+        #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null" >
+        #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null" >
+        #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="costClass != null" >
+        #{costClass,jdbcType=VARCHAR},
+      </if>
+      <if test="collectorId != null" >
+        #{collectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="pmPeriod != null" >
+        #{pmPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="cmFmHeartBeat != null" >
+        #{cmFmHeartBeat,jdbcType=INTEGER},
+      </if>
+      <if test="domainType != null" >
+        #{domainType,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpOrSftp != null" >
+        #{ftpOrSftp,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpIp != null" >
+        #{ftpIp,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpPort != null" >
+        #{ftpPort},
+      </if>
+      <if test="ftpUser != null" >
+        #{ftpUser,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpPassword != null" >
+        #{ftpPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="socketIp != null" >
+        #{socketIp,jdbcType=VARCHAR},
+      </if>
+      <if test="socketPort != null" >
+        #{socketPort},
+      </if>
+      <if test="socketUser != null" >
+        #{socketUser,jdbcType=VARCHAR},
+      </if>
+      <if test="socketPassword != null" >
+        #{socketPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vnfmEndpointUrl != null">
+        #{vnfmEndpointUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vnfmUsername != null">
+        #{vnfmUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="vnfmPassword != null">
+        #{vnfmPassword,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wk.entity.fcaps.AmCollectorSourceExample" resultType="java.lang.Integer" >
+    select count(*) from am_collection_source
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update am_collection_source
+    <set >
+      <if test="record.sourceId != null" >
+        source_id = #{record.sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceName != null" >
+        source_name = #{record.sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceType != null" >
+        source_type = #{record.sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vendorId != null" >
+        vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.costClass != null" >
+        cost_class = #{record.costClass,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collectorId != null" >
+        collector_id = #{record.collectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pmPeriod != null" >
+        pm_period = #{record.pmPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="record.cmFmHeartBeat != null" >
+        cm_fm_heartbeat = #{record.cmFmHeartBeat,jdbcType=INTEGER},
+      </if>
+      <if test="record.domainType != null" >
+        domain_type = #{record.domainType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ftpOrSftp != null" >
+        ftp_or_sftp = #{record.ftpOrSftp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ftpIp != null" >
+        ftp_ip = #{record.ftpIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ftpPort != null" >
+        ftp_port = #{record.ftpPort},
+      </if>
+      <if test="record.ftpUser != null" >
+        ftp_user = #{record.ftpUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ftpPassword != null" >
+        ftp_password = #{record.ftpPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socketIp != null" >
+        socket_ip = #{record.socketIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socketPort != null" >
+        socket_port = #{record.socketPort},
+      </if>
+      <if test="record.socketUser != null" >
+        socket_user = #{record.socketUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socketPassword != null" >
+        socket_password = #{record.socketPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.vnfmEndpointUrl != null">
+        vnfm_endpoint_url = #{record.vnfmEndpointUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vnfmUsername != null">
+        vnfm_username = #{record.vnfmUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.vnfmPassword != null">
+        vnfm_password = #{record.vnfmPassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update am_collection_source
+    set source_id = #{record.sourceId,jdbcType=VARCHAR},
+      source_name = #{record.sourceName,jdbcType=VARCHAR},
+      source_type = #{record.sourceType,jdbcType=VARCHAR},
+      vendor_id = #{record.vendorId,jdbcType=VARCHAR},
+      cost_class = #{record.costClass,jdbcType=VARCHAR},
+      collector_id = #{record.collectorId,jdbcType=VARCHAR},
+      pm_period = #{record.pmPeriod,jdbcType=INTEGER},
+      cm_fm_heartbeat = #{record.cmFmHeartBeat,jdbcType=INTEGER},
+      domain_type = #{record.domainType,jdbcType=VARCHAR},
+      ftp_or_sftp = #{record.ftpOrSftp,jdbcType=VARCHAR},
+      ftp_ip = #{record.ftpIp,jdbcType=VARCHAR},
+      ftp_port = #{record.ftpPort},
+      ftp_user = #{record.ftpUser,jdbcType=VARCHAR},
+      ftp_password = #{record.ftpPassword,jdbcType=VARCHAR},
+      socket_ip = #{record.socketIp,jdbcType=VARCHAR},
+      socket_port = #{record.socketPort},
+      socket_user = #{record.socketUser,jdbcType=VARCHAR},
+      socket_password = #{record.socketPassword,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      vnfm_endpoint_url = #{record.vnfmEndpointUrl,jdbcType=VARCHAR},
+      vnfm_username = #{record.vnfmUsername,jdbcType=VARCHAR},
+      vnfm_password = #{record.vnfmPassword,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wk.entity.fcaps.AmCollectorSource" >
+    update am_collection_source
+    <set >
+      <if test="sourceName != null" >
+        source_name = #{sourceName,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null" >
+        source_type = #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="vendorId != null" >
+        vendor_id = #{vendorId,jdbcType=VARCHAR},
+      </if>
+      <if test="costClass != null" >
+        cost_class = #{costClass,jdbcType=VARCHAR},
+      </if>
+      <if test="collectorId != null" >
+        collector_id = #{collectorId,jdbcType=VARCHAR},
+      </if>
+      <if test="pmPeriod != null" >
+        pm_period = #{pmPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="cmFmHeartBeat != null" >
+        cm_fm_heartbeat = #{cmFmHeartBeat,jdbcType=INTEGER},
+      </if>
+      <if test="domainType != null" >
+        domain_type = #{domainType,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpOrSftp != null" >
+        ftp_or_sftp = #{ftpOrSftp,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpIp != null" >
+        ftp_ip = #{ftpIp,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpPort != null" >
+        ftp_port = #{ftpPort},
+      </if>
+      <if test="ftpUser != null" >
+        ftp_user = #{ftpUser,jdbcType=VARCHAR},
+      </if>
+      <if test="ftpPassword != null" >
+        ftp_password = #{ftpPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="socketIp != null" >
+        socket_ip = #{socketIp,jdbcType=VARCHAR},
+      </if>
+      <if test="socketPort != null" >
+        socket_port = #{socketPort},
+      </if>
+      <if test="socketUser != null" >
+        socket_user = #{socketUser,jdbcType=VARCHAR},
+      </if>
+      <if test="socketPassword != null" >
+        socket_password = #{socketPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="vnfmEndpointUrl != null">
+        vnfm_endpoint_url = #{vnfmEndpointUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vnfmUsername != null">
+        vnfm_username = #{vnfmUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="vnfmPassword != null">
+        vnfm_password = #{vnfmPassword,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wk.entity.fcaps.AmCollectorSource" >
+    update am_collection_source
+    set source_name = #{sourceName,jdbcType=VARCHAR},
+      source_type = #{sourceType,jdbcType=VARCHAR},
+      vendor_id = #{vendorId,jdbcType=VARCHAR},
+      cost_class = #{costClass,jdbcType=VARCHAR},
+      collector_id = #{collectorId,jdbcType=VARCHAR},
+      pm_period = #{pmPeriod,jdbcType=INTEGER},
+      cm_fm_heartbeat = #{cmFmHeartBeat,jdbcType=INTEGER},
+      domain_type = #{domainType,jdbcType=VARCHAR},
+      ftp_or_sftp = #{ftpOrSftp,jdbcType=VARCHAR},
+      ftp_ip = #{ftpIp,jdbcType=VARCHAR},
+      ftp_port = #{ftpPort},
+      ftp_user = #{ftpUser,jdbcType=VARCHAR},
+      ftp_password = #{ftpPassword,jdbcType=VARCHAR},
+      socket_ip = #{socketIp,jdbcType=VARCHAR},
+      socket_port = #{socketPort},
+      socket_user = #{socketUser,jdbcType=VARCHAR},
+      socket_password = #{socketPassword,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      vnfm_endpoint_url = #{vnfmEndpointUrl,jdbcType=VARCHAR},
+      vnfm_username = #{vnfmUsername,jdbcType=VARCHAR},
+      vnfm_password = #{vnfmPassword,jdbcType=VARCHAR}
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+  </update>
+</mapper>

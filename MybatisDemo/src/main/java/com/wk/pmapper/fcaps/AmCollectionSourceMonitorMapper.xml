@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wk.pmapper.fcaps.AmCollectionSourceMonitorMapper" >
+  <resultMap id="BaseResultMap" type="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
+    <id column="source_id" property="sourceId" jdbcType="VARCHAR" />
+    <id column="info_type" property="infoType" jdbcType="VARCHAR" />
+    <result column="check_point" property="checkPoint" jdbcType="TIMESTAMP" />
+    <result column="alarm_seq" property="alarmSeq" jdbcType="INTEGER" />
+    <result column="heartbeat_time" property="heartbeatTime" jdbcType="TIMESTAMP" />
+    <result column="if_uncleared_alarm_exist" property="ifUnclearedAlarmExists" jdbcType="BIT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    source_id, info_type, check_point, alarm_seq, heartbeat_time, update_time,if_uncleared_alarm_exist
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from am_collection_source_monitor
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+  <select id="getHeatbeatTime" resultType="java.util.Date" parameterType="java.lang.String">
+    SELECT heartbeat_time FROM am_collection_source_monitor WHERE source_id = #{sourceId}
+          AND info_type='FM'
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from am_collection_source_monitor
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+      and info_type = #{infoType,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectSourceIds" resultType="java.lang.String">
+    select DISTINCT source_id from am_collection_source_monitor where info_type='FM';
+  </select>
+
+  <select id="getCheckPointByKey" resultType="java.util.Date" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey">
+    select
+        check_point
+    from am_collection_source_monitor
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+    and info_type = #{infoType,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey" >
+    delete from am_collection_source_monitor
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+      and info_type = #{infoType,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorExample" >
+    delete from am_collection_source_monitor
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
+    insert into am_collection_source_monitor (source_id, info_type, check_point, 
+      alarm_seq, heartbeat_time, update_time,if_uncleared_alarm_exist
+      )
+    values (#{sourceId,jdbcType=VARCHAR}, #{infoType,jdbcType=VARCHAR}, #{checkPoint,jdbcType=TIMESTAMP}, 
+      #{alarmSeq,jdbcType=INTEGER}, #{heartbeatTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{ifUnclearedAlarmExists, jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
+    insert into am_collection_source_monitor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sourceId != null" >
+        source_id,
+      </if>
+      <if test="infoType != null" >
+        info_type,
+      </if>
+      <if test="checkPoint != null" >
+        check_point,
+      </if>
+      <if test="alarmSeq != null" >
+        alarm_seq,
+      </if>
+      <if test="heartbeatTime != null" >
+        heartbeat_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="ifUnclearedAlarmExists != null">
+        if_uncleared_alarm_exist,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sourceId != null" >
+        #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="infoType != null" >
+        #{infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="checkPoint != null" >
+        #{checkPoint,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alarmSeq != null" >
+        #{alarmSeq,jdbcType=INTEGER},
+      </if>
+      <if test="heartbeatTime != null" >
+        #{heartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ifUnclearedAlarmExists != null">
+        #{ifUnclearedAlarmExists, jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorExample" resultType="java.lang.Integer" >
+    select count(*) from am_collection_source_monitor
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update am_collection_source_monitor
+    <set >
+      <if test="record.sourceId != null" >
+        source_id = #{record.sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.infoType != null" >
+        info_type = #{record.infoType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkPoint != null" >
+        check_point = #{record.checkPoint,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.alarmSeq != null" >
+        alarm_seq = #{record.alarmSeq,jdbcType=INTEGER},
+      </if>
+      <if test="record.heartbeatTime != null" >
+        heartbeat_time = #{record.heartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ifUnclearedAlarmExists != null">
+        if_uncleared_alarm_exist = #{ifUnclearedAlarmExists, jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateCheckpointAndSeqById" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor">
+    update am_collection_source_monitor
+    set check_point = #{checkPoint,jdbcType=TIMESTAMP},
+      alarm_seq = #{alarmSeq,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+      and info_type = #{infoType,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateMonitorHeartBeat" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor">
+    update am_collection_source_monitor set heartbeat_time=#{heartbeatTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where source_id=#{sourceId} and info_type='FM';
+  </update>
+
+  <update id="updateByExample" parameterType="map" >
+    update am_collection_source_monitor
+    set source_id = #{record.sourceId,jdbcType=VARCHAR},
+      info_type = #{record.infoType,jdbcType=VARCHAR},
+      check_point = #{record.checkPoint,jdbcType=TIMESTAMP},
+      alarm_seq = #{record.alarmSeq,jdbcType=INTEGER},
+      heartbeat_time = #{record.heartbeatTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
+    update am_collection_source_monitor
+    <set >
+      <if test="checkPoint != null" >
+        check_point = #{checkPoint,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alarmSeq != null" >
+        alarm_seq = #{alarmSeq,jdbcType=INTEGER},
+      </if>
+      <if test="heartbeatTime != null" >
+        heartbeat_time = #{heartbeatTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+      and info_type = #{infoType,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
+    update am_collection_source_monitor
+    set check_point = #{checkPoint,jdbcType=TIMESTAMP},
+      alarm_seq = #{alarmSeq,jdbcType=INTEGER},
+      heartbeat_time = #{heartbeatTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      if_uncleared_alarm_exist =
+    where source_id = #{sourceId,jdbcType=VARCHAR}
+      and info_type = #{infoType,jdbcType=VARCHAR}
+  </update>
+</mapper>
