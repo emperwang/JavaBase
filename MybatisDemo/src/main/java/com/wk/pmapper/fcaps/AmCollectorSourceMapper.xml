@@ -114,8 +114,22 @@
     select source_id from am_collection_source WHERE state='${state}'
   </select>
 
-  <select id="getSourceVo" resultMap="base2">
+  <select id="getSourceVo" resultMap="base2" parameterType="com.wk.entity.fcaps.AmCollectorSource">
     SELECT <include refid="Base_Column_List"/> FROM  am_collection_source
+      <trim prefix="where" prefixOverrides="and">
+        <if test="sourceId != null">
+          AND source_id=#{sourceId}
+        </if>
+        <if test="sourceType != null">
+          AND source_type=#{sourceType}
+        </if>
+        <if test="vendorId != null ">
+          AND vendor_id=#{vendorId}
+        </if>
+        <if test="collectorId  != null ">
+          AND collector_id=#{collectorId}
+        </if>
+      </trim>
   </select>
 
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >

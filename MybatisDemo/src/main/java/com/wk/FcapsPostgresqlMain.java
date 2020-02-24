@@ -1,6 +1,7 @@
 package com.wk;
 
 import com.wk.entity.fcaps.AmCollectionSourceMonitor;
+import com.wk.entity.fcaps.AmCollectorSource;
 import com.wk.entity.fcaps.AmCollectorSourceVo;
 import com.wk.pmapper.fcaps.AmCollectionSourceMonitorMapper;
 import com.wk.pmapper.fcaps.AmCollectorSourceMapper;
@@ -17,15 +18,20 @@ public class FcapsPostgresqlMain {
     private static SqlSessionFactory sessionFactory = PostgresqlUtil.getSessionFactory();
 
     public static void main(String[] args) {
-//        getAllMonitor();
-        getVoSource();
+        getAllMonitor();
+//        getVoSource();
     }
 
 
     public static void getVoSource(){
         SqlSession sqlSession = sessionFactory.openSession();
         AmCollectorSourceMapper sourceMapper = sqlSession.getMapper(AmCollectorSourceMapper.class);
-        List<AmCollectorSourceVo> lists = sourceMapper.getSourceVo();
+
+        AmCollectorSource source = new AmCollectorSource();
+        source.setCollectorId(1);
+        source.setSourceId("v1");
+
+        List<AmCollectorSourceVo> lists = sourceMapper.getSourceVo(source);
 
         if (lists != null && lists.size() > 0){
             lists.forEach(v -> {

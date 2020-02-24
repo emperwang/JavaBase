@@ -24,7 +24,7 @@ public interface AmCollectorSourceMapper {
 
     AmCollectorSource selectByPrimaryKey(String sourceId);
 
-    List<AmCollectorSourceVo> getSourceVo();
+    List<AmCollectorSourceVo> getSourceVo(AmCollectorSource source);
 
     int updateByExampleSelective(@Param("record") AmCollectorSource record, @Param("example") AmCollectorSourceExample example);
 
