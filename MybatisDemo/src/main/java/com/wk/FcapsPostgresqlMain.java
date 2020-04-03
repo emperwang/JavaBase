@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FcapsPostgresqlMain {
@@ -18,7 +19,8 @@ public class FcapsPostgresqlMain {
     private static SqlSessionFactory sessionFactory = PostgresqlUtil.getSessionFactory();
 
     public static void main(String[] args) {
-        getAllMonitor();
+        //getAllMonitor();
+        getSourceids();
 //        getVoSource();
     }
 
@@ -52,6 +54,17 @@ public class FcapsPostgresqlMain {
                 .getMapper(AmCollectionSourceMonitorMapper.class);
         List<AmCollectionSourceMonitor> res = sourceMonitorMapper.selectByExample(null);
         log.debug(res.toString());
+        sqlSession.close();
+    }
+
+    public static void getSourceids(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        AmCollectorSourceMapper sourceMapper = sqlSession.getMapper(AmCollectorSourceMapper.class);
+        List<String> ids = sourceMapper.getCustomStatusIds("idiidiid");
+        List<String> tmp = new ArrayList<>();
+        System.out.println("ids size : " + ids.size());
+        System.out.println("result : " + ids.containsAll(tmp));
+
         sqlSession.close();
     }
 }
