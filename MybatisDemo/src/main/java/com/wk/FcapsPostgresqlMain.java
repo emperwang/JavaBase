@@ -11,8 +11,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class FcapsPostgresqlMain {
     private static Logger log = Logger.getLogger(FcapsPostgresqlMain.class);
@@ -20,10 +19,21 @@ public class FcapsPostgresqlMain {
 
     public static void main(String[] args) {
         //getAllMonitor();
-        getSourceids();
+//        getSourceids();
 //        getVoSource();
+        BatchUpdate();
     }
 
+    public static void BatchUpdate(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        AmCollectionSourceMonitorMapper sourceMapper = sqlSession.getMapper(AmCollectionSourceMonitorMapper.class);
+        Map<String,Date> map = new HashMap<>();
+        map.put("v1",new Date());
+        map.put("ems1",new Date());
+        sourceMapper.updateBatch(map);
+        sqlSession.commit();
+        sqlSession.close();
+    }
 
     public static void getVoSource(){
         SqlSession sqlSession = sessionFactory.openSession();

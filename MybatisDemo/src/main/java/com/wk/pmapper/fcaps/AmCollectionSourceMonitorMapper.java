@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface AmCollectionSourceMonitorMapper {
     int countByExample(AmCollectionSourceMonitorExample example);
@@ -40,4 +41,15 @@ public interface AmCollectionSourceMonitorMapper {
     Date getCheckPointByKey(AmCollectionSourceMonitorKey key);
 
     int updateMonitorHeartBeat(AmCollectionSourceMonitor record);
+
+    int clsUnclearedDisconnected(@Param("sourceId") String sourceId, @Param("date") Date date);
+
+    int setUnclearedDisconnectedAndAlarmTime(@Param("sourceId") String sourceId,@Param("date") Date date);
+
+    int setUnclearedIdleAndTimeAndDuration(@Param("sourceId")String sourceId,@Param("date") Date date,@Param("duration") Integer duration);
+
+    int clearUnclearedIdle(@Param("sourceId")String sourceId,@Param("date") Date date);
+
+    // 进行更新操作
+    int updateBatch(@Param("tims") Map<String,Date> times);
 }

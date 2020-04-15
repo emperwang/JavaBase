@@ -7,7 +7,12 @@
     <result column="check_point" property="checkPoint" jdbcType="TIMESTAMP" />
     <result column="alarm_seq" property="alarmSeq" jdbcType="INTEGER" />
     <result column="heartbeat_time" property="heartbeatTime" jdbcType="TIMESTAMP" />
-    <result column="if_uncleared_alarm_exist" property="ifUnclearedAlarmExists" jdbcType="BIT" />
+    <result column="fm_last_submit_time" property="fmLastSubmitTime" jdbcType="TIMESTAMP"/>
+    <result column="send_active_alarm_time" property="sendActiveAlarmTime" jdbcType="TIMESTAMP"/>
+    <result column="send_clear_alarm_time" property="sendClearAlarmTime" jdbcType="TIMESTAMP"/>
+    <result column="if_uncleared_disconnect_alarm" property="ifUnclearedDisconnectedAlarm" jdbcType="BIT"/>
+    <result column="if_uncleared_idle_alarm" property="ifUnclearedIdleAlarm" jdbcType="BIT"/>
+    <result column="current_idle_alarm_duration" property="currentIdleAlarmDuration" jdbcType="INTEGER"/>
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -69,9 +74,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    source_id, info_type, check_point, alarm_seq, heartbeat_time, update_time,if_uncleared_alarm_exist
+    source_id, info_type, check_point, alarm_seq, heartbeat_time, update_time,
+    fm_last_submit_time,send_active_alarm_time,send_clear_alarm_time,if_uncleared_disconnect_alarm,
+    if_uncleared_idle_alarm,current_idle_alarm_duration
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorExample" useCache="false">
     select
     <if test="distinct" >
       distinct
@@ -86,13 +93,7 @@
       order by ${orderByClause}
     </if>
   </select>
-
-  <select id="getHeatbeatTime" resultType="java.util.Date" parameterType="java.lang.String">
-    SELECT heartbeat_time FROM am_collection_source_monitor WHERE source_id = #{sourceId}
-          AND info_type='FM'
-  </select>
-
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey" useCache="false">
     select 
     <include refid="Base_Column_List" />
     from am_collection_source_monitor
@@ -100,11 +101,15 @@
       and info_type = #{infoType,jdbcType=VARCHAR}
   </select>
 
-  <select id="selectSourceIds" resultType="java.lang.String">
+  <select id="selectSourceIds" resultType="java.lang.String" useCache="false">
     select DISTINCT source_id from am_collection_source_monitor where info_type='FM';
   </select>
 
-  <select id="getCheckPointByKey" resultType="java.util.Date" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey">
+  <select id="getHeatbeatTime" resultType="java.util.Date" parameterType="java.lang.String" useCache="false">
+    SELECT heartbeat_time FROM am_collection_source_monitor WHERE source_id = #{sourceId}
+    AND info_type='FM'
+  </select>
+  <select id="getCheckPointByKey" resultType="java.util.Date" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitorKey" useCache="false">
     select
         check_point
     from am_collection_source_monitor
@@ -125,12 +130,13 @@
   </delete>
   <insert id="insert" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
     insert into am_collection_source_monitor (source_id, info_type, check_point, 
-      alarm_seq, heartbeat_time, update_time,if_uncleared_alarm_exist
+      alarm_seq, heartbeat_time, update_time,fm_last_submit_time,send_active_alarm_time,send_clear_alarm_time,
+      if_uncleared_disconnect_alarm, if_uncleared_idle_alarm,current_idle_alarm_duration
       )
-    values (#{sourceId,jdbcType=VARCHAR}, #{infoType,jdbcType=VARCHAR}, #{checkPoint,jdbcType=TIMESTAMP}, 
+    values (#{sourceId,jdbcType=VARCHAR}, #{infoType,jdbcType=VARCHAR}, #{checkPoint,jdbcType=TIMESTAMP},
       #{alarmSeq,jdbcType=INTEGER}, #{heartbeatTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
-      #{ifUnclearedAlarmExists, jdbcType=BIT}
-      )
+	  #{fmLastSubmitTime,jdbcType=TIMESTAMP},#{sendActiveAlarmTime,jdbcType=TIMESTAMP},#{sendClearAlarmTime,jdbcType=TIMESTAMP},
+	  #{ifUnclearedDisconnectedAlarm,jdbcType=BIT},#{ifUnclearedIdleAlarm,jdbcType=BIT}, #{currentIdleAlarmDuration,jdbcType=INTEGER} )
   </insert>
   <insert id="insertSelective" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
     insert into am_collection_source_monitor
@@ -151,10 +157,25 @@
         heartbeat_time,
       </if>
       <if test="updateTime != null" >
-        update_time,
+      update_time,
       </if>
-      <if test="ifUnclearedAlarmExists != null">
-        if_uncleared_alarm_exist,
+      <if test="fmLastSubmitTime != null">
+        fm_last_submit_time,
+      </if>
+      <if test="sendActiveAlarmTime != null">
+        send_active_alarm_time,
+      </if>
+      <if test="sendClearAlarmTime != null">
+        send_clear_alarm_time,
+      </if>
+      <if test="ifUnclearedDisconnectedAlarm != null">
+        if_uncleared_disconnect_alarm,
+      </if>
+      <if test="ifUnclearedIdleAlarm != null">
+        if_uncleared_idle_alarm,
+      </if>
+      <if test="currentIdleAlarmDuration != null">
+        current_idle_alarm_duration,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -176,8 +197,23 @@
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="ifUnclearedAlarmExists != null">
-        #{ifUnclearedAlarmExists, jdbcType=BIT},
+      <if test="fmLastSubmitTime != null">
+        #{fmLastSubmitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendActiveAlarmTime != null">
+        #{sendActiveAlarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendClearAlarmTime != null">
+        #{sendClearAlarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ifUnclearedDisconnectedAlarm != null">
+        #{ifUnclearedDisconnectedAlarm,jdbcType=BIT},
+      </if>
+      <if test="ifUnclearedIdleAlarm != null">
+        #{ifUnclearedIdleAlarm,jdbcType=BIT},
+      </if>
+      <if test="currentIdleAlarmDuration != null">
+        #{currentIdleAlarmDuration,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -187,6 +223,48 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+
+
+  <update id="updateBatch" parameterType="map">
+    <foreach collection="tims" index="key" item="itm" separator=";">
+      UPDATE am_collection_source_monitor set fm_last_submit_time = #{itm}
+      WHERE source_id = #{key} and info_type = 'FM'
+    </foreach>
+  </update>
+
+
+  <update id="clsUnclearedDisconnected" parameterType="map">
+    UPDATE am_collection_source_monitor
+    SET if_uncleared_disconnect_alarm = FALSE ,
+    send_clear_alarm_time = #{date,jdbcType=TIMESTAMP}
+    WHERE source_id = #{sourceId}
+      and info_type = 'FM';
+  </update>
+
+  <update id="setUnclearedDisconnectedAndAlarmTime" parameterType="map">
+    UPDATE am_collection_source_monitor
+    SET if_uncleared_disconnect_alarm = TRUE,
+        send_active_alarm_time = #{date,jdbcType=TIMESTAMP}
+    WHERE source_id = #{sourceId}
+      and info_type = 'FM';
+  </update>
+
+  <update id="setUnclearedIdleAndTimeAndDuration" parameterType="map">
+    UPDATE am_collection_source_monitor
+        SET if_uncleared_idle_alarm = TRUE,
+            send_active_alarm_time = #{date,jdbcType=TIMESTAMP},
+            current_idle_alarm_duration=#{duration}
+        WHERE source_id = #{sourceId}
+          and info_type = 'FM';
+  </update>
+
+  <update id="clearUnclearedIdle" parameterType="map">
+    UPDATE am_collection_source_monitor
+        SET if_uncleared_idle_alarm = FALSE,
+            send_clear_alarm_time = #{date,jdbcType=TIMESTAMP}
+        WHERE source_id = #{sourceId}
+          and info_type = 'FM';
+  </update>
   <update id="updateByExampleSelective" parameterType="map" >
     update am_collection_source_monitor
     <set >
@@ -208,8 +286,23 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.ifUnclearedAlarmExists != null">
-        if_uncleared_alarm_exist = #{ifUnclearedAlarmExists, jdbcType=BIT},
+      <if test="record.fmLastSubmitTime != null">
+        fm_last_submit_time = #{record.fmLastSubmitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sendActiveAlarmTime != null">
+        send_active_alarm_time = #{record.sendActiveAlarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sendClearAlarmTime != null">
+        send_clear_alarm_time = #{record.sendClearAlarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ifUnclearedDisconnectedAlarm != null">
+        if_uncleared_disconnect_alarm = #{record.ifUnclearedDisconnectedAlarm,jdbcType=BIT},
+      </if>
+      <if test="record.ifUnclearedIdleAlarm != null">
+        if_uncleared_idle_alarm = #{record.ifUnclearedIdleAlarm,jdbcType=BIT},
+      </if>
+      <if test="record.currentIdleAlarmDuration != null">
+        current_idle_alarm_duration = #{record.currentIdleAlarmDuration,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -230,7 +323,7 @@
     update_time = #{updateTime,jdbcType=TIMESTAMP}
     where source_id=#{sourceId} and info_type='FM';
   </update>
-
+  
   <update id="updateByExample" parameterType="map" >
     update am_collection_source_monitor
     set source_id = #{record.sourceId,jdbcType=VARCHAR},
@@ -238,7 +331,13 @@
       check_point = #{record.checkPoint,jdbcType=TIMESTAMP},
       alarm_seq = #{record.alarmSeq,jdbcType=INTEGER},
       heartbeat_time = #{record.heartbeatTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+    fm_last_submit_time = #{record.fmLastSubmitTime,jdbcType=TIMESTAMP},
+    send_active_alarm_time = #{record.sendActiveAlarmTime,jdbcType=TIMESTAMP},
+    send_clear_alarm_time = #{record.send_clear_alarm_time,jdbcType=TIMESTAMP},
+    if_uncleared_disconnect_alarm = #{record.ifUnclearedDisconnectedAlarm,jdbcType=BIT},
+    if_uncleared_idle_alarm = #{record.ifUnclearedIdleAlarm, jdbcType=BIT},
+    current_idle_alarm_duration = #{record.currentIdleAlarmDuration,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -258,18 +357,41 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="fmLastSubmitTime != null">
+        fm_last_submit_time = #{fmLastSubmitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendActiveAlarmTime != null">
+        send_active_alarm_time = #{sendActiveAlarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendClearAlarmTime != null">
+        send_clear_alarm_time = #{sendClearAlarmTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ifUnclearedDisconnectedAlarm != null">
+        if_uncleared_disconnect_alarm = #{ifUnclearedDisconnectedAlarm,jdbcType=BIT},
+      </if>
+      <if test="ifUnclearedIdleAlarm != null">
+        if_uncleared_idle_alarm = #{ifUnclearedIdleAlarm,jdbcType=BIT},
+      </if>
+      <if test="currentIdleAlarmDuration != null">
+        current_idle_alarm_duration = #{currentIdleAlarmDuration,jdbcType=INTEGER},
+      </if>
     </set>
     where source_id = #{sourceId,jdbcType=VARCHAR}
       and info_type = #{infoType,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.wk.entity.fcaps.AmCollectionSourceMonitor" >
-    update am_collection_source_monitor
+       update am_collection_source_monitor
     set check_point = #{checkPoint,jdbcType=TIMESTAMP},
       alarm_seq = #{alarmSeq,jdbcType=INTEGER},
       heartbeat_time = #{heartbeatTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      if_uncleared_alarm_exist =
-    where source_id = #{sourceId,jdbcType=VARCHAR}
+	  fm_last_submit_time = #{fmLastSubmitTime,jdbcType=TIMESTAMP},
+	  send_active_alarm_time = #{sendActiveAlarmTime,jdbcType=TIMESTAMP},
+	  send_clear_alarm_time = #{sendClearAlarmTime,jdbcType=TIMESTAMP},
+	  if_uncleared_disconnect_alarm = #{ifUnclearedDisconnectedAlarm,jdbcType=BIT},
+	  if_uncleared_idle_alarm = #{ifUnclearedIdleAlarm,jdbcType=BIT},
+	  current_idle_alarm_duration = #{currentIdleAlarmDuration,jdbcType=INTEGER}
+      where source_id = #{sourceId,jdbcType=VARCHAR}
       and info_type = #{infoType,jdbcType=VARCHAR}
   </update>
 </mapper>
