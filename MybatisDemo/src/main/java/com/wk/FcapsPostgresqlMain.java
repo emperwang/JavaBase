@@ -11,19 +11,49 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class FcapsPostgresqlMain {
     private static Logger log = Logger.getLogger(FcapsPostgresqlMain.class);
     private static SqlSessionFactory sessionFactory = PostgresqlUtil.getSessionFactory();
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         //getAllMonitor();
 //        getSourceids();
 //        getVoSource();
-        BatchUpdate();
+//        BatchUpdate();
+//        insertOrUpdate();
+        batchUpdate();
     }
 
+    public static void batchUpdate() throws ParseException {
+        SqlSession sqlSession = sessionFactory.openSession();
+        AmCollectionSourceMonitorMapper sourceMapper = sqlSession.getMapper(AmCollectionSourceMonitorMapper.class);
+        Map<String,Date> map = new HashMap<>();
+        map.put("vim01",new Date());
+        map.put("ems1",new Date());
+        Date date = format.parse("2019-00-00 12:12:21");
+        sourceMapper.insertOnUpdateBatch(map,date);
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+    /**
+     *  如果数据存在则更新，数据不存在则插入操作。postgresl-9.5之后提供的新功能
+     * @throws ParseException
+     */
+    public static void insertOrUpdate() throws ParseException {
+        SqlSession sqlSession = sessionFactory.openSession();
+        AmCollectionSourceMonitorMapper sourceMapper = sqlSession.getMapper(AmCollectionSourceMonitorMapper.class);
+        Date d = new Date();
+        Date date = format.parse("2019-00-00 12:12:21");
+        sourceMapper.insertOnUpdate("vim01",d,date);
+        sqlSession.commit();
+        sqlSession.close();
+    }
     public static void BatchUpdate(){
         SqlSession sqlSession = sessionFactory.openSession();
         AmCollectionSourceMonitorMapper sourceMapper = sqlSession.getMapper(AmCollectionSourceMonitorMapper.class);

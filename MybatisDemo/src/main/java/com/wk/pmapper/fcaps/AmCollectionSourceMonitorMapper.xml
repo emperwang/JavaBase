@@ -224,6 +224,21 @@
     </if>
   </select>
 
+  <insert id="insertOnUpdate" parameterType="map">
+    insert into am_collection_source_monitor(source_id, info_type,update_time, fm_last_submit_time)
+    values(#{sid},'FM',#{utime}, #{ftime}) ON conflict(source_id, info_type)
+    do update set fm_last_submit_time=excluded.fm_last_submit_time, update_time=excluded.update_time
+  </insert>
+
+
+  <insert id="insertOnUpdateBatch" parameterType="map">
+    <foreach collection="ids" index="idx" item="itm" separator=";">
+      insert into am_collection_source_monitor(source_id, info_type,update_time, fm_last_submit_time)
+      values(#{idx},'FM',#{utime}, #{itm}) ON conflict(source_id, info_type)
+      do update set fm_last_submit_time=excluded.fm_last_submit_time, update_time=excluded.update_time
+    </foreach>
+  </insert>
+
 
   <update id="updateBatch" parameterType="map">
     <foreach collection="tims" index="key" item="itm" separator=";">

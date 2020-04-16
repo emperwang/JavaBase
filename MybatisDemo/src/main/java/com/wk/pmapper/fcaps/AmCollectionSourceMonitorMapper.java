@@ -52,4 +52,10 @@ public interface AmCollectionSourceMonitorMapper {
 
     // 进行更新操作
     int updateBatch(@Param("tims") Map<String,Date> times);
+
+    // 不存在则插入，存在则更新。postgresql-95 版本之后才有的功能
+    int insertOnUpdate(@Param("sid") String sid,@Param("utime") Date utime,@Param("ftime") Date ftime);
+
+    // 批量更新操作
+    int insertOnUpdateBatch(@Param("ids") Map<String, Date> map, @Param("utime") Date ut);
 }
