@@ -1,4 +1,4 @@
-package com.wk.consumer;
+package com.wk.demo.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
