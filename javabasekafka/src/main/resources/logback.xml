@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="encoder.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} NFVO-AM-CONTROLLER [%thread] %-5level %logger - %msg%n"/>
+    <property name="logpath" value="E:/code-workSpace/project-javaBase/JavaBase/javabasekafka/logs" />
+    <property name="MAX_FILE_SIZE" value="100MB"/>
+    <property name="MAX_HISTORY" value="30"/>
+    <property name="TOTAL_SIZE_CAP" value="10GB"/>
+
+    <!--<property name="log.path" value="logs"/>-->
+    <appender name="runtime" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${logpath}/runtime.log</File>
+        <Prudent>false</Prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${logpath}/runtime_%d{yyyyMMdd}_%i.log.gz</FileNamePattern>
+            <MaxHistory>${MAX_HISTORY}</MaxHistory>
+            <maxFileSize>${MAX_FILE_SIZE}</maxFileSize>
+            <totalSizeCap>${TOTAL_SIZE_CAP}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>${encoder.pattern}</Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${encoder.pattern}</Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <logger name="com.wk.demo"  additivity="true" level="DEBUG">
+        <appender-ref ref="runtime" />
+    </logger>
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
+
