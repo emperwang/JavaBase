@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="encoder.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} NFVO-AM-CONTROLLER [%thread] %-5level %logger - %msg%n"/>
-    <property name="logpath" value="E:/code-workSpace/project-javaBase/JavaBase/javabasekafka/logs" />
+    <property name="logpath" value="./logs" />
     <property name="MAX_FILE_SIZE" value="100MB"/>
     <property name="MAX_HISTORY" value="30"/>
     <property name="TOTAL_SIZE_CAP" value="10GB"/>
