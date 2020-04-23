@@ -1,9 +1,11 @@
 package com.wk;
 
 import com.wk.entity.fcaps.AmCollectionSourceMonitor;
+import com.wk.entity.fcaps.AmCollectorHostInfo;
 import com.wk.entity.fcaps.AmCollectorSource;
 import com.wk.entity.fcaps.AmCollectorSourceVo;
 import com.wk.pmapper.fcaps.AmCollectionSourceMonitorMapper;
+import com.wk.pmapper.fcaps.AmCollectorHostInfoMapper;
 import com.wk.pmapper.fcaps.AmCollectorSourceMapper;
 import com.wk.util.PostgresqlUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +28,18 @@ public class FcapsPostgresqlMain {
 //        getVoSource();
 //        BatchUpdate();
 //        insertOrUpdate();
-        batchUpdate();
+//        batchUpdate();
+        hostInfoGetAll();
+    }
+
+    public static void hostInfoGetAll(){
+        SqlSession sqlSession = sessionFactory.openSession();
+        AmCollectorHostInfoMapper hostInfoMapper = sqlSession.getMapper(AmCollectorHostInfoMapper.class);
+        List<AmCollectorHostInfo> hosts = hostInfoMapper.selectByExample(null);
+        List<Integer> ids = hostInfoMapper.getStateIds("MASTER");
+        ids.forEach(System.out::println);
+        // hosts.forEach(System.out::println);
+        sqlSession.close();
     }
 
     public static void batchUpdate() throws ParseException {
