@@ -58,5 +58,6 @@
         <module>hibernateDemo</module>
         <module>JedisClusterProject</module>
         <module>javabasekafka</module>
+        <module>Assertions</module>
     </modules>
 </project>
