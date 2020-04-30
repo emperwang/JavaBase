@@ -42,9 +42,16 @@
         <httpCoreNio-version>4.4.5</httpCoreNio-version>
         <common-pool2-version>2.6.2</common-pool2-version>
         <curator.version>2.12.0</curator.version>
+        <collection-version>3.2.2</collection-version>
     </properties>
 
     <dependencies>
+        <!--deep copy-->
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${collection-version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
