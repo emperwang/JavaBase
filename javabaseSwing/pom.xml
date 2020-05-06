@@ -29,5 +29,15 @@
 
     <build>
         <finalName>swing</finalName>
+
+        <resources>
+            <resource>
+                <directory>src\main\java\com\wk\swing\images</directory>
+                <includes>
+                    <include>*.png</include>
+                </includes>
+                <targetPath>/images</targetPath>
+            </resource>
+        </resources>
     </build>
 </project>
