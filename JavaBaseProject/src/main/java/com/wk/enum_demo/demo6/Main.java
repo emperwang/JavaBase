@@ -5,5 +5,7 @@ public class Main {
         String info = EnumInterface.GREEN.getInfo();
         System.out.println(info);
         System.out.println(EnumInterface.RED.getInfo());
+        int red_idx = EnumInterface.resove("green");
+        System.out.println(red_idx);
     }
 }

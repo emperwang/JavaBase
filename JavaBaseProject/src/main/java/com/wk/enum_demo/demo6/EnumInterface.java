@@ -30,4 +30,13 @@ public enum  EnumInterface implements Behaviour{
     public String getInfo() {
         return this.name+"__"+this.index;
     }
+
+    public static int resove(String name){
+        for (EnumInterface ff : values()) {
+            if (name.equalsIgnoreCase(ff.name)){
+                return ff.index;
+            }
+        }
+        return -1;
+    }
 }
