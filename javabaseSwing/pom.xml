@@ -35,6 +35,7 @@
                 <directory>src\main\java\com\wk\swing\images</directory>
                 <includes>
                     <include>*.png</include>
+                    <include>*.jpg</include>
                 </includes>
                 <targetPath>/images</targetPath>
             </resource>
