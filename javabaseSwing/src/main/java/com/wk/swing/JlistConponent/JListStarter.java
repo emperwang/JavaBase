@@ -1,5 +1,8 @@
 package com.wk.swing.JlistConponent;
 
+import com.wk.swing.JlistConponent.custom.ListCellRenderDemo1;
+import com.wk.swing.JlistConponent.fileList.FileListFrame;
+
 import javax.swing.*;
 
 public class JListStarter {
@@ -10,8 +13,9 @@ public class JListStarter {
         //JListFrame3 list= new JListFrame3("listEvent");
         // JListFrame4 list = new JListFrame4("frame4");
 
-        JListFileFrame list = new JListFileFrame("browserFile");
-
+        // JListFileFrame list = new JListFileFrame("browserFile");
+        //ListCellRenderDemo1 list = new ListCellRenderDemo1("renderer");
+        FileListFrame list = new FileListFrame("fileList");
         list.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         list.setSize(800,600);
         list.setVisible(true);
