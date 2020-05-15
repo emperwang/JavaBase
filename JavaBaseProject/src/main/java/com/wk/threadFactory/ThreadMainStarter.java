@@ -16,7 +16,7 @@ public class ThreadMainStarter {
             }
         };
         // 创建线程工厂
-        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("MineThread")
+        ThreadFactory factory = new ThreadFactoryBuilder().setNameFormat("MineThread-%d")
                 .setUncaughtExceptionHandler(handler).build();
 
         // 创建线程
