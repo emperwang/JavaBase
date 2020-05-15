@@ -17,4 +17,11 @@ public class AppTest
     {
         assertTrue( true );
     }
+    @Test
+    public void testClazz(){
+        Integer iter = new Integer(1);
+        boolean b = Object.class.isAssignableFrom(iter.getClass());
+        System.out.println(b);
+
+    }
 }

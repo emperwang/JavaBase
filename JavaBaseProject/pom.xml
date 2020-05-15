@@ -46,6 +46,12 @@
     </properties>
 
     <dependencies>
+        <!--jol java object layout, 打印对象的内存布局-->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.9</version>
+        </dependency>
         <!--deep copy-->
         <dependency>
             <groupId>commons-collections</groupId>
