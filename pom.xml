@@ -60,5 +60,6 @@
         <module>javabasekafka</module>
         <module>Assertions</module>
         <module>javabaseSwing</module>
+        <module>JavabaseTomcat</module>
     </modules>
 </project>
