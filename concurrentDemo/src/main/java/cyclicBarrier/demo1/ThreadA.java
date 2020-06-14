@@ -15,7 +15,7 @@ public class ThreadA  extends Thread{
 		
 		try {
 			Thread.sleep((int) (Math.random()*10000));
-			System.out.println(Thread.currentThread().getName()+"µ½ÁË"+System.currentTimeMillis());
+			System.out.println(Thread.currentThread().getName()+"åˆ°äº†"+System.currentTimeMillis());
 			cyclicBarrier.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();

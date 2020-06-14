@@ -61,5 +61,6 @@
         <module>Assertions</module>
         <module>javabaseSwing</module>
         <module>concurrentDemo</module>
+        <module>JavabaseTomcat</module>
     </modules>
 </project>

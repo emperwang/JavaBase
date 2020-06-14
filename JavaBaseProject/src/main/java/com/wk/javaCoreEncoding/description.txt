@@ -1,0 +1,6 @@
+java内核是unicode的,就连class文件也是. 但是很多媒体, 包括文件/流的保存方式
+是使用字节流的. 因此Java要对这些字节流进行转化. char是unicode的,而byte是字节.
+Java中byte/char互转的函数在sun.io的包中有.  其中ByteToCharConverter类是中间调度,
+可以用来获取converter. 其中有两个很常用的静态函数:
+public static ByteToCharConverter getDefault();
+public static ByteToCharConverter getConverter(String encoding);

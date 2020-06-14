@@ -8,7 +8,7 @@ public class Service {
 	public void testMethod(){
 		try {
 			System.out.println("AAAAAAAAA");
-			//ÅĞ¶Ï¼ÆÊıÊÇ·ñÎª0    Èç¹ûÎª0  ÄÇÃ´¾Ã¼ÌĞøÖ´ĞĞ   ·ñÔòµÈ´ı
+			//åˆ¤æ–­è®¡æ•°æ˜¯å¦ä¸º0    å¦‚æœä¸º0  é‚£ä¹ˆä¹…ç»§ç»­æ‰§è¡Œ   å¦åˆ™ç­‰å¾…
 			countDownLatch.await();
 			System.out.println("BBBBBBBBB");
 		} catch (InterruptedException e) {

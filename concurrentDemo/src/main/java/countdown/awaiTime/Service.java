@@ -9,9 +9,9 @@ public class Service {
 	public void testMethod(){
 		
 		try {
-			System.out.println(Thread.currentThread().getName()+"×¼±¸"+System.currentTimeMillis());
+			System.out.println(Thread.currentThread().getName()+"å‡†å¤‡"+System.currentTimeMillis());
 			countDownLatch.await(3, TimeUnit.SECONDS);
-			System.out.println(Thread.currentThread().getName()+"½áÊø"+System.currentTimeMillis());
+			System.out.println(Thread.currentThread().getName()+"ç»“æŸ"+System.currentTimeMillis());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
