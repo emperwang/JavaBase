@@ -25,7 +25,7 @@ public class BaseDemo {
         Observer<Integer> observer = new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable disposable) {
-
+                System.out.println("subscribe event..");
             }
 
             @Override
@@ -35,7 +35,7 @@ public class BaseDemo {
 
             @Override
             public void onError(Throwable throwable) {
-
+                System.out.println("error occur.. " + throwable.getMessage());
             }
 
             @Override
@@ -149,8 +149,8 @@ public class BaseDemo {
 
     public static void main(String[] args) {
         //demostration1();
-        //demostration2();
+        demostration2();
         //demostation3();
-        demostration4();
+        //demostration4();
     }
 }
