@@ -33,6 +33,7 @@ public class ASMGenerateStarted {
         // 初始化 一个无参的构造函数
         MethodVisitor constructor = writer.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null,
                 null);
+        // 构造方法的第一步, aload 0 ; 记载隐含的this对象
         constructor.visitVarInsn(Opcodes.ALOAD,0);
         // 执行父类的init初始化
         constructor.visitMethodInsn(Opcodes.INVOKESPECIAL,Type.getInternalName(Object.class),
@@ -58,6 +59,7 @@ public class ASMGenerateStarted {
         getIntValMethod.visitInsn(Opcodes.ARETURN);
         getIntValMethod.visitMaxs(1,1);
         getIntValMethod.visitEnd();
+        // 返回创建好的类的 字节码
         return writer.toByteArray();
     }
 

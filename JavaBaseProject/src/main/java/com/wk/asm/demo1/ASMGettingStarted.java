@@ -14,8 +14,15 @@ import java.lang.reflect.Method;
 public class ASMGettingStarted {
 
     public static ClassWriter createClassWriter(String className){
+        // new ClassWriter(0) 参数为0,表示方法栈长度和本地变量表由用户自己计算; COMPUTE_MAXS表示最大
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         // 1.8   public  父类为Object 没有接口
+        // Opcodes.V1_8版本号
+        // Opcodes.ACC_PUBLIC 表示 public 类
+        // classname 表示全限定类名
+        // 第一个null 表示 泛型
+        // java/lang/Object 表示父类
+        // 最后一个null 表示接口
         classWriter.visit(Opcodes.V1_8,Opcodes.ACC_PUBLIC,className,null,
                 "java/lang/Object",null);
         // 构造函数
@@ -41,6 +48,7 @@ public class ASMGettingStarted {
         // 将 int float String型常量从常量池推送至栈顶（此处将message字符串从常量池中推送至栈顶）
         runMethod.visitLdcInsn(message);
         // 执行 println方法
+        // 最后一个参数 false, 表示是否是接口
         runMethod.visitMethodInsn(Opcodes.INVOKEVIRTUAL,"java/io/PrintStream","println",
                 "(Ljava/lang/String;)V",false);
         runMethod.visitInsn(Opcodes.RETURN);
