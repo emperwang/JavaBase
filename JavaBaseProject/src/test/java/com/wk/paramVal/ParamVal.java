@@ -2,9 +2,26 @@ package com.wk.paramVal;
 
 import org.junit.Test;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 public class ParamVal {
+
+    /**
+     * 验证解析uri地址：
+     * 当uri地址为 spark://name_2:7077,也就是name中有_下划线时,会导致解析错误
+     */
+    @Test
+    public void testUri() throws URISyntaxException {
+        String str1="spark://name_2:7077";
+        String str="spark://name2:7077";
+        URI uri = new URI(str);
+        System.out.println(uri.getScheme());
+        System.out.println(uri.getHost());
+        System.out.println(uri.getPort());
+    }
+
 
     /** 验证参数传递方式:
      *  值传递: String 加其他基本类型是值传递
