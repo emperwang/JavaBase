@@ -62,5 +62,6 @@
         <module>javabaseSwing</module>
         <module>concurrentDemo</module>
         <module>JavabaseTomcat</module>
+        <module>ForCommandCall</module>
     </modules>
 </project>
