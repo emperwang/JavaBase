@@ -63,5 +63,6 @@
         <module>concurrentDemo</module>
         <module>JavabaseTomcat</module>
         <module>ForCommandCall</module>
+        <module>java-metrics</module>
     </modules>
 </project>
