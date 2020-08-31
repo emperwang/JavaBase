@@ -15,8 +15,9 @@ public class ParamVal {
     @Test
     public void testUri() throws URISyntaxException {
         String str1="spark://name_2:7077";
+        String str2="spark://name-2:7077";
         String str="spark://name2:7077";
-        URI uri = new URI(str);
+        URI uri = new URI(str2);
         System.out.println(uri.getScheme());
         System.out.println(uri.getHost());
         System.out.println(uri.getPort());
