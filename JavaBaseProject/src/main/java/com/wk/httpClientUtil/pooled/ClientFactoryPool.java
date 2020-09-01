@@ -58,11 +58,9 @@ public class ClientFactoryPool {
     private static PoolingHttpClientConnectionManager pool;
 
     static {
-        pool = new PoolingHttpClientConnectionManager();
-        pool.closeExpiredConnections();
+        pool = new PoolingHttpClientConnectionManager(50, TimeUnit.SECONDS);
         pool.setMaxTotal(20);
         pool.setDefaultMaxPerRoute(20);
-        pool.closeIdleConnections(50L, TimeUnit.SECONDS);
     }
     /**
      *  http请求客户端
@@ -72,12 +70,15 @@ public class ClientFactoryPool {
 
     public static CloseableHttpClient httpClientPooled(Integer connectTimeout,Integer socketTime){
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(socketTime).build();
-        //PoolingHttpClientConnectionManager pool = new PoolingHttpClientConnectionManager();
+        pool.closeExpiredConnections();
+        pool.closeIdleConnections(50L, TimeUnit.SECONDS);
         Set<HttpRoute> routes = pool.getRoutes();
         for (HttpRoute route : routes) {
             log.info("route:{}", route.toString());
         }
         CloseableHttpClient client = HttpClients.custom().setConnectionManager(pool)
+                .evictExpiredConnections()
+                .evictIdleConnections(50, TimeUnit.SECONDS)
                 .setDefaultRequestConfig(requestConfig)
                 .build();
         return client;
