@@ -1,0 +1,1 @@
+thrift -r -gen java user.thrift
