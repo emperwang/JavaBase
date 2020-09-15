@@ -64,5 +64,7 @@
         <module>JavabaseTomcat</module>
         <module>ForCommandCall</module>
         <module>java-metrics</module>
+        <module>protobuf</module>
+        <module>JavaThrift</module>
     </modules>
 </project>

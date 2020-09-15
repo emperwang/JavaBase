@@ -1,0 +1,12 @@
+syntax = "proto3";
+// 首先需要指明版本号
+package protobuf;
+// java输出的package
+option java_package = "com.wk.protobuf";
+// java 输出的类名
+option java_outer_classname = "FirstProtobuf";
+// testbuf为内部类, 此定义的ID和Url是类的 field, 1,2 指定了ID输出时位置为1
+message testBuf {
+    int32 ID=1;
+    string Url=2;
+}
