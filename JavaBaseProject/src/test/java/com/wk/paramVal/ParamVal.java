@@ -23,6 +23,11 @@ public class ParamVal {
         System.out.println(uri.getPort());
     }
 
+    @Test
+    public void testsanmu(){
+        String vv = 1==2?"yes":"no";
+        System.out.println(vv);
+    }
 
     /** 验证参数传递方式:
      *  值传递: String 加其他基本类型是值传递

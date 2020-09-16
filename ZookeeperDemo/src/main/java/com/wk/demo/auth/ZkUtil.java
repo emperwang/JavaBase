@@ -23,13 +23,18 @@ public class ZkUtil implements Watcher {
      //认证错误方法
      final static String badAuthentication="654321";
 
-     static ZooKeeper zk = null;
+     ZooKeeper zk = null;
      //计时器
      AtomicInteger seq = new AtomicInteger();
      //标识
      private static final String LOG_PREFIX_OF_MAIN="[MAIN]";
 
      private CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    /**
+     * process 就是监听事件的处理类
+     * 此处理是一次性的, 如果要持续监听,那么久需要在process中 再次设置监听
+     */
     @Override
     public void process(WatchedEvent watchedEvent) {
 
@@ -42,6 +47,15 @@ public class ZkUtil implements Watcher {
         Event.EventType type = watchedEvent.getType();
         //受影响path
         String path = watchedEvent.getPath();
+        // 在这里 再次对path设置监听
+        try {
+            List<String> chs = this.zk.getChildren(path, this);
+        } catch (KeeperException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //标识
         String logPrefix = "[Watcher-"+this.seq.incrementAndGet()+"]";
         System.out.println("收到watcher通知");
@@ -298,12 +312,12 @@ public class ZkUtil implements Watcher {
             acls.add(ids_acl);
         }
         try {
-            if(zk.exists(PATH,false) == null) {
-                zk.create(PATH, "init content".getBytes(), acls, CreateMode.PERSISTENT);
+            if(zkUtil.zk.exists(PATH,false) == null) {
+                zkUtil.zk.create(PATH, "init content".getBytes(), acls, CreateMode.PERSISTENT);
                 System.out.println("使用授权key"+correctAuthentication+",创建节点:"+PATH);
             }
-            if(zk.exists(PATH_DEL,false) == null){
-                zk.create(PATH_DEL,"will be deleted".getBytes(),acls,CreateMode.PERSISTENT);
+            if(zkUtil.zk.exists(PATH_DEL,false) == null){
+                zkUtil.zk.create(PATH_DEL,"will be deleted".getBytes(),acls,CreateMode.PERSISTENT);
                 System.out.println("使用授权key:"+correctAuthentication+",创建节点:"+PATH_DEL);
             }
 
