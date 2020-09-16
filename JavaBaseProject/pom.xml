@@ -46,6 +46,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.betfair.net.java.opendmk</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0-b02</version>
+        </dependency>
         <!--jol java object layout, 打印对象的内存布局-->
         <dependency>
             <groupId>org.openjdk.jol</groupId>
