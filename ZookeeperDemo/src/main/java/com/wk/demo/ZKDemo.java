@@ -9,7 +9,7 @@ public class ZKDemo {
     public static void main(String[] args) throws IOException, InterruptedException {
         String connect_addr = "192.168.72.15:2181";
         int session_outtime=200000;
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
         ZooKeeper zooKeeper = new ZooKeeper(connect_addr, session_outtime, new Watcher() {
             @Override
             public void process(WatchedEvent watchedEvent) {
