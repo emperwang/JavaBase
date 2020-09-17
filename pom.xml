@@ -66,5 +66,6 @@
         <module>java-metrics</module>
         <module>protobuf</module>
         <module>JavaThrift</module>
+        <module>InterviewAlgorithm</module>
     </modules>
 </project>
