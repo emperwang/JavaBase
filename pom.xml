@@ -67,5 +67,6 @@
         <module>protobuf</module>
         <module>JavaThrift</module>
         <module>InterviewAlgorithm</module>
+        <module>javaMysqlXA</module>
     </modules>
 </project>
