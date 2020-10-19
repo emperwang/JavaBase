@@ -69,5 +69,6 @@
         <module>InterviewAlgorithm</module>
         <module>javaMysqlXA</module>
         <module>Java-mapperStruct</module>
+        <module>LeeCode</module>
     </modules>
 </project>
