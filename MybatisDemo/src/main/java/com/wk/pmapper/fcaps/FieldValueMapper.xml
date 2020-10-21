@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wk.pmapper.fcaps.FieldValueMapper">
+
+    <resultMap id="fieldId" type="com.wk.entity.fcaps.FieldValue">
+        <result column="cn_name" property="cnName" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getField" resultType="java.util.Map">
+        select value,cn_name from field_enum_value where field=#{field};
+    </select>
+
+    <select id="getField2" resultMap="fieldId">
+        select value,cn_name from field_enum_value where field in
+        <foreach collection="list" open="(" separator="," close=")" item="itm">
+            #{itm}
+        </foreach>
+    </select>
+    
+    <resultMap id="hisfield" type="com.wk.entity.fcaps.HisField">
+        <result column="alarm_content" property="alarm_content" jdbcType="VARCHAR"/>
+        <result column="if_confirm" property="alarmStatus" jdbcType="VARCHAR"/>
+        <result column="confirm_content" property="alarmSeq" jdbcType="VARCHAR"/>
+        <result column="if_comment" property="clearFlag" jdbcType="VARCHAR"/>
+        <result column="comment" property="value" jdbcType="VARCHAR"/>
+        <result column="clear_flag" property="value" jdbcType="VARCHAR"/>
+        <result column="clear_time" property="value" jdbcType="VARCHAR"/>
+        <result column="clear_operate_user" property="value" jdbcType="VARCHAR"/>
+        <result column="latest_arrive_time" property="value" jdbcType="VARCHAR"/>
+        <result column="if_master" property="value" jdbcType="VARCHAR"/>
+        <result column="if_slave" property="value" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getHisa" resultType="com.wk.entity.fcaps.HisField">
+        select alarm_id alarmId,alarm_seq alarmSeq,event_time eventTime,
+        alarm_content alarmContent,if_confirm ifConfirm,confirm_content confirmContent,if_comment ifComment,
+        comment,clear_flag clearFlag,clear_time clearTime,clear_operate_user clearOperateUser,
+        latest_arrive_time latestArriveTime,if_master ifMaster,if_slave ifSlave
+        from standard_alarm
+    </select>
+</mapper>
