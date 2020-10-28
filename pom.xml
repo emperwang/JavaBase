@@ -70,5 +70,6 @@
         <module>javaMysqlXA</module>
         <module>Java-mapperStruct</module>
         <module>LeeCode</module>
+        <module>TwoDimCode</module>
     </modules>
 </project>
