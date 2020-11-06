@@ -71,5 +71,6 @@
         <module>Java-mapperStruct</module>
         <module>LeeCode</module>
         <module>TwoDimCode</module>
+        <module>Postgresql_EFM</module>
     </modules>
 </project>

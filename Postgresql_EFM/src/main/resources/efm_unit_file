@@ -1,0 +1,23 @@
+# Copyright EnterpriseDB Corporation, 2015-2017. All Rights Reserved.
+#
+# Any changes made to this file may be overwritten during package upgrades.
+# If you want to customize, the best way is to create a new file containing
+#	.include /usr/lib/systemd/system/efm-2.1.service
+# and change the cluster name.
+
+[Unit]
+Description=EnterpriseDB Failover Manager 2.1
+
+[Service]
+Type=forking
+TimeoutSec=120
+Environment=CLUSTER=efm
+User=efm
+
+ExecStart=/bin/bash -c "/usr/efm-2.1/bin/runefm.sh start ${CLUSTER}"
+ExecStop=/bin/bash -c "/usr/efm-2.1/bin/runefm.sh stop ${CLUSTER}"
+
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,111 @@
+#!/bin/sh
+
+# efm-2.1    This is the init script for starting up Failover Manager
+#
+# chkconfig: - 95 10
+# description: Starts and stops the EnterpriseDB Failover Manager
+# Copyright EnterpriseDB Corporation, 2014-2017. All Rights Reserved.
+
+# default user to run as for non-privileged commands
+USER=efm
+
+# default cluster name
+CLUSTER=efm
+
+# version name
+EFM=efm-2.1
+
+# Configuration file for Java
+EFM_CONFIG=/etc/sysconfig/$EFM
+RUN_JAVA=/usr/$EFM/bin/runJavaApplication.sh
+
+source $EFM_CONFIG
+source $RUN_JAVA
+
+verifyJRE
+
+
+# default properties file
+PROPS=/etc/$EFM/$CLUSTER.properties
+
+LOGDIR=/var/log/$EFM
+LOG=$LOGDIR/startup-$CLUSTER.log
+LIB=/usr/$EFM/lib/EFM-2.1.2.jar
+CLASS=com.enterprisedb.efm.main.ServiceCommand
+
+# Source function library.
+INITD=/etc/rc.d/init.d
+. $INITD/functions
+
+# Find the name of the script
+NAME=`basename $0`
+
+# compute pid file name based on cluster .name
+# this computed file name must match what's usd in Util.writePid()
+PIDFILE=/var/run/${EFM}.${CLUSTER}.pid
+
+#
+# Check for root privileges
+#
+checkPrivileges() {
+    WHO=`/usr/bin/whoami`
+    ROOT=`/usr/bin/getent passwd 0 | cut -d ':' -f 1`
+    if [ $WHO != $ROOT ]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+runPrivilegedCommand() {
+    if ! checkPrivileges; then
+        echo "You must be 'root' to run the '$1' command"
+        exit 1
+    fi
+
+    # create the startup log if it doesn't exist
+    if [ ! -e $LOG ]; then
+        touch $LOG || exit 1
+        chown $USER:$USER $LOG
+    fi
+
+    # print a description of what's going on...
+    case "$1" in
+        start)
+            MSG="Starting local $NAME service: "
+            ;;
+        stop)
+            MSG="Stopping local $NAME service: "
+            ;;
+    esac
+    echo -n "$MSG"
+
+    su - $USER -c "source $EFM_CONFIG; source $RUN_JAVA; runJREApplication -cp $LIB $CLASS $1 $PROPS " >> $LOG 2>&1 < /dev/null
+
+    if [ "$?" -eq 0 ]; then
+        echo_success
+        echo
+        exit 0
+    else
+        echo_failure
+        echo
+        exit 1
+    fi
+}
+
+# make sure prop file exists
+# See how we were called.
+case "$1" in
+    status)
+        status -p ${PIDFILE} ${NAME}
+        exit $?
+        ;;
+    start|stop)
+        runPrivilegedCommand $1
+        ;;
+    help|*)
+        runJREApplication -cp $LIB $CLASS --help
+        ;;
+esac
+
+exit $?
