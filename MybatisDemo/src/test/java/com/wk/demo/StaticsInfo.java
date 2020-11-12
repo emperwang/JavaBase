@@ -43,10 +43,11 @@ public class StaticsInfo {
 //        final Info info13 = new Info("notStandardAlarm",5L,"server","1101ERHX2SCTBEC7C7539B8CE12","NFV-D-HNGZ-01A-2302-AH17-S-SRV-13");
 //        final Info info14 = new Info("notStandardAlarm",5L,"host","1101ERHX2SCTBEC7C7539B8CE10","NFV-D-HNGZ-01A-2302-AH17-S-SRV-14");
 //
-//        final Info info15 = new Info("reportOSSAlarm",5L,null,null,null);
+        final Info info15 = new Info("reportOSSAlarm",5L,null,null,null);
 //        final Info info16 = new Info("filteredAlarm",6L,null,null,null);
-//        final Info info17 = new Info("collectedAlarm",10L,"vim01",null,"vim01采集源");
-//        final Info info18 = new Info("collectedAlarm",5L,"pin01",null,"pim01采集源");
+        final Info info17 = new Info("collectedAlarm",10L,"vim01",null,"vim01采集源");
+        final Info info18 = new Info("collectedAlarm",5L,"pin01",null,"pim01采集源");
+        lists.add(info);
         lists.add(info2);
         lists.add(info3);
         lists.add(info4);
@@ -60,10 +61,10 @@ public class StaticsInfo {
 //        lists.add(info12);
 //        lists.add(info13);
 //        lists.add(info14);
-//        lists.add(info15);
+        lists.add(info15);
 //        lists.add(info16);
-//        lists.add(info17);
-//        lists.add(info18);
+        lists.add(info17);
+        lists.add(info18);
         return lists;
     }
 
@@ -71,59 +72,46 @@ public class StaticsInfo {
     public void test1() {
         final List<Info> infos = generateDate();
         if (infos != null && infos.size() > 0) {
+            String collectedAlarm = "collectedAlarm";
+            String detail = "reportOSSAlarmDetail";
             final Map<String, List<Info>> collect = infos.stream().collect(Collectors.groupingBy(Info::getStatisticalType));
+            final List<Info> detas = collect.get(detail);
+            collect.remove(detail);
+            final List<JSONObject> dtas3 = attr2(detas, detail);
+
+            Long dis = null;
+            if (collect.containsKey(collectedAlarm)) {
+                dis = collect.get(collectedAlarm).stream().collect(Collectors.summingLong(Info::getCount));
+            }
             List<JSONObject> res = new ArrayList<>();
+            Long finalDis = dis;
             collect.entrySet().forEach(it -> {
                 final String type = it.getKey();
                 System.out.println(type);
-                System.out.println(it.getValue());
-                System.out.println("----------------------------------");
+                //System.out.println(it.getValue());
+                //System.out.println("----------------------------------");
                 JSONObject object = new JSONObject();
                 Long count = it.getValue().stream().collect(Collectors.summingLong(Info::getCount));
                 object.put("statisticalType", it.getKey());
                 object.put("totalNum", count);
-                List<JSONObject> tmp1 = new ArrayList<>();
+                if (null != finalDis && finalDis > 0) {
+                    object.put("rate", (double) Math.round((count.doubleValue() / finalDis.doubleValue()) * 100) / 100);
+                }else{
+                    object.put("rate",0);
+                }
                 final List<Info> tmp11 = it.getValue().stream().filter(tm -> {
                     if (!"".equalsIgnoreCase(tm.getAttribute()) && null != tm.getAttribute()) {
                         return true;
                     }
                     return false;
                 }).collect(Collectors.toList());
-                if (tmp11 != null && tmp11.size() > 0) {
-                    final Map<String, List<Info>> collect1 = tmp11.stream().collect(Collectors.groupingBy(Info::getAttribute));
-                    collect1.entrySet().forEach(it2 -> {
-                        JSONObject object1 = new JSONObject();
-                        object1.put("attributeID", it2.getKey());
-                        if ("standardAlarm".equalsIgnoreCase(type) || "notStandardAlarm".equalsIgnoreCase(type)){
-                            object1.put("attributeName", null);
-                        }else {
-                            object1.put("attributeName", it2.getValue().get(0).getAttributeCnName());
-                        }
-                        final Long ccut = it2.getValue().stream().collect(Collectors.summingLong(Info::getCount));
-                        object1.put("attributeCount", ccut);
-
-                        List<JSONObject> tmp2 = new ArrayList<>();
-                        final List<Info> tmp22 = it2.getValue().stream().filter(t22 -> {
-                            if (!"".equalsIgnoreCase(t22.getSubAttribute()) && null != t22.getSubAttribute()) {
-                                return true;
-                            }
-                            return false;
-                        }).collect(Collectors.toList());
-                        if (tmp22 != null && tmp22.size() > 0) {
-                            tmp22.stream().forEach(t222 -> {
-                                JSONObject object2 = new JSONObject();
-                                object2.put("subattributeId", t222.getSubAttribute());
-                                object2.put("subItemName", t222.getAttributeCnName());
-                                object2.put("subAttributeCount", t222.getCount());
-                                tmp2.add(object1);
-                            });
-                            System.out.println(JSON.toJSONString(tmp2, SerializerFeature.WriteMapNullValue));
-                            object1.put("subAttributes", tmp2);
-                        }
-                        tmp1.add(object1);
-                    });
-                    object.put("attributes", tmp1);
+                final List<JSONObject> objects = attr2(tmp11, type);
+                object.put("attributes", objects);
+                System.out.println(JSON.toJSONString(object, SerializerFeature.WriteMapNullValue));
+                if ("reportOSSAlarm".equalsIgnoreCase(type)){
+                    object.put("attributes", dtas3);
                 }
+                System.out.println("----------------------------------");
                 res.add(object);
             });
             final JSONArray ret = new JSONArray();
@@ -131,6 +119,48 @@ public class StaticsInfo {
             System.out.println(JSON.toJSONString(ret, SerializerFeature.WriteMapNullValue));
         }
     }
+
+    public List<JSONObject> attr2(List<Info> tmp11,String type){
+        List<JSONObject> tmp1 = new ArrayList<>();
+        if (tmp11 != null && tmp11.size() > 0) {
+            final Map<String, List<Info>> collect1 = tmp11.stream().collect(Collectors.groupingBy(Info::getAttribute));
+            collect1.entrySet().forEach(it2 -> {
+                JSONObject object1 = new JSONObject();
+                object1.put("attributeID", it2.getKey());
+                if ("standardAlarm".equalsIgnoreCase(type) || "notStandardAlarm".equalsIgnoreCase(type)){
+                    object1.put("attributeName", null);
+                }else {
+                    object1.put("attributeName", it2.getValue().get(0).getAttributeCnName());
+                }
+                final Long ccut = it2.getValue().stream().collect(Collectors.summingLong(Info::getCount));
+                object1.put("attributeCount", ccut);
+
+                List<JSONObject> tmp2 = new ArrayList<>();
+                final List<Info> tmp22 = it2.getValue().stream().filter(t22 -> {
+                    if (!"".equalsIgnoreCase(t22.getSubAttribute()) && null != t22.getSubAttribute()) {
+                        return true;
+                    }
+                    return false;
+                }).collect(Collectors.toList());
+                if (tmp22 != null && tmp22.size() > 0) {
+                    tmp22.stream().forEach(t222 -> {
+                        JSONObject object2 = new JSONObject();
+                        object2.put("subattributeId", t222.getSubAttribute());
+                        object2.put("subItemName", t222.getAttributeCnName());
+                        object2.put("subAttributeCount", t222.getCount());
+                        System.out.println(JSON.toJSONString(object2, SerializerFeature.WriteMapNullValue));
+                        tmp2.add(object1);
+                    });
+                    System.out.print("tmp2: ---- ");
+                    System.out.println(JSON.toJSONString(tmp2, SerializerFeature.WriteMapNullValue));
+                    object1.put("subAttributes", tmp2);
+                }
+                tmp1.add(object1);
+            });
+        }
+        return tmp1;
+    }
+
 }
 
 
