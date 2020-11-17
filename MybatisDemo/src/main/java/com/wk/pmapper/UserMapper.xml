@@ -15,13 +15,39 @@
         SELECT <include refid="baseSql"/> FROM users;
     </select>
 
+    <select id="getSeq" resultType="java.lang.Integer" useCache="false">
+        select nextval('user_id_seq'::regclass)
+    </select>
+
     <select id="getAllId" resultType="java.lang.Integer">
         SELECT id from users;
     </select>
 
-    <update id="updateAges" parameterType="com.wk.entity.User">
-        <foreach collection="list" item="idx" separator=";" close=";">
-            UPDATE users SET age=#{idx.age} WHERE id=#{idx.id}
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="id">
+        insert into users(id,name, age) values
+        <foreach collection="list" item="itm" separator="," close=";">
+            (nextval('user_id_seq'::regclass),#{itm.name}, #{itm.age})
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="com.wk.entity.User">
+        <foreach collection="list" item="idx" separator=";">
+            UPDATE users SET name=#{idx.name}, age=#{idx.age} WHERE id=#{idx.id}
+        </foreach>
+    </update>
+
+    <update id="batchUdates" parameterType="java.util.List">
+        <foreach collection="list" item="idx" separator=";">
+            UPDATE users
+            <set>
+                <if test="idx.name != null ">
+                    name=#{idx.name},
+                </if>
+                <if test="idx.age != null">
+                    age=#{idx.age},
+                </if>
+            </set>
+            WHERE id=#{idx.id}
         </foreach>
     </update>
 

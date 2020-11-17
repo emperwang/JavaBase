@@ -17,6 +17,11 @@ public interface UserMapper {
 
     List<Integer> getAllId();
 
-    int updateAges(List<User> users);
+    int batchUpdate(List<User> users);
 
+    int batchUdates(List<User> users);
+
+    int batchInsert(List<User> list);
+
+    int getSeq();
 }
