@@ -97,13 +97,54 @@ public class NumSort {
     }
     /*
     堆排序
+    最后的非叶子节点 数组.length / 2-1
+    下标为i的节点的父节点下标为: (i-1)/2
+    下标为i的节点的左孩子节点下标为: 2*i + 1
+    下标为i的节点的右孩子节点下标为: 2*i + 2
+     大头堆
      */
     public void HeapSort(int[] nums){
         if (nums == null || nums.length <= 0){
             System.out.printf("Invalid array.");
             return;
         }
+        // 建堆
+        for (int i = nums.length/2-1;i >= 0; i--){
+            headify(nums,i,nums.length);
+        }
+        // 排序
+        // 把最后的叶子节点,即数组的最后一个值和堆的root节点交换
+        for (int l = nums.length-1; l>=0;l--){
+            int tmp = nums[l];
+            nums[l] = nums[0];
+            nums[0] = tmp;
+            headify(nums,0,l);
+        }
     }
+
+    /**
+     * @param arr 待排序的列表
+     * @param i   父节点(简单说是 子树的父节点)
+     * @param n    列表长度
+     */
+    private void headify(int[] arr, int i, int n){
+        int tmp = arr[i];
+        for (int k = i * 2+1; k<n; k = 2*i+1){
+            // k = i*2+1 即 k是i的左孩子节点的索引
+            // 如果右节点存在(i*2+2即右节点索引),且左节点小于右节点值,那把k指向右节点索引
+            if ((k+1)<n && arr[k] < arr[k+1]){
+                k++;
+            }
+            if (arr[i] < arr[k]){
+                arr[i] = arr[k];
+                arr[k] = tmp;
+                i = k;  // 这里修改i的值,即把k指向被修改的子树的父节点
+            }else{
+                break;
+            }
+        }
+    }
+
     /*
     快速排序
     从待排序的数组中随机选择一个值 作为中值,然后把数分为:
@@ -151,14 +192,18 @@ public class NumSort {
             System.out.printf("Invalid array.");
             return;
         }
-        sort(nums,0,nums.length);
+        sort(nums,0,nums.length-1);
         Arrays.stream(nums).forEach(i -> System.out.println(i));
     }
     public void sort(int[] nums, int low, int high){
-        int mid = (low + high) >>1;
+        int mid = (low + high) /2 ;
+        System.out.printf("compute val low=%d, mid = %d, high=%d\n", low, mid, high);
         if (low < high){
+            // left
+            System.out.printf("left low=%d, mid = %d, high=%d\n", low, mid, high);
             sort(nums,low,mid);
-            sort(nums,mid, high);
+            // right
+            sort(nums,mid+1, high);
             merage(nums,low, mid, high);
         }
     }
@@ -166,22 +211,23 @@ public class NumSort {
     public void merage(int[] a, int low, int mid,int high){
         int i=low, j=mid+1, k=0;
         int[] tmp = new int[high-low+1];
-        while (i < mid && j < high){
-            if (a[i] < a[j]){
+        System.out.printf("merge low=%d, mid = %d, high=%d\n", low, mid, high);
+        while (i <= mid && j <= high){
+            if (a[i] <= a[j]){
                 tmp[k++] = a[i++];
             }else{
                 tmp[k++] = a[j++];
             }
         }
-        while (i < mid){
+        while (i <= mid){
             tmp[k++] = a[i++];
         }
-        while (j<high){
+        while (j<=high){
             tmp[k++] = a[j++];
         }
         //覆盖原数组
         for (int i1 = 0; i1 < tmp.length; i1++) {
-            a[i1] = tmp[i1];
+            a[i1+low] = tmp[i1];
         }
     }
 
@@ -194,5 +240,7 @@ public class NumSort {
 //        numSort.QuickSort(nums,0,nums.length-1);
 //        Arrays.stream(nums).forEach(it -> System.out.println(it));
         numSort.MergerSort(nums);
+//        numSort.HeapSort(nums);
+//        Arrays.stream(nums).forEach(it -> System.out.println(it));
     }
 }
