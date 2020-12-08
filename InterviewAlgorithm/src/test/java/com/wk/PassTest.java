@@ -8,6 +8,16 @@ import java.util.List;
 public class PassTest {
 
     @Test
+    public void test(){
+        walk(7);
+        walk(3);
+    }
+
+    public void walk(int i){
+        System.out.printf("(i-1)>>> = %d\n", (i-1)>>>1);
+    }
+
+    @Test
     public void testAdd(){
         int a = 5;
         // 测试传递
