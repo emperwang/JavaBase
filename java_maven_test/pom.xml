@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Java-base-project</artifactId>
+        <groupId>com.wk.demo</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>java_maven_test</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.10</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- junit 5, unit test -->
+<!--        <dependency>-->
+<!--            <groupId>org.junit.jupiter</groupId>-->
+<!--            <artifactId>junit-jupiter-engine</artifactId>-->
+<!--            <version>5.3.1</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <!--测试报告生成-->
+        <!-- 依赖reportNg 关联testNg-->
+        <dependency>
+            <groupId>org.uncommons</groupId>
+            <artifactId>reportng</artifactId>
+            <version>1.1.4</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.testng</groupId>
+                    <artifactId>testng</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 依赖Guice -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <!--
+                    "**/Test*.java" - includes all of its subdirectories and all Java filenames that start with "Test".
+                    "**/*Test.java" - includes all of its subdirectories and all Java filenames that end with "Test".
+                    "**/*Tests.java" - includes all of its subdirectories and all Java filenames that end with "Tests".
+                    "**/*TestCase.java" - includes all of its subdirectories and all Java filenames that end with "TestCase".
+                -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <!--传递命令行参数-->
+                    <argLine>${argLine} -Dmaven.test.failure.ignore=true</argLine>
+                    <skipTests>false</skipTests>
+                    <skipAfterFailureCount>2</skipAfterFailureCount>
+                    <rerunFailingTestsCount>2</rerunFailingTestsCount>
+                    <!--简单理解 forkCount会fork 多个jvm进程-->
+                    <forkCount>2</forkCount>
+                    <reuseForks>false</reuseForks>
+                    <!--这是在jvm进程中 fork多个线程-->
+                    <threadCount>2</threadCount>
+                    <parallel>methods</parallel>
+                    <forkedProcessExitTimeoutInSeconds>10</forkedProcessExitTimeoutInSeconds>
+                    <reportsDirectory>target/surfire-report-${surefire.forkNumber}</reportsDirectory>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/res/test.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <includes>
+                        <!--<include>sample.java</include>-->
+                        <!--  使用正则匹配     -->
+                        <!--<include>%regex[.*(Cat|Dog).*], !%regex[pkg.*Slow.*.class], pkg/**/*Fast*.java, Basic????, !Unstable*</include>-->
+                    </includes>
+                    <excludes>
+                    </excludes>
+                <!--配置生成报告-->
+                    <systemPropertyVariables>
+                        <usedefaultlisteners>false</usedefaultlisteners>
+                        <listener>org.uncommons.reportng.HTMLReporter,org.uncommons.reportng.JUnitXMLReporter</listener>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <!--代码测试覆盖率-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!--attached to maven test phase-->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <!--指定方法覆盖率到 50%-->
+                                            <counter>METHOD</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.90</minimum>
+                                        </limit>
+                                        <limit>
+                                            <!--指定分支覆盖率 50%-->
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.50</minimum>
+                                        </limit>
+                                        <limit>
+                                            <!--指定类覆盖率100%,不能遗失类-->
+                                            <counter>CLASS</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <maximum>1</maximum>
+                                        </limit>
+                                        <!--<limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.60</minimum>
+                                        </limit>-->
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outputDirectory>target/jacoco-report</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
