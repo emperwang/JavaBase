@@ -29,4 +29,9 @@ public class NgTest {
     public void aSlowTest(){
         System.out.println("slow test");
     }
+
+    @Test
+    public void testMaxInt(){
+        System.out.printf("max int %d",Integer.MAX_VALUE);
+    }
 }
