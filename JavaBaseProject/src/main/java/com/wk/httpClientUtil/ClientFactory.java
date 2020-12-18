@@ -52,7 +52,17 @@ public class ClientFactory {
     public static final String KEY_TYPE_JKS = "JKS";
 
     private static boolean shutdown = false;
-
+    /*
+        连接池的使用
+     */
+    private static PoolingHttpClientConnectionManager pool = new PoolingHttpClientConnectionManager(60, TimeUnit.SECONDS);
+    public static CloseableHttpClient CLIENT;
+    static {
+        pool.setMaxTotal(20);//连接池的最大连接数
+        pool.setDefaultMaxPerRoute(200);//每个Rount(远程)请求最大的连接数。
+        pool.closeExpiredConnections();
+        pool.closeIdleConnections(60, TimeUnit.SECONDS);
+    }
     /**
      *  http请求客户端
      * @param
@@ -66,7 +76,7 @@ public class ClientFactory {
 
     public static CloseableHttpClient httpClientPooled(Integer connectTimeout,Integer socketTime){
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(connectTimeout).setSocketTimeout(socketTime).build();
-        PoolingHttpClientConnectionManager pool = new PoolingHttpClientConnectionManager();
+//        PoolingHttpClientConnectionManager pool = new PoolingHttpClientConnectionManager();
         // 此处解释下MaxtTotal和DefaultMaxPerRoute的区别：
         // 1、MaxtTotal是整个池子的大小；
         // 2、DefaultMaxPerRoute是根据连接到的主机对MaxTotal的一个细分；比如：
@@ -75,12 +85,19 @@ public class ClientFactory {
         // 而我连接到http://www.bac.com 和
         // http://www.ccd.com时，到每个主机的并发最多只有200；即加起来是400（但不能超过400）；所以起作用的设置是DefaultMaxPerRoute
         // 初始化httpClient
-        pool.setMaxTotal(20);
-        pool.setDefaultMaxPerRoute(20);
-        CloseableHttpClient client = HttpClients.custom().setConnectionManager(pool)
-                .setDefaultRequestConfig(requestConfig)
-                .build();
-        return client;
+//        pool.setMaxTotal(20);
+//        pool.setDefaultMaxPerRoute(20);
+//        CloseableHttpClient client = HttpClients.custom().setConnectionManager(pool)
+//                .setDefaultRequestConfig(requestConfig)
+//                .build();
+//        return client;
+        if (CLIENT == null){
+            CLIENT = HttpClients.custom().setConnectionManager(pool)
+                    .evictIdleConnections(10,TimeUnit.SECONDS)
+                    .evictExpiredConnections()
+                    .setDefaultRequestConfig(requestConfig).build();
+        }
+        return CLIENT;
     }
 
     /**
