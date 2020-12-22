@@ -214,11 +214,15 @@ public class EfmAgent extends EfmNode {
             LOGGER.log(Level.SEVERE, "Cannot retrieve host address for {0}", newMaster);
             return;
         }
+        // 先修改 recovery.conf 配置文件
         if (!reconfigureRecoveryConf(host))
             return;
         LOGGER.log(Level.INFO, "Restarting database. Will stop monitoring during restart");
         this.state = EfmNode.State.RECONFIGURING;
+        // 关闭监控
         stopMonitoring();
+        // 这里创建了 重启命令
+        // 在后面执行一次命令重启
         if (this.env.useDbService()) {
             restartCommand = this.env.getRootSudoCommand() + " " + this.env.getRootFunctionsScript() + " " + SudoFunctions.RESTART_DB_SERVICE.toString() + " " + this.env.getClusterName();
         } else {
@@ -248,6 +252,7 @@ public class EfmAgent extends EfmNode {
         }
         LOGGER.log(Level.INFO, "Resuming monitoring.");
         try {
+            // 启动监控
             resumeMonitoring();
         } catch (Exception e) {
             Notifications.RESTART_RESUME_TIMED_OUT.addSubjectParams(new String[] { this.env.getClusterName() }).send();

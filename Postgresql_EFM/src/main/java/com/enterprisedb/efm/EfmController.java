@@ -242,7 +242,7 @@ public class EfmController {
             return false;
         }
     }
-
+    // 切换master
     private boolean doPromote() {
         LogManager.getEfmLogger().setLevel(Level.OFF);
         if (!checkMembersAndPromoteStatus())
@@ -263,7 +263,9 @@ public class EfmController {
 
     private boolean reportStatus() {
         try {
+            // 解析返回值
             EfmStatus status = new EfmStatus(getAgentResponse(AdminServer.AdminCommand.STATUS, new String[0]));
+            // 打印结果
             status.print();
             boolean promoteStatus = reportPromoteStatus(status, null);
             return (status.isAllUp() && promoteStatus);
@@ -703,6 +705,7 @@ public class EfmController {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
         StringBuilder response = new StringBuilder();
         try {
+            // 发送命令
             out.println(ac.name());
             String fromServer = in.readLine();
             while (fromServer != null) {

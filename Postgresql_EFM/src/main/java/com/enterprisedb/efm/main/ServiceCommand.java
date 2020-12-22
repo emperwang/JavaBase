@@ -49,6 +49,7 @@ public final class ServiceCommand extends AbstractCommand {
                 System.err.println("Please make sure that you don't already have an agent running on this node for cluster '" + Environment.getEnvironment().getClusterName() + "'.  If not, please manually delete " + "the lock file and restart the agent.");
                 return;
             }
+            // 启动
             if (Environment.getEnvironment().isWitness()) {
                 (new EfmWitness()).run();
             } else {

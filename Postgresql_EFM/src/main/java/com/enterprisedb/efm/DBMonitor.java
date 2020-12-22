@@ -257,13 +257,16 @@ public class DBMonitor {
         PreparedStatement preparedStatement = null;
         long timeA = System.currentTimeMillis();
         try {
+            // 创建数据库连接
             conn = DriverManager.getConnection(this.connectionUrl, this.jdbcProps);
             if (LOGGER.isLoggable(Level.FINEST))
                 LOGGER.log(Level.FINEST, "Acquired connection after {0} ms", Long.valueOf(System.currentTimeMillis() - timeA));
             long timeB = System.currentTimeMillis();
+            // 创建statement
             preparedStatement = conn.prepareStatement("select version();");
             if (LOGGER.isLoggable(Level.FINEST))
                 LOGGER.log(Level.FINEST, "Prepared statement after {0} ms", Long.valueOf(System.currentTimeMillis() - timeB));
+            // 执行statement
             return checkDB(preparedStatement);
         } catch (SQLException sqle) {
             String sqlState = sqle.getSQLState();

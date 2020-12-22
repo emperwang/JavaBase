@@ -693,6 +693,7 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
             LOGGER.finest("checkClusterStatus before lock");
             synchronized (this.clusterStateLock) {
                 LOGGER.finest("checkClusterStatus has lock");
+                // 执行命令
                 return ClusterUtils.sendStatusRequestToNodes(this.dispatcher, this.clusterState).marshal();
             }
         } catch (Exception e) {
@@ -900,7 +901,9 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
             System.err.println("Could not reach the address " + this.env.getPingServer() + ". Please check the value of your " + EfmProps.EFM_PING_SERVER.getPropName() + " property.");
             return false;
         }
+        // server端
         this.adminServer = AdminServer.getAdminServer();
+        // server端启动
         if (!this.adminServer.start(this)) {
             System.err.println("Error starting admin server. See log for details: " + this.env.getLogFileLocation());
             return false;
@@ -921,9 +924,13 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
             return false;
         }
         LOGGER.info("Starting");
+        // 创建channel
         this.channel = this.env.createJChannel(this);
+        // 设置接收者
         this.channel.setReceiver((Receiver)this);
+        // 创建发送者
         this.dispatcher = new MessageDispatcher((Channel)this.channel, (MessageListener)this, (MembershipListener)this, this);
+        // 连接集群
         this.channel.connect(this.env.getClusterName(), null, 10000L);
         if (isCoordinator()) {
             Address me = this.channel.getAddress();
@@ -1279,6 +1286,7 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
     private void checkNewDBPing(String host) {
         try {
             DBMonitor monitor = DBUtils.createMonitor(host);
+            // pingdb,即执行一次 select version()
             if (!monitor.checkOnce(true, true)) {
                 LOGGER.log(Level.SEVERE, "Unable to ping database of new or resumed node at {0}. Failover may not function properly until this is fixed.", host);
                 Notifications.PING_NEW_DB_FAIL.addSubjectParams(new String[] { this.env.getClusterName() }).addBodyParams(new String[] { host }).send();
@@ -1566,6 +1574,7 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
             }
         }
         try {
+            // ping所有的db
             couldNotConnect = DBUtils.checkConnections(dbs);
         } catch (PasswordDecryptException e) {
             System.err.println("Unexpected exception trying to verify database connections: " + e.toString());
