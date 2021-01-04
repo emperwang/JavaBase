@@ -10,7 +10,14 @@
     <sql id="baseSql">
         id,name,age
     </sql>
-
+    <select id="getUserBatch" resultMap="baseResult">
+        select <include refid="baseSql"/> from users where (id,name) in
+        <foreach collection="list" item="itm" open="(" close=")" separator=",">
+            (#{itm.id},#{itm.name})
+        </foreach>
+        and age &gt;= #{sage}
+        and age &lt;= #{eage}
+    </select>
     <select id="getAll" resultMap="baseResult">
         SELECT <include refid="baseSql"/> FROM users;
     </select>

@@ -120,6 +120,18 @@ public class PostgresqlMain {
         });
     }
 
+    public static void getUserWithForeachAndEventTime(){
+        final SqlSession sqlSession = sessionFactory.openSession();
+        final UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        final User u1 = new User().setId(1).setName("ch-0");
+        final User u2 = new User().setId(2).setName("ch-1");
+        final User u3 = new User().setId(3).setName("ch-2");
+        final User u4 = new User().setId(4).setName("ch-3");
+        final List<User> users = Arrays.asList(u1, u2, u3, u4);
+        final List<User> userBatch = mapper.getUserBatch(users, 100, 1000);
+        System.out.println(userBatch);
+    }
+
     public static void main(String[] args) {
 //        selectAll();
 //        getAllId();
@@ -127,6 +139,7 @@ public class PostgresqlMain {
 //        batchInsert();
 //        updates2();
 //        getSeq();
-        getSeq2();
+//        getSeq2();
+        getUserWithForeachAndEventTime();
     }
 }

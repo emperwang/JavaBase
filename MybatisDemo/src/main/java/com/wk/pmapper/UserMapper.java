@@ -1,6 +1,7 @@
 package com.wk.pmapper;
 
 import com.wk.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface UserMapper {
     int batchInsert(List<User> list);
 
     int getSeq();
+
+    List<User> getUserBatch(@Param("list") List<User> list, @Param("sage") int sage, @Param("eage") int eage);
 }
