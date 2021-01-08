@@ -39,19 +39,40 @@ public class Solution_strStr {
         if (needle.length() > haystack.length()){
             return -1;
         }
-        for (int i=0; i<haystack.length();i++){
+        int L = haystack.length();
+        int N = needle.length();
+        /*
+         总共需要遍历 L-N 次
+         nidx表示遍历到 needle的位置,i表示遍历haystack的位置
+         current表示最大的相同的字符串的长度
+         最坏时间: O((L-N)*N)
+         */
+        for (int i=0; i<(L-N+1); i++){
             if (needle.charAt(0) == haystack.charAt(i)){
-                int j = 0,k=i;
-                while ( j<=(needle.length()-1) && k < haystack.length()){
-                    if (needle.charAt(j++) != haystack.charAt(k++)){
-                        break;
-                    }
-                    if (j > (needle.length()-1)){
-                        return i;
-                    }
+                int nidx = 0,current=0;
+                while (nidx < N && i<L && needle.charAt(nidx++) == haystack.charAt(i++)){
+                    current++;
                 }
+                if (current == N){
+                    return i-current;
+                }
+                i = i-nidx;
             }
         }
+//        for (int i=0; i<haystack.length();i++){
+//            if (needle.charAt(0) == haystack.charAt(i)){
+//                int j = 0,k=i;
+//                while ( j<=(needle.length()-1) && k < haystack.length()){
+//                    if (needle.charAt(j++) != haystack.charAt(k++)){
+//                        break;
+//                    }
+//                    if (j > (needle.length()-1)){
+//                        return i;
+//                    }
+//                }
+//            }
+//        }
+
         return -1;
     }
 
@@ -89,6 +110,10 @@ public class Solution_strStr {
 
     public static void main(String[] args) {
         final Solution_strStr solutionStrStr = new Solution_strStr();
+        final int idx2 = solutionStrStr.strStr("mississippi", "pi");
+        System.out.println(idx2);
+        final int idx1 = solutionStrStr.strStr("mississippi", "issip");
+        System.out.println(idx1);
         final int idx0 = solutionStrStr.strStr1("mississippi", "issip");
         System.out.println(idx0);
 //        final int idx = solutionStrStr.strStr("hello", "ll");
