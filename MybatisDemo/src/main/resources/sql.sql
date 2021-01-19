@@ -1,8 +1,9 @@
-drop table if exists user;
-create table "user"(
+drop table if exists users;
+create table "users"(
     id serial,
     name varchar(255),
     age int4,
+    logdata timestamp default now(),
     primary key(id)
 );
 

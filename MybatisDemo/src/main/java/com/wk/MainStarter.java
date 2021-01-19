@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -159,15 +161,17 @@ public class MainStarter {
         sqlSession.close();
     }
 
-    public static void insertBatch(){
+    public static void insertBatch() throws ParseException {
         SqlSession sqlSession = sessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         List<User> lists = new ArrayList<>();
         for (int i=0;i<10;i++){
             User user = new User();
             user.setAge(155);
             user.setName("洪七公 :"+i+"  徒弟");
             user.setAddress("叫花鸡");
+            user.setLogdata(dateFormat.parse("2021-01-19 10:02:00"));
             lists.add(user);
         }
         userMapper.batchInsert(lists);

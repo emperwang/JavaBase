@@ -5,10 +5,11 @@
         <id property="id" column="id" jdbcType="INTEGER"></id>
         <result property="name" column="name" jdbcType="VARCHAR"></result>
         <result property="age" column="age" jdbcType="INTEGER"></result>
+        <result property="logdata" column="logdata" jdbcType="TIMESTAMP"></result>
     </resultMap>
 
     <sql id="baseSql">
-        id,name,age
+        id,name,age,logdata
     </sql>
     <select id="getUserBatch" resultMap="baseResult">
         select <include refid="baseSql"/> from users where (id,name) in
@@ -30,10 +31,11 @@
         SELECT id from users;
     </select>
 
+
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="id">
-        insert into users(id,name, age) values
+        insert into users(id,name, age,logdata) values
         <foreach collection="list" item="itm" separator="," close=";">
-            (nextval('user_id_seq'::regclass),#{itm.name}, #{itm.age})
+            (nextval('users_id_seq'::regclass),#{itm.name}, #{itm.age},date_trunc('seconds', #{itm.logdata}::timestamp ))
         </foreach>
     </insert>
 

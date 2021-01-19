@@ -13,7 +13,10 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,18 +77,22 @@ public class PostgresqlMain {
         sqlSession.close();
     }
 
-    public static void batchInsert(){
+    public static void batchInsert() throws ParseException {
         SqlSession sqlSession = sessionFactory.openSession();
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         final User user = new User();
         user.setName("k1");
         user.setAge(20);
+        user.setLogdata(dateFormat.parse("2021-01-19 10:02:00"));
         final User user1 = new User();
         user1.setName("k2");
         user1.setAge(20);
+        user1.setLogdata(new Date());
         final User user2 = new User();
         user2.setName("k3");
         user2.setAge(20);
+        user2.setLogdata(new Date());
         final List<User> users = Arrays.asList(user, user1, user2);
         mapper.batchInsert(users);
         System.out.println("batch insert");
@@ -132,14 +139,14 @@ public class PostgresqlMain {
         System.out.println(userBatch);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
 //        selectAll();
 //        getAllId();
 //            updates();
-//        batchInsert();
+        batchInsert();
 //        updates2();
 //        getSeq();
 //        getSeq2();
-        getUserWithForeachAndEventTime();
+//        getUserWithForeachAndEventTime();
     }
 }
