@@ -34,6 +34,7 @@ public class Solution_summaryRanges {
     [6,6] --> "6"
     [8,9] --> "8->9"
      */
+    // 有瑕疵
     public List<String> summaryRanges(int[] nums) {
         List<String> lists = new ArrayList<>();
         if (nums == null || nums.length<=0) return lists;
@@ -49,14 +50,54 @@ public class Solution_summaryRanges {
                 pre = nums[i];
                 continue;
             }
-
+            lists.add(start==pre ? (pre+""):(start+"->"+pre));
+            start = pre = nums[i];
+            if (i == nums.length-1) lists.add(nums[i]+"");
         }
         return lists;
     }
 
+    public List<String> summaryRanges2(int[] nums) {
+        int i = 0,len = nums.length;
+        List<String> lists = new ArrayList<>();
+        while (i < len){
+            int low = i;
+            i++;
+            while (i < len && nums[i] == nums[i-1]+1){
+                i++;
+            }
+            int high = i-1;
+            final StringBuilder builder = new StringBuilder(Integer.toString(nums[low]));
+            if (low < high){
+                builder.append("->");
+                builder.append(Integer.toString(nums[high]));
+            }
+            lists.add(builder.toString());
+        }
+        return lists;
+    }
+    public List<String> summaryRanges3(int[] nums) {
+        List<String> lists = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for (int i=0,j=i+1; j<nums.length;i++,j++){
+            if (nums[j] - 1 > nums[i]){
+                sb.append(nums[i]);
+                lists.add(sb.toString());
+                sb = new StringBuilder();
+            }else{
+                if (sb.length()==0){
+                    sb.append(nums[i]);
+                    sb.append("->");
+                }
+            }
+        }
+        lists.add(nums[nums.length-1]+"");
+        return lists;
+    }
 
     public static void main(String[] args) {
         final Solution_summaryRanges solutionSummaryRanges = new Solution_summaryRanges();
-        System.out.println(solutionSummaryRanges.summaryRanges(new int[]{0,1,2,4,5,7}));
+        System.out.println(solutionSummaryRanges.summaryRanges3(new int[]{0,1,2,4,5,7}));
+        System.out.println(solutionSummaryRanges.summaryRanges3(new int[]{0,2,3,4,6,8,9}));
     }
 }
