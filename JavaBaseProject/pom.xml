@@ -43,9 +43,26 @@
         <common-pool2-version>2.6.2</common-pool2-version>
         <curator.version>2.12.0</curator.version>
         <collection-version>3.2.2</collection-version>
+        <quartz-version>2.3.0</quartz-version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz-version}</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>c3p0</artifactId>
+                    <groupId>com.mchange</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>HikariCP-java6</artifactId>
+                    <groupId>com.zaxxer</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>com.betfair.net.java.opendmk</groupId>
             <artifactId>core</artifactId>
