@@ -23,6 +23,13 @@
         SELECT <include refid="baseSql"/> FROM users;
     </select>
 
+<!--    <select id="getAll" resultMap="baseResult">-->
+<!--        SELECT <include refid="baseSql"/> FROM user where id in-->
+<!--        <foreach collection="list" open="(" close=")" separator="," item="itm">-->
+<!--            #{itm}-->
+<!--        </foreach>-->
+<!--    </select>-->
+
     <select id="getSeq" resultType="java.lang.Integer" useCache="false">
         select nextval('user_id_seq'::regclass)
     </select>

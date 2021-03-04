@@ -39,6 +39,16 @@ public class PostgresqlMain {
         sqlSession.close();
     }
 
+    // 测试方法重载
+    // 结论: 不支持方法的重载
+//    public static void selectAlls(){
+//        SqlSession sqlSession = sessionFactory.openSession();
+//        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+//        List<User> users = mapper.getAll(Arrays.asList(1,2,3));
+//        log.info(users.toString());
+//        sqlSession.close();
+//    }
+
     public static void getAllId(){
         SqlSession sqlSession = sessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
@@ -140,10 +150,11 @@ public class PostgresqlMain {
     }
 
     public static void main(String[] args) throws ParseException {
-//        selectAll();
+       // selectAlls();
+        selectAll();
 //        getAllId();
 //            updates();
-        batchInsert();
+//        batchInsert();
 //        updates2();
 //        getSeq();
 //        getSeq2();

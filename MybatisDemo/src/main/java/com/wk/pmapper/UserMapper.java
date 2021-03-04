@@ -15,6 +15,11 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> getAll();
+    /**
+     * 注意: mapper接口不支持  方法的重载
+     */
+    // 查看是否支持接口重载
+    //List<User> getAll(List<Integer> list);
 
     List<Integer> getAllId();
 
