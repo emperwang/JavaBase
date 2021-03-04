@@ -41,7 +41,7 @@ public class Solution_kthLargest {
     输出: 4
      */
     // 中序遍历 数据就有序了  之后从得到的数据中获取 倒数大的值
-    //
+    // 后续遍历 就可以得到 从大到小的排序, 就可以直接获取第k个就可以
     public int kthLargest(TreeNode root, int k) {
         List<Integer> vals = new ArrayList<>();
         inorder(root, vals);
@@ -54,6 +54,23 @@ public class Solution_kthLargest {
         values.add(root.val);
         inorder(root.right,values);
     }
+
+    // 这里采用后续遍历,记录遍历的个数, 达到个数后直接返回
+    private int k, res;
+    public int kthLargest2(TreeNode root, int k) {
+        this.k = k;
+        dfs(root);
+        return res;
+    }
+    // 后续遍历节点
+    public void dfs(TreeNode node){
+        if (node == null) return;
+        dfs(node.right);
+        if (k == 0) return;
+        if (--k == 0) res = node.val;
+        dfs(node.left);
+    }
+
 
     public static void main(String[] args) {
 
