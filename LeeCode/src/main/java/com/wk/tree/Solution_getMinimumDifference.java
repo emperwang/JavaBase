@@ -12,7 +12,6 @@ public class Solution_getMinimumDifference {
         TreeNode right;
         TreeNode(int x) { val = x; }
     }
-}
 
     /*
     530. 二叉搜索树的最小绝对差
