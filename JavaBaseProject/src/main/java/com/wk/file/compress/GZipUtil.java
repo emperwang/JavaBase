@@ -1,9 +1,13 @@
 package com.wk.file.compress;
 
+import com.wk.time.DateTimeFormatterDemo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -98,7 +102,7 @@ public class GZipUtil {
     private void compress(InputStream inputStream, OutputStream outputStream) throws IOException {
         GZIPOutputStream gzos = new GZIPOutputStream(outputStream);
         int len = 0;
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[1024*1024*2];
         while ((len = inputStream.read(buf)) != -1){
             gzos.write(buf,0,len);
         }
@@ -194,7 +198,7 @@ public class GZipUtil {
     private void deCompress(InputStream inputStream,OutputStream outputStream) throws IOException {
         GZIPInputStream gzis = new GZIPInputStream(inputStream);
         int len = 0;
-        byte[] buf = new byte[1024];
+        byte[] buf = new byte[1024*1024*2];
         while ((len = gzis.read(buf)) != -1){
             outputStream.write(buf,0,len);
         }
@@ -210,10 +214,45 @@ public class GZipUtil {
             throw new RuntimeException("filePath must be set");
         }
     }
+    public void testDecompressPerformance() throws IOException {
+        String file="C:\\work\\PM_PIM_NFV-RP-HZZZ-01A-PIM-ER-01_PORT_V2.2.0_20210310T131500_15.json.gz";
+        String destpath="C:\\work";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        logger.info("start:{}", formatter.format(LocalDateTime.now()));
+        deCompress(file, false, destpath);
+        logger.info("end:{}", formatter.format(LocalDateTime.now()));
+    }
+
+    public void testCompressPerformance() throws IOException {
+        String file="C:\\work\\PM_PIM_NFV-RP-HZZZ-01A-PIM-ER-01_PORT_V2.2.0_20210310T131500_15.json";
+        String destpath="C:\\work";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        logger.info("start:{}", formatter.format(LocalDateTime.now()));
+        compress(file, destpath, false);
+        logger.info("end:{}", formatter.format(LocalDateTime.now()));
+    }
 
     public static void main(String[] args) throws IOException {
         GZipUtil gZipUtil = new GZipUtil();
+        /*
+         byte[] buf = new byte[1024];
+         压缩文件1.5M,解压后 98M, buf=1024  time: 2s
 
+         byte[] buf = new byte[1024*1024]; 1M
+        压缩文件1.5M,解压后 98M, buf=1024  time: 537ms
+
+        1024*1024*2     322ms
+         */
+        //gZipUtil.testDecompressPerformance();
+
+        /*
+        压缩性能:
+         byte[] buf = new byte[1024];
+         压缩文件1.5M,解压后 98M, buf=1024  time: 2s
+                                  buf=1M    time: 310ms
+                                  buf=2M   time: 491ms
+         */
+        gZipUtil.testCompressPerformance();
         // 压缩文件
         //gZipUtil.compress(To_Compress_File,true);
         //gZipUtil.compress(To_Compress_File,Dest_Path,true);
