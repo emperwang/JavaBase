@@ -73,5 +73,6 @@
         <module>TwoDimCode</module>
         <module>Postgresql_EFM</module>
         <module>java_maven_test</module>
+        <module>java_JettyExample</module>
     </modules>
 </project>
