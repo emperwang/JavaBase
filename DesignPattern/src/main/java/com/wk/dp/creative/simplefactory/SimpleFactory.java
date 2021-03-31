@@ -6,4 +6,8 @@ package com.wk.dp.creative.simplefactory;
  * @Description
  */
 public class SimpleFactory {
+    // 简单工厂类, 用于创建 redCar
+    public RedCar buildCar(){
+        return new RedCar();
+    }
 }
