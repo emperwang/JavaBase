@@ -2101,7 +2101,7 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
                 EfmNode.LOGGER.fine("all threads done. decrementing main latch");
                 mainLatch.countDown();
             }
-        }"ping_monitor"));
+        },"ping_monitor"));
         if (retVal.size() != pingThreads + 1)
             throw new AssertionError("Wrong number of threads created for pinging target.");
         return retVal;
