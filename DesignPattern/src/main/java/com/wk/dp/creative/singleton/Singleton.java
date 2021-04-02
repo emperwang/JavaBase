@@ -27,7 +27,7 @@ public class Singleton {
     }
     // 双重判定锁
     static class RedCar3{
-        private static RedCar3 car = null;
+        private static volatile RedCar3 car = null;
         private RedCar3(){}
         public static RedCar3 getCar(){
             if (car == null){
