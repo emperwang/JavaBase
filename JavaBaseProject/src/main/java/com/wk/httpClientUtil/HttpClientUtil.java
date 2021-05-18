@@ -56,7 +56,7 @@ public class HttpClientUtil {
             response = (CloseableHttpResponse) httpConfig.getClient().execute(getMethod);
             statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != null) {
-                if (200 != statusCode && 201 != statusCode) {
+                if (200 == statusCode || 201 == statusCode) {
                     entityString = convertResponseToString(response);
                 }
             }
@@ -119,7 +119,7 @@ public class HttpClientUtil {
             configParamEntity(request,httpConfig);
             response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
             statusCode = response.getStatusLine().getStatusCode();
-            if (200 != statusCode && 201 != statusCode) {
+            if (200 == statusCode || 201 == statusCode) {
                 entityString = convertResponseToString(response);
             }
             result.put("code",statusCode.toString());
@@ -180,7 +180,7 @@ public class HttpClientUtil {
             configRequest(request,httpConfig);
             response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
             statusCode = response.getStatusLine().getStatusCode();
-            if (200 != statusCode && 201 != statusCode) {
+            if (200 == statusCode || 201 == statusCode) {
                 entityString = convertResponseToString(response);
             }
             result.put("code",statusCode.toString());
@@ -218,7 +218,7 @@ public class HttpClientUtil {
             configParamEntity(request,httpConfig);
             response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
             statusCode = response.getStatusLine().getStatusCode();
-            if (200 != statusCode && 201 != statusCode) {
+            if (200 == statusCode || 201 == statusCode) {
                 entityString = convertResponseToString(response);
             }
             result.put("code",statusCode.toString());
@@ -249,7 +249,7 @@ public class HttpClientUtil {
      * @return
      */
     private static String convertResponseToString(HttpResponse response) throws IOException {
-        return  EntityUtils.toString(response.getEntity());
+        return  EntityUtils.toString(response.getEntity(),"UTF-8");
     }
 
     /**
@@ -295,7 +295,7 @@ public class HttpClientUtil {
             response = (CloseableHttpResponse) httpConfig.getClient().execute(request);
             statusCode = response.getStatusLine().getStatusCode();
             logger.info("httpPutMethodWithStatusCode statusCode is {}",statusCode);
-            if (200 != statusCode && 201 != statusCode) {
+            if (200 == statusCode || 201 == statusCode) {
                 entityString = convertResponseToString(response);
             }
             result.put("code",statusCode.toString());
