@@ -76,5 +76,7 @@
         <module>java_JettyExample</module>
         <module>DesignPattern</module>
         <module>java_testNG</module>
+        <module>java_RxJava</module>
+        <module>java_maven_mock_test</module>
     </modules>
 </project>
