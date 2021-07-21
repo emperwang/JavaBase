@@ -78,5 +78,7 @@
         <module>java_testNG</module>
         <module>java_RxJava</module>
         <module>java_maven_mock_test</module>
+        <module>java_yaml</module>
+        <module>java_byteBuddy</module>
     </modules>
 </project>
