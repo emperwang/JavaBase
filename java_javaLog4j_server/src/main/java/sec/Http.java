@@ -9,6 +9,8 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -81,6 +83,10 @@ public class Http {
 
             classWriter.visitEnd();
             byte[] data = classWriter.toByteArray();
+            File file = new File("badClassName.class");
+            FileOutputStream outputStream = new FileOutputStream(file);
+            System.out.println(file.getAbsolutePath());
+            outputStream.write(data);
             exchange.sendResponseHeaders(200, 0);
             OutputStream os = exchange.getResponseBody();
             os.write(data);
