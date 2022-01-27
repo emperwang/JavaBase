@@ -82,5 +82,6 @@
         <module>java_byteBuddy</module>
         <module>java_javaLog4j_client</module>
         <module>java_javaLog4j_server</module>
+        <module>Java_mail</module>
     </modules>
 </project>
