@@ -20,6 +20,8 @@ public class Main {
         String property = System.getProperty("java.rmi.server.useCodebaseOnly");
         System.out.println(property);
 
+        // com.sun.jndi.rmi.object.trustURLCodebase
+        // com.sun.jndi.cosnaming.object.trustURLCodebase
         // com.sun.jndi.ldap.object.trustURLCodebase=false 不执行远程代码
         String property1 = System.getProperty("com.sun.jndi.ldap.object.trustURLCodebase");
         System.out.println(property1);
