@@ -1,6 +1,10 @@
 package com.wk.recv;
 
+import com.wk.forward.QQForward;
+
 import javax.mail.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 
@@ -14,7 +18,9 @@ public class QQReceiver {
 
     private Session session;
 
-    public QQReceiver() throws GeneralSecurityException {
+    public QQReceiver() throws GeneralSecurityException, IOException {
+        InputStream stream = QQForward.class.getResourceAsStream("/res.properties");
+        prop.load(stream);
         /*
         DEBUG POP3: mail.pop3.rsetbeforequit: false
         DEBUG POP3: mail.pop3.disabletop: false
@@ -36,7 +42,7 @@ public class QQReceiver {
         Authenticator authenticator =  new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("544094478@qq.com", "edsxumdajjbkbdhh");
+                return new PasswordAuthentication("544094478@qq.com", prop.getProperty("code"));
             }
         };
 
@@ -48,15 +54,18 @@ public class QQReceiver {
         return session;
     }
 
+    public Properties getProp() {
+        return prop;
+    }
 
-    public static void main(String[] args) throws GeneralSecurityException, MessagingException {
+    public static void main(String[] args) throws GeneralSecurityException, MessagingException, IOException {
         QQReceiver receiver = new QQReceiver();
         Session session = receiver.getSession();
-
+        Properties prop = receiver.getProp();
         // 1. get store object
         Store store = session.getStore();
         // 2. connect server
-        store.connect("544094478@qq.com","edsxumdajjbkbdhh");
+        store.connect("544094478@qq.com",prop.getProperty("code"));
 
         // 3. 获得邮箱内的邮件夹
         Folder defaultFolder = store.getFolder("inbox");

@@ -1,9 +1,12 @@
 package com.wk.send;
 
 import com.sun.mail.util.MailSSLSocketFactory;
+import com.wk.forward.QQForward;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 
@@ -17,7 +20,9 @@ public class QQSender {
 
     private Session session;
 
-    public QQSender() throws GeneralSecurityException {
+    public QQSender() throws GeneralSecurityException, IOException {
+        InputStream stream = QQForward.class.getResourceAsStream("/res.properties");
+        prop.load(stream);
         MailSSLSocketFactory sf = new MailSSLSocketFactory();
         sf.setTrustAllHosts(true);
         prop.setProperty("mail.smtp.user","544094478@qq.com");
@@ -31,7 +36,7 @@ public class QQSender {
         session = Session.getDefaultInstance(prop, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("544094478@qq.com", "edsxumdajjbkbdhh");
+                return new PasswordAuthentication("544094478@qq.com", prop.getProperty("code"));
             }
         });
         session.setDebug(true);
@@ -41,14 +46,13 @@ public class QQSender {
         return session;
     }
 
-    public static void main(String[] args) throws GeneralSecurityException, MessagingException {
+    public static void main(String[] args) throws GeneralSecurityException, MessagingException, IOException {
         String user = "544094478@qq.com";
         QQSender QQSender = new QQSender();
         Session session = QQSender.getSession();
         Transport transport = session.getTransport();
         //连接服务器
         transport.connect();
-        //transport.connect("smtp.qq.com","544094478@qq.com","edsxumdajjbkbdhh");
 
         // 创建邮件对象
         MimeMessage message = new MimeMessage(session);

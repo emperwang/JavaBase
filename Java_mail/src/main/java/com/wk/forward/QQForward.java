@@ -7,6 +7,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 
@@ -23,11 +25,16 @@ public class QQForward {
 
     private String MailFrom = "544094478@qq.com";
 
-    public QQForward() throws GeneralSecurityException {
+    private String code = "";
+
+    public QQForward() throws GeneralSecurityException, IOException {
+        InputStream stream = QQForward.class.getResourceAsStream("/res.properties");
+        prop.load(stream);
+        code = prop.getProperty("code");
         Authenticator authenticator =  new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(MailFrom, "edsxumdajjbkbdhh");
+                return new PasswordAuthentication(MailFrom, code);
             }
         };
         // transport
@@ -58,7 +65,7 @@ public class QQForward {
         // 1. get store object
         Store store = session.getStore();
         // 2. connect server
-        store.connect("544094478@qq.com","edsxumdajjbkbdhh");
+        store.connect("544094478@qq.com",code);
 
         // 3. 获得邮箱内的邮件夹
         Folder defaultFolder = store.getFolder("inbox");
@@ -100,7 +107,7 @@ public class QQForward {
         forward.saveChanges();
 
         Transport transport = session.getTransport("smtp");
-        transport.connect("544094478@qq.com","edsxumdajjbkbdhh");
+        transport.connect("544094478@qq.com",code);
         transport.sendMessage(forward, forward.getAllRecipients());
 
 
@@ -111,7 +118,7 @@ public class QQForward {
         System.out.println("message forward successfully..");
     }
 
-    public static void main(String[] args) throws GeneralSecurityException, MessagingException {
+    public static void main(String[] args) throws GeneralSecurityException, MessagingException, IOException {
         QQForward qqForward = new QQForward();
         qqForward.forwardFirstMessage();
     }
