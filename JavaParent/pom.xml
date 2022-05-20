@@ -22,7 +22,7 @@
         <hadoop.version>2.7.4</hadoop.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <guave.version>14.0.1</guave.version>
-        <gson.version>2.5</gson.version>
+        <gson.version>2.8.9</gson.version>
         <kafka.version>0.10.0.1</kafka.version>
     </properties>
 
