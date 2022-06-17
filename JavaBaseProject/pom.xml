@@ -24,7 +24,7 @@
         <cglib.version>3.2.4</cglib.version>
         <spring.version>4.3.0.RELEASE</spring.version>
         <logback.version>1.2.3</logback.version>
-        <fastjson.version>1.2.47</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <jsch.version>0.1.54</jsch.version>
         <commons-io.version>2.4</commons-io.version>
         <netty.version>4.1.32.Final</netty.version>
