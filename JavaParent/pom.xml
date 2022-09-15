@@ -19,7 +19,7 @@
     <properties>
         <lombok.version>1.18.0</lombok.version>
         <sl4j.version>1.7.21</sl4j.version>
-        <hadoop.version>2.7.4</hadoop.version>
+        <hadoop.version>3.2.3</hadoop.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <guave.version>14.0.1</guave.version>
         <gson.version>2.5</gson.version>
