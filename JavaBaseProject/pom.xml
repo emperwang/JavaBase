@@ -29,7 +29,7 @@
         <commons-io.version>2.4</commons-io.version>
         <netty.version>4.1.32.Final</netty.version>
         <ant.version>1.9.4</ant.version>
-        <commons-compress.version>1.18</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <javassist-version>3.22.0-GA</javassist-version>
         <rxjava-version>2.2.10</rxjava-version>
