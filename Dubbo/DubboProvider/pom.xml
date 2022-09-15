@@ -22,7 +22,7 @@
     <dependency>
       <groupId>com.alibaba</groupId>
       <artifactId>dubbo</artifactId>
-      <version>2.6.2</version>
+      <version>2.6.12</version>
     </dependency>
     <!--2.5版本前的dubbo依赖于zkclient,2.6版本后依赖于curator框架操作zookeeper-->
     <dependency>
