@@ -83,5 +83,9 @@
         <module>java_javaLog4j_client</module>
         <module>java_javaLog4j_server</module>
         <module>Java_mail</module>
+        <module>Java_log4j_demo</module>
+        <module>java_logback_demo</module>
+        <module>java_log4j2_demo</module>
+        <module>java_JUC_demo</module>
     </modules>
 </project>
