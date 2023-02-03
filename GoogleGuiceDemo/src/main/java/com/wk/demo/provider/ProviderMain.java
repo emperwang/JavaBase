@@ -16,13 +16,13 @@ public class ProviderMain {
     }
 
     public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new Module() {
+        /*Injector injector = Guice.createInjector(new Module() {
             @Override
             public void configure(Binder binder) {
 
             }
-        });
-
+        });*/
+        Injector injector = Guice.createInjector(new SimpleFactory());
         ProviderMain instance = injector.getInstance(ProviderMain.class);
         instance.testSingleton();
     }
