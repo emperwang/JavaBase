@@ -1,6 +1,7 @@
 package com.wk.demo.namedInject;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 import com.google.inject.name.Names;
 
 //module类  创建类之间的依赖关系
@@ -11,7 +12,7 @@ public class SimpleModule extends AbstractModule{
      */
     @Override
     protected void configure() {
-        bind(IPrinter.class).annotatedWith(Names.named("simple")).to(SimplePrint.class);
+        bind(IPrinter.class).annotatedWith(Names.named("simple")).to(SimplePrint.class).in(Scopes.SINGLETON);
         bind(IPrinter.class).annotatedWith(Names.named("complex")).to(ComplexPrinter.class);
     }
 }

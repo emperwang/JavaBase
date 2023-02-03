@@ -7,7 +7,7 @@ public class ThreadScopeDemo {
     static class ThreadServiceScope implements Scope{
         static ThreadLocal<Object> threadLocal = new ThreadLocal<>();
         @Override
-        public <T> Provider<T> scope(Key<T> key, Provider<T> unscoped) {
+        public <T> Provider<T> scope(Key<T> key, final Provider<T> unscoped) {
             return new Provider<T>() {
                 @Override
                 public T get() {
@@ -28,7 +28,7 @@ public class ThreadScopeDemo {
     }
 
     public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new Module() {
+        final Injector injector = Guice.createInjector(new Module() {
             @Override
             public void configure(Binder binder) {
                 binder.bind(Service.class).to(WwwService.class).in(new ThreadServiceScope());

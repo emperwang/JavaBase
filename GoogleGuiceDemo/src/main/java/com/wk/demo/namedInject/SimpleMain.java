@@ -17,6 +17,8 @@ public class SimpleMain {
     private IPrinter complexPrinter;
 
     public void hello(){
+        System.out.println("simple: " + simplePrinter.hashCode());
+        System.out.println("complex: " + complexPrinter.hashCode());
         simplePrinter.print();
         complexPrinter.print();
     }
@@ -25,6 +27,11 @@ public class SimpleMain {
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(new SimpleModule());
         SimpleMain instance = injector.getInstance(SimpleMain.class);
+
+        SimpleMain instance1 = injector.getInstance(SimpleMain.class);
+        System.out.println(instance.hashCode());
+        System.out.println(instance1.hashCode());
         instance.hello();
+        instance1.hello();
     }
 }
