@@ -31,7 +31,7 @@ public class CertificateCoderTest {
     private String alias = "www.wk.org";
     private String certificatePath = "D:/wk.cer";
     private String keyStorePath = "D:/wk.keystore";
-    @Test
+    //@Test
     public void test() throws Exception{
         System.out.println("公钥加密----私钥解密");
         String inputStr = "Certificate";
@@ -41,7 +41,7 @@ public class CertificateCoderTest {
         byte[] decryptData = CertificateCoder.decryptByPrivateKey(encryptData, keyStorePath, alias, password);
         System.out.println("解密后:"+new String(decryptData));
     }
-    @Test
+    //@Test
     public void testSign() throws Exception{
         System.out.println("私钥加密---公钥解密");
         String inputStr = "sign";

@@ -15,7 +15,7 @@
         <dependency>
             <groupId>QRCode</groupId>
             <artifactId>QRCode</artifactId>
-            <version>1.0.0</version>
+            <version>3.0</version>
         </dependency>
         <!--  other tool  -->
         <dependency>

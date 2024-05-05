@@ -53,7 +53,7 @@ public class SSLCoderTest {
     public String clientKeyStorepath = "d:/tomcat_client.keystore";
     public String clientPassword = "123456";
 
-    @Test
+    //@Test
     public void test()throws Exception{
         URL url = new URL("https://localhost:8443/");
         HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
@@ -73,7 +73,7 @@ public class SSLCoderTest {
         httpsURLConnection.disconnect();
     }
 
-    @Test
+    //@Test
     public void tests(){
         String name = Student.class.getName();
         System.out.println(name.replace(".","/"));

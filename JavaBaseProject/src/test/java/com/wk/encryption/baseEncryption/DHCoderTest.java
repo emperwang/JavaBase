@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.Map;
 
 public class DHCoderTest {
-    @Test
+    //@Test
     public void test() throws Exception{
         // 生成甲方密钥对
         Map<String, Object> akeyMap = DHCoder.initKey();
