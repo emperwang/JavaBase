@@ -87,5 +87,7 @@
         <module>java_logback_demo</module>
         <module>java_log4j2_demo</module>
         <module>java_JUC_demo</module>
+        <module>javabase_cl_api</module>
+        <module>javabase_cl</module>
     </modules>
 </project>
