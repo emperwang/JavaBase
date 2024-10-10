@@ -45,6 +45,23 @@ JKS 密钥库使用专用格式。建议使用 "keytool -importkeystore
 -srckeystore client.key -destkeystore client.key 
 -deststoretype pkcs12" 迁移到行业标准格式 PKCS12。
 
+**client1 certificate**
+$ keytool.exe -genkeypair -keystore client1.key -alias sslclient1 -storepass 123456 -keyalg RSA -keypass 123456
+您的名字与姓氏是什么?
+[Unknown]:  jason
+您的组织单位名称是什么?
+[Unknown]:  loongson
+您的组织名称是什么?
+[Unknown]:  loongson
+您所在的城市或区域名称是什么?
+[Unknown]:  gz
+您所在的省/市/自治区名称是什么?
+[Unknown]:  gd
+该单位的双字母国家/地区代码是什么?
+[Unknown]:  CN
+CN=jason, OU=loongson, O=loongson, L=gz, ST=gd, C=CN是否正确?
+[否]:  y
+
 **server.cer:  服务端证书**
 PS D:\test> keytool -exportcert -alias sslserver -keystore server.key -storepass 123456 -file server.cer
 存储在文件 <server.cer> 中的证书
