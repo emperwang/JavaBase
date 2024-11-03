@@ -1,6 +1,5 @@
 package com.wk.baseKstream;
 
-import com.sun.xml.internal.ws.api.pipe.StreamSOAPCodec;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
@@ -10,7 +9,6 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 
 import java.util.Arrays;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 public class LineSplit {
     public static void main(String[] args) {

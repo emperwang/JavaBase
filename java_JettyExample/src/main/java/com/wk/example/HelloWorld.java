@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class HelloWorld  extends AbstractHandler {
 
-    @Override
+    //@Override
     public void handle(String s, Request request, HttpServletRequest httpServletRequest,
                        HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html;charset-utf-8");
@@ -34,5 +34,10 @@ public class HelloWorld  extends AbstractHandler {
         server.setHandler(new HelloWorld());
         server.start();
         server.join();
+    }
+
+    @Override
+    public void handle(String s, Request request, jakarta.servlet.http.HttpServletRequest httpServletRequest, jakarta.servlet.http.HttpServletResponse httpServletResponse) throws IOException, jakarta.servlet.ServletException {
+
     }
 }

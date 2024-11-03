@@ -19,7 +19,7 @@ public class StarterJavaAgentMainAemain {
             // 查找到 则把mainAgent 加载进去
             if (vmd.displayName().endsWith("com.wk.StarterJavaAgentMainAemain")){
                 VirtualMachine virtualMachine = VirtualMachine.attach(vmd.id());
-                virtualMachine.loadAgent("E:/code-workSpace/project-javaBase/JavaBase/javaAgentMainAgent/javaAgentMainDemo.jar");
+                virtualMachine.loadAgent("D:\\project\\project-java\\project-base\\JavaBase\\javaAgentMainAgent\\target\\javaAgentMainDemo.jar");
 
                 Thread.sleep(2000);
 

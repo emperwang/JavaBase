@@ -1,7 +1,5 @@
 package com.wk;
 
-import org.eclipse.jetty.util.StringUtil;
-
 /**
  * @author: ekiawna
  * @Date: 2021/3/12 17:17
@@ -35,7 +33,7 @@ public class ExampleUtil {
 
 
     private static int toInt(String value){
-        if (StringUtil.isBlank(value)){
+        if (value == null || value.length() == 0){
             return -1;
         }
 

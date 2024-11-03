@@ -15,8 +15,9 @@
         <dependency>
             <groupId>QRCode</groupId>
             <artifactId>QRCode</artifactId>
-            <version>3.0</version>
+            <version>3.0.0</version>
         </dependency>
+
         <!--  other tool  -->
         <dependency>
             <groupId>com.google.zxing</groupId>

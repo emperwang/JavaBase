@@ -24,7 +24,7 @@
         <module>KstreamDemo</module>
         <module>MiniTomcat</module>
         <module>mybatis-generate-maven</module>
-        <module>MyBatisGenerate</module>
+<!--        <module>MyBatisGenerate</module>-->
         <module>MybatisSource</module>
         <module>MyOwnIBatis</module>
         <module>MySpringMVC</module>
@@ -70,8 +70,8 @@
         <module>javaMysqlXA</module>
         <module>Java-mapperStruct</module>
         <module>LeeCode</module>
-        <module>TwoDimCode</module>
-        <module>Postgresql_EFM</module>
+<!--        <module>TwoDimCode</module>  QRCode dependency not fond-->
+<!--        <module>Postgresql_EFM</module>-->
         <module>java_maven_test</module>
         <module>java_JettyExample</module>
         <module>DesignPattern</module>

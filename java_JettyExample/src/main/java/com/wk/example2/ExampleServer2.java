@@ -25,8 +25,8 @@ public class ExampleServer2 {
 
         ServletContextHandler contextHandler = new ServletContextHandler();
         contextHandler.setContextPath("/");
-        contextHandler.addServlet(HelloServlet.class, "/hello");
-        contextHandler.addServlet(AsyncEchoServlet.class, "/echo/*");
+        //contextHandler.addServlet(HelloServlet.class, "/hello");
+        //contextHandler.addServlet(AsyncEchoServlet.class, "/echo/*");
 
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers(new Handler[]{contextHandler, new DefaultHandler()});

@@ -9,8 +9,6 @@ import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldap.sdk.LDAPException;
 import com.unboundid.ldap.sdk.LDAPResult;
 import com.unboundid.ldap.sdk.ResultCode;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
@@ -19,7 +17,7 @@ import java.net.InetAddress;
 import java.net.URL;
 
 public class Ldap {
-    private static final Logger logger = LogManager.getLogger(Ldap.class);
+    //private static final Logger logger = LogManager.getLogger(Ldap.class);
     private static final String LDAP_BASE = "dc=example,dc=com";
 
 
@@ -37,7 +35,7 @@ public class Ldap {
                     (SSLSocketFactory) SSLSocketFactory.getDefault()));
             config.addInMemoryOperationInterceptor(new OperationInterceptor(new URL(codeBase)));
             InMemoryDirectoryServer ds = new InMemoryDirectoryServer(config);
-            logger.info("start ldap server: 0.0.0.0:" + port);
+            //logger.info("start ldap server: 0.0.0.0:" + port);
             ds.startListening();
         } catch (Exception e) {
             e.printStackTrace();

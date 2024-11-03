@@ -183,7 +183,7 @@ public abstract class EfmNode extends ReceiverAdapter implements RequestHandler 
                             try {
                                 EfmNode.this.channel.getState(null, 3000L * EfmNode.this.env.getRemoteDbTimeout());
                             } catch (Exception e) {
-                                Notifications.UNEXPECTED_ERROR.addSubjectParams(new String[] { this.this$0.env.getClusterName() }).addBodyParams(new String[] { e.toString() }).send();
+//                                Notifications.UNEXPECTED_ERROR.addSubjectParams(new String[] { this.this$0.env.getClusterName() }).addBodyParams(new String[] { e.toString() }).send();
                                 EfmNode.LOGGER.severe("Could not load shared state: " + e.toString());
                             }
                         }

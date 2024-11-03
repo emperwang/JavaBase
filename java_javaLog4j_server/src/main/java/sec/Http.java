@@ -3,8 +3,6 @@ package sec;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -18,12 +16,12 @@ import java.net.InetSocketAddress;
 import static org.objectweb.asm.Opcodes.*;
 
 public class Http {
-    private static final Logger logger = LogManager.getLogger(Http.class);
+    //private static final Logger logger = LogManager.getLogger(Http.class);
 
     public static void start(String cmd) {
         try {
             int port = 8000;
-            logger.info("start http server: 0.0.0.0:" + port);
+            //logger.info("start http server: 0.0.0.0:" + port);
             HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
             server.createContext("/badClassName.class", new TestHandler(cmd));
             server.start();
